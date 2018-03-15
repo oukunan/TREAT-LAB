@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+</head>
+
+<body>
+    <h1>Main</h1>
+
+    <p id="test"></p>
+
+
+
+    <script>
+        const io = require('socket.io-client');
+        const gkm = require('gkm');
+        const $ = require('jquery');
+        const socket = io('http://localhost:3000');
+
+        let start = 0;
+        let time = 0;
+        let timeout = null;
+
+
+        gkm.events.on('key.pressed', function () {
+            if (!start) {
+                start = $.now()
+            }
+        });
+
+        gkm.events.on('key.released', function () {
+            let dif = $.now() - start;
+            time += dif
+            clearTimeout(timeout)
+            timeout = setTimeout(() => {
+                start = null;
+                if (dif < 15000) {
+                    socket.emit('test', dif)
+                }
+            }, 1500)
+        });
+
+        socket.on('render', function (data) {
+            document.getElementById("test").innerHTML = data
+        });
+
+    </script>
+</body>
+
+</html>
