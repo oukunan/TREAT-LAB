@@ -4,7 +4,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron ."
   },
   "author": "",
   "license": "ISC",
@@ -12,6 +12,10 @@
     "electron": "^1.8.3",
     "electron-builder": "^20.5.1",
     "electron-packager": "^11.1.0",
-    "electron-rebuild": "^1.7.3"
+    "electron-rebuild": "^1.7.3",
+    "gkm": "^0.2.0",
+    "jquery": "^3.3.1",
+    "socket.io": "^2.0.4",
+    "socket.io-client": "^2.0.4"
   }
 }
