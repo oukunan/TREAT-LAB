@@ -4,18 +4,31 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "dist": "build",
+    "package-win":
+      "electron-packager . electron-tutorial-app --overwrite --asar=false --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"TreatLab\""
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "electron": "^1.8.3",
-    "electron-builder": "^20.5.1",
     "electron-packager": "^11.1.0",
-    "electron-rebuild": "^1.7.3",
     "gkm": "^0.2.0",
     "jquery": "^3.3.1",
+    "mongoose": "^5.0.10",
     "socket.io": "^2.0.4",
     "socket.io-client": "^2.0.4"
+  },
+  "build": {
+    "appId": "ou.com",
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    }
+  },
+  "devDependencies": {
+    "electron": "^1.8.4",
+    "electron-builder": "^20.5.1",
+    "electron-rebuild": "^1.7.3"
   }
 }

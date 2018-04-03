@@ -9,44 +9,28 @@
 
 <body>
     <h1>Main</h1>
-
-    <p id="test"></p>
-
-
+    <p id="hello"></p>
 
     <script>
         const io = require('socket.io-client');
         const gkm = require('gkm');
-        const $ = require('jquery');
-        const socket = io('http://localhost:3000');
-
-        let start = 0;
-        let time = 0;
+        const socket = io.connect('http://localhost:3000');
+        
         let timeout = null;
+        let count = 0
 
-
-        gkm.events.on('key.pressed', function () {
-            if (!start) {
-                start = $.now()
-            }
-        });
-
-        gkm.events.on('key.released', function () {
-            let dif = $.now() - start;
-            time += dif
+        gkm.events.on('key.pressed', () => {
+            ++count
             clearTimeout(timeout)
             timeout = setTimeout(() => {
-                start = null;
-                if (dif < 15000) {
-                    socket.emit('test', dif)
-                }
+                console.log(count)
+                count = 0;
             }, 1500)
         });
 
-        socket.on('render', function (data) {
-            document.getElementById("test").innerHTML = data
-        });
-
+        socket.on('helloWorld', function (data) {
+            document.getElementById("hello").innerHTML = data
+        })
     </script>
 </body>
 
