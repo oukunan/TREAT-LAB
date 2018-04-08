@@ -10,7 +10,7 @@ app.on("ready", () => {
   main = new BrowserWindow({});
   main.loadURL(
     url.format({
-      pathname: path.join(__dirname, "main.html"),
+      pathname: path.join(__dirname, "login.html"),
       protocol: "file",
       slashes: true
     })
