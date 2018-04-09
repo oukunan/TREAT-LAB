@@ -1,3 +1,5 @@
+const notifier = require("node-notifier");
+
 let ctracker;
 let trigHeight = 0;
 let ypos = 0;
@@ -43,7 +45,7 @@ function draw() {
 }
 
 function setHeight() {
-  trigHeight = ypos + 5;
+  trigHeight = ypos + 15;
   isLine = true;
   checkFace = true;
   alarm = true;
@@ -54,7 +56,10 @@ function headUp() {
     if (ypos > trigHeight && alarm) {
       timer();
       if (counter == 2) {
-        console.log("ALERT");
+        notifier.notify({
+          title: "Mind your posture",
+          message: "Your head is bending down."
+        });
         alarm = false;
         counter = 0;
         clearInterval(timer);
