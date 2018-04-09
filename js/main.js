@@ -16,7 +16,6 @@ gkm.events.on("key.pressed", () => {
 // Get Current User
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
-    console.log(user);
   } else {
     document.location.href = "login.html";
   }
