@@ -1,13 +1,13 @@
 const notifier = require("node-notifier");
 
-let ctracker;
-let trigHeight = 0;
-let ypos = 0;
-let button;
-let alarm = false;
-let isLine = false;
-let checkFace = false;
-let counter = 0;
+var ctracker;
+var trigHeight = 0;
+var ypos = 0;
+var button;
+var alarm = false;
+var isLine = false;
+var checkFace = false;
+var counter = 0;
 
 function setup() {
   var videoInput = createCapture(VIDEO);
@@ -38,7 +38,6 @@ function draw() {
       ypos = positions[i][1];
     }
   }
-
   stroke("rgb(0,255,0)");
   strokeWeight(4);
   isLine && line(0, trigHeight, width * 2, trigHeight);
