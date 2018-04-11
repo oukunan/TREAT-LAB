@@ -99,3 +99,14 @@ function bendCount() {
 
   databaseRef.on("value", updateCount);
 }
+
+window.onload = function() {
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      let databaseRef = firebase
+        .database()
+        .ref(`users/${user.uid}/bends/${date}/count`);
+      databaseRef.on("value", updateCount);
+    }
+  });
+};
