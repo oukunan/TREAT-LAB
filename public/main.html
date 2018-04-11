@@ -10,10 +10,20 @@
     <script src="libraries/model_pca_20_svm.js"></script>
     <script src="libraries/p5.min.js"></script>
     <script src="libraries/p5.dom.js"></script>
-    <script src="sketch.js"></script> 
+    <script src="sketch.js"></script>
+    <style>
+        #sketch-holder2 {
+            position: fixed;
+            top: 0px;
+        }
+    </style>
 </head>
 
 <body>
+    <div id="sketch-holder">
+    </div>
+    <div id="sketch-holder2">
+    </div>
     <button id="logoutBtn">Logout</button>
 
     <script src="js/init_firebase.js"></script>
