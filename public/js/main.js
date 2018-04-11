@@ -13,14 +13,6 @@ gkm.events.on("key.pressed", () => {
   }, 1500);
 });
 
-// Get Current User
-firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-  } else {
-    document.location.href = "login.html";
-  }
-});
-
 // Logout
 logoutBtn.addEventListener("click", function() {
   firebase
