@@ -6,6 +6,10 @@ var alarm = false;
 var isLine = false;
 var checkFace = false;
 var counter = 0;
+let date = new Date()
+  .toJSON()
+  .slice(0, 10)
+  .replace(/-/g, "-");
 
 function setup() {
   var videoInput = createCapture(VIDEO);
@@ -55,6 +59,7 @@ function headUp() {
         let myNotification = new Notification("Mind your posture", {
           body: "Your head is bending down."
         });
+        bendCount();
         alarm = false;
         counter = 0;
         clearInterval(timer);
@@ -75,3 +80,22 @@ function timer() {
 }
 
 setInterval(headUp, 1000);
+
+function updateCount(received) {
+  let data = received.val();
+  document.getElementById("showBend").innerHTML = data;
+}
+
+// Save and Retrive data
+function bendCount() {
+  let user = firebase.auth().currentUser;
+  let databaseRef = firebase
+    .database()
+    .ref(`users/${user.uid}/bends/${date}/count`);
+  databaseRef.transaction(function(count) {
+    count += 1;
+    return count;
+  });
+
+  databaseRef.on("value", updateCount);
+}
