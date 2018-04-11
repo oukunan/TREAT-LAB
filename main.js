@@ -6,6 +6,7 @@ const { app, BrowserWindow, Menu, focusedWindow, ipcMain } = electron;
 
 let main;
 
+app.setAppUserModelId("ou.com");
 app.on("ready", () => {
   main = new BrowserWindow({});
   main.loadURL(

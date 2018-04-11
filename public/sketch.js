@@ -1,5 +1,3 @@
-const notifier = require("node-notifier");
-
 var ctracker;
 var trigHeight = 0;
 var ypos = 0;
@@ -12,17 +10,16 @@ var counter = 0;
 function setup() {
   var videoInput = createCapture(VIDEO);
   videoInput.size(400, 300);
-  videoInput.position(0, 0);
+  videoInput.parent("sketch-holder");
 
   var cnv = createCanvas(400, 300);
-  cnv.position(0, 0);
+  cnv.parent("sketch-holder2");
 
   ctracker = new clm.tracker();
   ctracker.init(pModel);
   ctracker.start(videoInput.elt);
 
   button = createButton("set height");
-  button.position(150, 260);
   button.mousePressed(setHeight);
 }
 
@@ -55,9 +52,8 @@ function headUp() {
     if (ypos > trigHeight && alarm) {
       timer();
       if (counter == 2) {
-        notifier.notify({
-          title: "Mind your posture",
-          message: "Your head is bending down."
+        let myNotification = new Notification("Mind your posture", {
+          body: "Your head is bending down."
         });
         alarm = false;
         counter = 0;
