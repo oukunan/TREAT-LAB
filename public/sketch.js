@@ -6,6 +6,8 @@ var alarm = false;
 var isLine = false;
 var checkFace = false;
 var counter = 0;
+var positions;
+let sec = 0;
 let date = new Date()
   .toJSON()
   .slice(0, 10)
@@ -31,7 +33,7 @@ function draw() {
   clear();
   noStroke();
 
-  var positions = ctracker.getCurrentPosition();
+  positions = ctracker.getCurrentPosition();
   for (var i = 0; i < positions.length; i++) {
     fill(0, 255, 0);
     rect(positions[i][0], positions[i][1], 3, 3);
@@ -81,6 +83,16 @@ function timer() {
 
 setInterval(headUp, 1000);
 
+
+// Timer for long sit
+function sitTimer() {
+  if (typeof positions === "object") {
+    ++sec;
+    document.getElementById("timer").innerHTML = `${sec} s`;
+  }
+}
+setInterval(sitTimer, 1000);
+
 function updateCount(received) {
   let data = received.val();
   document.getElementById("showBend").innerHTML = data;
@@ -99,3 +111,14 @@ function bendCount() {
 
   databaseRef.on("value", updateCount);
 }
+
+window.onload = function() {
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      let databaseRef = firebase
+        .database()
+        .ref(`users/${user.uid}/bends/${date}/count`);
+      databaseRef.on("value", updateCount);
+    }
+  });
+};
