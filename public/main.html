@@ -8,8 +8,8 @@
     <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
     <script src="libraries/clmtrackr.js"></script>
     <script src="libraries/model_pca_20_svm.js"></script>
-    <script src="libraries/p5.min.js"></script>
-    <script src="libraries/p5.dom.js"></script>
+    <script src="libraries/p5.min.js" type="text/javascript"></script>
+    <script src="libraries/p5.dom.js" type="text/javascript"></script>
     <script src="sketch.js"></script>
     <style>
         #sketch-holder2 {
@@ -25,19 +25,16 @@
     <div id="sketch-holder2">
     </div>
     <button id="logoutBtn">Logout</button>
-    <button id="user">Get user</button>
     <div>
         <h2>Bad posture count</h2>
         <p id="showBend">0</p>
     </div>
-
-
-
-
+    <div>
+        <h2>How long have u spent on your Laptop</h2>
+        <p id="timer">0 s</p>
+    </div>
     <script src="js/init_firebase.js"></script>
     <script src="js/main.js"></script>
-
-
 </body>
 
 </html>
