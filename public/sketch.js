@@ -1,3 +1,5 @@
+const notifier = require("node-notifier");
+
 var ctracker;
 var trigHeight = 0;
 var ypos = 0;
@@ -58,9 +60,11 @@ function headUp() {
     if (ypos > trigHeight && alarm) {
       timer();
       if (counter == 2) {
-        let myNotification = new Notification("Mind your posture", {
-          body: "Your head is bending down."
+        notifier.notify({
+          title: "Mind your posture",
+          message: "Your Head is bending down."
         });
+
         bendCount();
         alarm = false;
         counter = 0;
@@ -83,7 +87,6 @@ function timer() {
 
 setInterval(headUp, 1000);
 
-
 // Timer for long sit
 function sitTimer() {
   if (typeof positions === "object") {
@@ -95,7 +98,11 @@ setInterval(sitTimer, 1000);
 
 function updateCount(received) {
   let data = received.val();
-  document.getElementById("showBend").innerHTML = data;
+  if (data) {
+    document.getElementById("showBend").innerHTML = data;
+  } else {
+    document.getElementById("showBend").innerHTML = "0";
+  }
 }
 
 // Save and Retrive data
