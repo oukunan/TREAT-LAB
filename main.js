@@ -2,9 +2,11 @@ const electron = require("electron");
 const url = require("url");
 const path = require("path");
 
-const { app, BrowserWindow, Menu, focusedWindow, ipcMain } = electron;
+const { app, BrowserWindow, Menu, focusedWindow, Tray } = electron;
 
+const iconPath = path.join(__dirname, "icon.png");
 let main;
+let appIcon;
 
 app.setAppUserModelId("ou.com");
 app.on("ready", () => {
@@ -16,12 +18,32 @@ app.on("ready", () => {
       slashes: true
     })
   );
-  main.on("closed", () => {
-    app.quit();
+
+  main.on("minimize", function(event) {
+    event.preventDefault();
+    main.hide();
   });
+
+  main.on("close", function(event) {
+    if (!app.isQuiting) {
+      event.preventDefault();
+      main.hide();
+    }
+    return false;
+  });
+
+  const contextMenu = Menu.buildFromTemplate(contextMenuTemplate);
+
+  appIcon = new Tray(iconPath);
+  appIcon.setToolTip("Treatlap is running.");
+  appIcon.setContextMenu(contextMenu);
 
   const mainMenu = Menu.buildFromTemplate(menuTemplate);
   Menu.setApplicationMenu(mainMenu);
+
+  main.on("closed", () => {
+    app.quit();
+  });
 });
 
 const menuTemplate = [
@@ -36,6 +58,22 @@ const menuTemplate = [
         }
       }
     ]
+  }
+];
+
+const contextMenuTemplate = [
+  {
+    label: "Show App",
+    click: function() {
+      main.show();
+    }
+  },
+  {
+    label: "Quit",
+    click: function() {
+      app.isQuiting = true;
+      app.quit();
+    }
   }
 ];
 
