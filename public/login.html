@@ -18,8 +18,19 @@
     <button id="signInBtn">Login</button>
 
 
+    <!-- the button onClick sends a quitAndInstall message to the electron main process -->
+    <button id="ready" onClick="ipcRenderer.send('quitAndInstall')">no updates ready</button>
+
     <script src="js/init_firebase.js"></script>
     <script src="js/login.js"></script>
+    <script>
+        const ipcRenderer = require('electron').ipcRenderer;
+        ipcRenderer.on('updateReady', function (event, text) {
+            var container = document.getElementById('ready');
+            container.innerHTML = "new version ready!";
+        })
+    </script>
+
 </body>
 
 </html>

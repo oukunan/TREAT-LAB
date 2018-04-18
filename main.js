@@ -1,14 +1,20 @@
-const electron = require("electron");
+const {
+  app,
+  BrowserWindow,
+  Menu,
+  focusedWindow,
+  Tray,
+  ipcMain
+} = require("electron");
 const url = require("url");
 const path = require("path");
-
-const { app, BrowserWindow, Menu, focusedWindow, Tray } = electron;
+const { autoUpdater } = require("electron-updater");
 
 const iconPath = path.join(__dirname, "icon.png");
 let main;
 let appIcon;
 
-app.setAppUserModelId("ou.com");
+app.setAppUserModelId("treatlab.com");
 app.on("ready", () => {
   main = new BrowserWindow({});
   main.loadURL(
@@ -18,6 +24,7 @@ app.on("ready", () => {
       slashes: true
     })
   );
+  autoUpdater.checkForUpdates();
 
   main.on("minimize", function(event) {
     event.preventDefault();
@@ -44,6 +51,14 @@ app.on("ready", () => {
   main.on("closed", () => {
     app.quit();
   });
+});
+
+autoUpdater.on("update-downloaded", info => {
+  main.webContents.send("updateReady");
+});
+
+ipcMain.on("quitAndInstall", (event, arg) => {
+  autoUpdater.quitAndInstall();
 });
 
 const menuTemplate = [
