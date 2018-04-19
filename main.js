@@ -16,7 +16,9 @@ let appIcon;
 
 app.setAppUserModelId("treatlab.com");
 app.on("ready", () => {
-  main = new BrowserWindow({});
+  main = new BrowserWindow({
+    webPreferences: { backgroundThrottling: false }
+  });
   main.loadURL(
     url.format({
       pathname: path.join(__dirname, "public/login.html"),
@@ -40,12 +42,12 @@ app.on("ready", () => {
   });
 
   const contextMenu = Menu.buildFromTemplate(contextMenuTemplate);
+  const mainMenu = Menu.buildFromTemplate(menuTemplate);
 
   appIcon = new Tray(iconPath);
   appIcon.setToolTip("Treatlap is running.");
   appIcon.setContextMenu(contextMenu);
 
-  const mainMenu = Menu.buildFromTemplate(menuTemplate);
   Menu.setApplicationMenu(mainMenu);
 
   main.on("closed", () => {
