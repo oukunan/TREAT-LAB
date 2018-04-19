@@ -6,31 +6,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+        crossorigin="anonymous">
 </head>
 
 <body>
-    <h1>ThreatLAB</h1>
-    <label for="email">Email</label>
-    <input type="email" name="email" id="email">
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password">
-    <button id="signUpBtn">Sign Up</button>
-    <button id="signInBtn">Login</button>
+    <div>
+        <h3>TREATLAB</h1>
+            <form >
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" placeholder="Enter email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" placeholder="Password">
+                </div>
+                <button type="button" class="btn btn-outline-dark" id="signUpBtn">Sign Up</button>
+                <button type="button" class="btn btn-outline-success" id="signInBtn">Login</button>
+            </form>
 
+            <!-- the button onClick sends a quitAndInstall message to the electron main process -->
+            <br>
+            <button type="button" class="btn btn-outline-secondary" id="ready" onClick="ipcRenderer.send('quitAndInstall')">no updates ready</button>
 
-    <!-- the button onClick sends a quitAndInstall message to the electron main process -->
-    <button id="ready" onClick="ipcRenderer.send('quitAndInstall')">no updates ready</button>
-
-    <script src="js/init_firebase.js"></script>
-    <script src="js/login.js"></script>
-    <script>
-        const ipcRenderer = require('electron').ipcRenderer;
-        ipcRenderer.on('updateReady', function (event, text) {
-            var container = document.getElementById('ready');
-            container.innerHTML = "new version ready!";
-        })
-    </script>
-
+            <script src="js/init_firebase.js"></script>
+            <script src="js/login.js"></script>
+            <script>
+                const ipcRenderer = require('electron').ipcRenderer;
+                ipcRenderer.on('updateReady', function (event, text) {
+                    var container = document.getElementById('ready');
+                    container.innerHTML = "new version ready!";
+                })
+            </script>
+    </div>
 </body>
 
 </html>
