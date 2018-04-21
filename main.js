@@ -10,7 +10,22 @@ const url = require("url");
 const path = require("path");
 const { autoUpdater } = require("electron-updater");
 
-let main;
+let main = null;
+let myWindows;
+
+let shouldQuit = app.makeSingleInstance(() => {
+  if (main) {
+    if (main.isMinimized()) {
+      main.restore();
+    }
+    main.focus();
+  }
+});
+
+if (shouldQuit) {
+  app.quit();
+  return;
+}
 
 app.setAppUserModelId("treatlab.com");
 app.on("ready", () => {
@@ -24,10 +39,12 @@ app.on("ready", () => {
       slashes: true
     })
   );
+
+  // Check update when window loaded
   autoUpdater.checkForUpdates();
 
+  // Create Menu
   const mainMenu = Menu.buildFromTemplate(menuTemplate);
-
   Menu.setApplicationMenu(mainMenu);
 
   main.on("closed", () => {
@@ -57,7 +74,6 @@ const menuTemplate = [
     ]
   }
 ];
-
 
 if (process.platform === "darwin") {
   menuTemplate.unshift({});
