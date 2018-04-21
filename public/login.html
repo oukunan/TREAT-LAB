@@ -13,7 +13,7 @@
 <body>
     <div>
         <h3>TREATLAB</h1>
-            <form >
+            <form>
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input type="email" name="email" id="email" placeholder="Enter email">
@@ -25,11 +25,11 @@
                 <button type="button" class="btn btn-outline-dark" id="signUpBtn">Sign Up</button>
                 <button type="button" class="btn btn-outline-success" id="signInBtn">Login</button>
             </form>
-
             <!-- the button onClick sends a quitAndInstall message to the electron main process -->
             <br>
             <button type="button" class="btn btn-outline-secondary" id="ready" onClick="ipcRenderer.send('quitAndInstall')">no updates ready</button>
-
+            <br>
+            <p>Version 1.0.2</p>
             <script src="js/init_firebase.js"></script>
             <script src="js/login.js"></script>
             <script>
