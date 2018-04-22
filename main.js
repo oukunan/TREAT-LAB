@@ -10,13 +10,28 @@ const url = require("url");
 const path = require("path");
 const { autoUpdater } = require("electron-updater");
 
-const iconPath = path.join(__dirname, "icon.png");
-let main;
-let appIcon;
+let main = null;
+let myWindows;
+
+let shouldQuit = app.makeSingleInstance(() => {
+  if (main) {
+    if (main.isMinimized()) {
+      main.restore();
+    }
+    main.focus();
+  }
+});
+
+if (shouldQuit) {
+  app.quit();
+  return;
+}
 
 app.setAppUserModelId("treatlab.com");
 app.on("ready", () => {
-  main = new BrowserWindow({});
+  main = new BrowserWindow({
+    webPreferences: { backgroundThrottling: false }
+  });
   main.loadURL(
     url.format({
       pathname: path.join(__dirname, "public/login.html"),
@@ -24,27 +39,11 @@ app.on("ready", () => {
       slashes: true
     })
   );
+
+  // Check update when window loaded
   autoUpdater.checkForUpdates();
 
-  main.on("minimize", function(event) {
-    event.preventDefault();
-    main.hide();
-  });
-
-  main.on("close", function(event) {
-    if (!app.isQuiting) {
-      event.preventDefault();
-      main.hide();
-    }
-    return false;
-  });
-
-  const contextMenu = Menu.buildFromTemplate(contextMenuTemplate);
-
-  appIcon = new Tray(iconPath);
-  appIcon.setToolTip("Treatlap is running.");
-  appIcon.setContextMenu(contextMenu);
-
+  // Create Menu
   const mainMenu = Menu.buildFromTemplate(menuTemplate);
   Menu.setApplicationMenu(mainMenu);
 
@@ -73,22 +72,6 @@ const menuTemplate = [
         }
       }
     ]
-  }
-];
-
-const contextMenuTemplate = [
-  {
-    label: "Show App",
-    click: function() {
-      main.show();
-    }
-  },
-  {
-    label: "Quit",
-    click: function() {
-      app.isQuiting = true;
-      app.quit();
-    }
   }
 ];
 
