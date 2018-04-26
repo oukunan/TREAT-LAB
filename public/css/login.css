@@ -1,0 +1,70 @@
+body {
+  padding: 40px;
+  color: white;
+  background-color: #191414;
+}
+
+input {
+  -webkit-border-radius: 0 !important;
+  -moz-border-radius: 0 !important;
+  border-radius: 0 !important;
+}
+
+#signInBtn {
+  background-color: #1db954;
+  color: white;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+#signInBtn:hover {
+  background-color: #43d677;
+  transform: scale(1.05);
+}
+
+#signInBtn:active {
+  background-color: #358c54;
+  transform: scale(0.95);
+}
+
+#signUpBtn,
+#ready {
+  cursor: pointer;
+}
+
+#signUpBtn:hover,
+#ready:hover {
+  text-decoration: underline;
+}
+
+.foot {
+  font-size: 12px;
+  margin-bottom: 35px;
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+::-moz-placeholder {
+  color: white;
+}
+
+input[type="email"],
+input[type="password"] {
+  color: white;
+  background-color: #333333;
+  border: 1px solid #333333;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+  background-color: #333333;
+  border: 1px solid #333333;
+  outline: none;
+  box-shadow: none;
+  color: white;
+}
