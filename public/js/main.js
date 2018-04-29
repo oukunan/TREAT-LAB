@@ -16,6 +16,7 @@ let timeout = null;
 let keycount = 0;
 let sumKeycount = 0;
 let alwaySit = 0;
+let alwayRelax = 0;
 let logoutBtn = document.getElementById("logoutBtn");
 let date = moment(new Date()).format("DD-MM-YYYY ");
 let hour = moment(new Date()).format("HH");
@@ -132,11 +133,21 @@ function sitTimer() {
     .database()
     .ref(`users/${user.uid}/relax/${date}/${hour}/duration`);
   if (typeof positions === "object") {
-    alwaySit = 0;
     ++secSit;
+    ++alwayRelax;
+    alwaySit = 0;
+    let tmpSecRelax = secRelex;
+    if (alwayRelax == 2) {
+      relaxRef.transaction(duration => {
+        duration += tmpSecRelax;
+        secRelex = 0;
+        return duration;
+      });
+    }
   } else {
     ++secRelex;
     ++alwaySit;
+    alwayRelax = 0;
     let tmpSecSit = secSit;
     if (alwaySit == 2) {
       sitRef.transaction(duration => {
@@ -145,7 +156,6 @@ function sitTimer() {
         return duration;
       });
     }
-    document.getElementById("relax").innerHTML = `${secRelex} s`;
   }
 }
 setInterval(sitTimer, 1000);
@@ -163,6 +173,9 @@ window.onload = () => {
       let sitRef = firebase
         .database()
         .ref(`users/${user.uid}/sit/${date}/${hour}/duration`);
+      let relaxRef = firebase
+        .database()
+        .ref(`users/${user.uid}/relax/${date}/${hour}/duration`);
 
       bendRef.on("value", received => {
         let data = received.val();
@@ -186,6 +199,14 @@ window.onload = () => {
           document.getElementById("sit").innerHTML = `${sitDuration} s`;
         } else {
           document.getElementById("sit").innerHTML = "0 s";
+        }
+      });
+      relaxRef.on("value", received => {
+        let sitRelax = received.val();
+        if (sitRelax) {
+          document.getElementById("relax").innerHTML = `${sitRelax} s`;
+        } else {
+          document.getElementById("relax").innerHTML = "0 s";
         }
       });
     }
