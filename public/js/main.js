@@ -10,14 +10,14 @@ let isLine = false;
 let checkFace = false;
 let counter = 0;
 let positions;
-let sec = 0;
+let secSit = 0;
+let secRelex = 0;
 let timeout = null;
 let keycount = 0,
   sumKeycount = 0;
 let logoutBtn = document.getElementById("logoutBtn");
 let date = moment(new Date()).format("DD-MM-YYYY ");
 let hour = moment(new Date()).format("HH");
-
 
 //------- Image proceessing -----------
 function setup() {
@@ -112,8 +112,11 @@ gkm.events.on("key.pressed", () => {
 // --------- Timer for sit duration -------------
 function sitTimer() {
   if (typeof positions === "object") {
-    ++sec;
-    document.getElementById("timer").innerHTML = `${sec} s`;
+    ++secSit;
+    document.getElementById("sit").innerHTML = `${secSit} s`;
+  } else {
+    ++secRelex;
+    document.getElementById("relax").innerHTML = `${secRelex} s`;
   }
 }
 setInterval(sitTimer, 1000);
