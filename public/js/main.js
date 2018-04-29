@@ -13,8 +13,9 @@ let positions;
 let secSit = 0;
 let secRelex = 0;
 let timeout = null;
-let keycount = 0,
-  sumKeycount = 0;
+let keycount = 0;
+let sumKeycount = 0;
+let alwaySit = 0;
 let logoutBtn = document.getElementById("logoutBtn");
 let date = moment(new Date()).format("DD-MM-YYYY ");
 let hour = moment(new Date()).format("HH");
@@ -92,6 +93,18 @@ function timer() {
 
 setInterval(headUp, 1000);
 
+// -------- Save beding data -------------
+function bendCount() {
+  let user = firebase.auth().currentUser;
+  let bendRef = firebase
+    .database()
+    .ref(`users/${user.uid}/bends/${date}/${hour}/count`);
+  bendRef.transaction(count => {
+    count += 1;
+    return count;
+  });
+}
+
 // --------- Keyboard tracking --------------
 gkm.events.on("key.pressed", () => {
   ++keycount;
@@ -111,27 +124,31 @@ gkm.events.on("key.pressed", () => {
 
 // --------- Timer for sit duration -------------
 function sitTimer() {
+  let user = firebase.auth().currentUser;
+  let sitRef = firebase
+    .database()
+    .ref(`users/${user.uid}/sit/${date}/${hour}/duration`);
+  let relaxRef = firebase
+    .database()
+    .ref(`users/${user.uid}/relax/${date}/${hour}/duration`);
   if (typeof positions === "object") {
+    alwaySit = 0;
     ++secSit;
-    document.getElementById("sit").innerHTML = `${secSit} s`;
   } else {
     ++secRelex;
+    ++alwaySit;
+    let tmpSecSit = secSit;
+    if (alwaySit == 2) {
+      sitRef.transaction(duration => {
+        duration += tmpSecSit;
+        secSit = 0;
+        return duration;
+      });
+    }
     document.getElementById("relax").innerHTML = `${secRelex} s`;
   }
 }
 setInterval(sitTimer, 1000);
-
-// Save and Retrive data
-function bendCount() {
-  let user = firebase.auth().currentUser;
-  let bendRef = firebase
-    .database()
-    .ref(`users/${user.uid}/bends/${date}/${hour}/count`);
-  bendRef.transaction(count => {
-    count += 1;
-    return count;
-  });
-}
 
 // --------- Load data after login -----------
 window.onload = () => {
@@ -143,6 +160,9 @@ window.onload = () => {
       let keyboardRef = firebase
         .database()
         .ref(`users/${user.uid}/keyboard/${date}/${hour}/keycount`);
+      let sitRef = firebase
+        .database()
+        .ref(`users/${user.uid}/sit/${date}/${hour}/duration`);
 
       bendRef.on("value", received => {
         let data = received.val();
@@ -158,6 +178,14 @@ window.onload = () => {
           document.getElementById("keyboard").innerHTML = keyboardCountData;
         } else {
           document.getElementById("keyboard").innerHTML = "0";
+        }
+      });
+      sitRef.on("value", received => {
+        let sitDuration = received.val();
+        if (sitDuration) {
+          document.getElementById("sit").innerHTML = `${sitDuration} s`;
+        } else {
+          document.getElementById("sit").innerHTML = "0 s";
         }
       });
     }
