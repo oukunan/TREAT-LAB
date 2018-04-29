@@ -15,11 +15,9 @@ let timeout = null;
 let keycount = 0,
   sumKeycount = 0;
 let logoutBtn = document.getElementById("logoutBtn");
-let hour = new Date().getHours();
-let date = new Date()
-  .toJSON()
-  .slice(0, 10)
-  .replace(/-/g, "-");
+let date = moment(new Date()).format("DD-MM-YYYY ");
+let hour = moment(new Date()).format("HH");
+
 
 //------- Image proceessing -----------
 function setup() {
@@ -98,10 +96,10 @@ setInterval(headUp, 1000);
 gkm.events.on("key.pressed", () => {
   ++keycount;
   let user = firebase.auth().currentUser;
-  let databaseRef = firebase
+  let keyboardRef = firebase
     .database()
     .ref(`users/${user.uid}/keyboard/${date}/${hour}/keycount`);
-  databaseRef.transaction(keycount => {
+  keyboardRef.transaction(keycount => {
     keycount += 1;
     return keycount;
   });
@@ -125,7 +123,7 @@ function bendCount() {
   let user = firebase.auth().currentUser;
   let bendRef = firebase
     .database()
-    .ref(`users/${user.uid}/bends/${date}/count`);
+    .ref(`users/${user.uid}/bends/${date}/${hour}/count`);
   bendRef.transaction(count => {
     count += 1;
     return count;
@@ -138,7 +136,7 @@ window.onload = () => {
     if (user) {
       let bendRef = firebase
         .database()
-        .ref(`users/${user.uid}/bends/${date}/count`);
+        .ref(`users/${user.uid}/bends/${date}/${hour}/count`);
       let keyboardRef = firebase
         .database()
         .ref(`users/${user.uid}/keyboard/${date}/${hour}/keycount`);
