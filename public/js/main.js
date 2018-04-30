@@ -196,17 +196,19 @@ window.onload = () => {
       sitRef.on("value", received => {
         let sitDuration = received.val();
         if (sitDuration) {
-          document.getElementById("sit").innerHTML = `${sitDuration} s`;
+          const formatted = moment.utc(sitDuration * 1000).format("HH:mm:ss");
+          document.getElementById("sit").innerHTML = `${formatted}`;
         } else {
-          document.getElementById("sit").innerHTML = "0 s";
+          document.getElementById("sit").innerHTML = "00:00:00";
         }
       });
       relaxRef.on("value", received => {
         let sitRelax = received.val();
         if (sitRelax) {
-          document.getElementById("relax").innerHTML = `${sitRelax} s`;
+          const formatted = moment.utc(sitRelax * 1000).format("HH:mm:ss");
+          document.getElementById("relax").innerHTML = `${formatted}`;
         } else {
-          document.getElementById("relax").innerHTML = "0 s";
+          document.getElementById("relax").innerHTML = "00:00:00";
         }
       });
     }
