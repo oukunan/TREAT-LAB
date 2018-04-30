@@ -17,6 +17,8 @@ let keycount = 0;
 let sumKeycount = 0;
 let alwaySit = 0;
 let alwayRelax = 0;
+let showSit = 0;
+let showRelax = 0;
 let logoutBtn = document.getElementById("logoutBtn");
 let date = moment(new Date()).format("DD-MM-YYYY ");
 let hour = moment(new Date()).format("HH");
@@ -134,28 +136,26 @@ function sitTimer() {
     .ref(`users/${user.uid}/relax/${date}/${hour}/duration`);
   if (typeof positions === "object") {
     ++secSit;
-    ++alwayRelax;
-    alwaySit = 0;
+    ++showSit;
+    const formatted = moment.utc(showSit * 1000).format("HH:mm:ss");
+    document.getElementById("sit").innerHTML = `${formatted}`;
     let tmpSecRelax = secRelex;
-    if (alwayRelax == 2) {
-      relaxRef.transaction(duration => {
-        duration += tmpSecRelax;
-        secRelex = 0;
-        return duration;
-      });
-    }
+    relaxRef.transaction(duration => {
+      duration += tmpSecRelax;
+      secRelex = 0;
+      return duration;
+    });
   } else {
     ++secRelex;
-    ++alwaySit;
-    alwayRelax = 0;
+    ++showRelax;
+    const formatted = moment.utc(showRelax * 1000).format("HH:mm:ss");
+    document.getElementById("relax").innerHTML = `${formatted}`;
     let tmpSecSit = secSit;
-    if (alwaySit == 2) {
-      sitRef.transaction(duration => {
-        duration += tmpSecSit;
-        secSit = 0;
-        return duration;
-      });
-    }
+    sitRef.transaction(duration => {
+      duration += tmpSecSit;
+      secSit = 0;
+      return duration;
+    });
   }
 }
 setInterval(sitTimer, 1000);
@@ -196,6 +196,7 @@ window.onload = () => {
       sitRef.on("value", received => {
         let sitDuration = received.val();
         if (sitDuration) {
+          showSit = sitDuration;
           const formatted = moment.utc(sitDuration * 1000).format("HH:mm:ss");
           document.getElementById("sit").innerHTML = `${formatted}`;
         } else {
@@ -205,6 +206,7 @@ window.onload = () => {
       relaxRef.on("value", received => {
         let sitRelax = received.val();
         if (sitRelax) {
+          showRelax = sitRelax;
           const formatted = moment.utc(sitRelax * 1000).format("HH:mm:ss");
           document.getElementById("relax").innerHTML = `${formatted}`;
         } else {
