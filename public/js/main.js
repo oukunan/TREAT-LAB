@@ -194,6 +194,12 @@ window.onload = () => {
       keyboardRef.on("value", received => {
         let keyboardCountData = received.val();
         if (keyboardCountData) {
+          if (keyboardCountData == 12000) {
+            notifier.notify({
+              title: "DANGER",
+              message: "Number of keystroke is too many"
+            });
+          }
           document.getElementById("keyboard").innerHTML = keyboardCountData;
         } else {
           document.getElementById("keyboard").innerHTML = "0";
