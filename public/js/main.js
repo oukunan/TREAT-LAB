@@ -137,6 +137,12 @@ function sitTimer() {
   if (typeof positions === "object") {
     ++secSit;
     ++showSit;
+    if (showSit % 1800 == 0) {
+      notifier.notify({
+        title: "Go get some rest",
+        message: "You work for 1 hour"
+      });
+    }
     const formatted = moment.utc(showSit * 1000).format("HH:mm:ss");
     document.getElementById("sit").innerHTML = `${formatted}`;
     let tmpSecRelax = secRelex;
