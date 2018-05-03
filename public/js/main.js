@@ -14,6 +14,7 @@ let secSit = 0;
 let secRelex = 0;
 let timeout = null;
 let keycount = 0;
+let mouseClickCount = 0;
 let sumKeycount = 0;
 let alwaySit = 0;
 let alwayRelax = 0;
@@ -89,7 +90,7 @@ function headUp() {
 
 function timer() {
   console.log(counter);
-  setTimeout(function() {
+  setTimeout(function () {
     ++counter;
   }, 1000);
 }
@@ -107,6 +108,21 @@ function bendCount() {
     return count;
   });
 }
+
+// -------- Mouse part -------------
+gkm.events.on('mouse.pressed', () => {
+  ++mouseClickCount;
+  console.log(mouseClickCount);
+  let user = firebase.auth().currentUser;
+  let mouseRef = firebase
+    .database()
+    .ref(`users/${user.uid}/mouse/${date}/${hour}/mouseClickCount`);
+  mouseRef.transaction(mouseClickCount => {
+    mouseClickCount += 1;
+    return mouseClickCount;
+  });
+
+});
 
 // --------- Keyboard tracking --------------
 gkm.events.on("key.pressed", () => {
@@ -176,6 +192,9 @@ window.onload = () => {
       let keyboardRef = firebase
         .database()
         .ref(`users/${user.uid}/keyboard/${date}/${hour}/keycount`);
+      let mouseRef = firebase
+        .database()
+        .ref(`users/${user.uid}/mouse/${date}/${hour}/mouseClickCount`);
       let sitRef = firebase
         .database()
         .ref(`users/${user.uid}/sit/${date}/${hour}/duration`);
@@ -205,6 +224,23 @@ window.onload = () => {
           document.getElementById("keyboard").innerHTML = "0";
         }
       });
+
+      mouseRef.on("value", received => {
+        let mouseCountData = received.val();
+        if (mouseCountData) {
+          if (mouseCountData == 100) {
+            notifier.notify({
+              title: "DANGER",
+              message: "Number of mouse click is too many"
+            });
+          }
+          document.getElementById("mouse").innerHTML = mouseCountData;
+        } else {
+          document.getElementById("mouse").innerHTML = "0";
+        }
+      });
+
+
       sitRef.on("value", received => {
         let sitDuration = received.val();
         if (sitDuration) {
