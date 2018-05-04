@@ -1,5 +1,5 @@
 const notifier = require("node-notifier");
-const gkm = require("gkm");
+var gkm = require("gkm");
 
 let ctracker;
 let trigHeight = 0;
@@ -70,10 +70,7 @@ function headUp() {
     if (ypos > trigHeight && alarm) {
       timer();
       if (counter == 2) {
-        notifier.notify({
-          title: "Mind your posture",
-          message: "Your Head is bending down."
-        });
+        notifier.notify({title: "Mind your posture", message: "Your Head is bending down."});
 
         bendCount();
         alarm = false;
@@ -110,36 +107,35 @@ function bendCount() {
 }
 
 // -------- Mouse part -------------
-gkm.events.on('mouse.pressed', () => {
-  ++mouseClickCount;
-  console.log(mouseClickCount);
-  let user = firebase.auth().currentUser;
-  let mouseRef = firebase
-    .database()
-    .ref(`users/${user.uid}/mouse/${date}/${hour}/mouseClickCount`);
-  mouseRef.transaction(mouseClickCount => {
-    mouseClickCount += 1;
-    return mouseClickCount;
+gkm.events.on("mouse.pressed", () => {
+    ++mouseClickCount;
+    let user = firebase.auth().currentUser;
+    let mouseRef = firebase
+      .database()
+      .ref(`users/${user.uid}/mouse/${date}/${hour}/mouseClickCount`);
+    mouseRef.transaction(mouseClickCount => {
+      mouseClickCount += 1;
+      return mouseClickCount;
+    });
   });
-
-});
 
 // --------- Keyboard tracking --------------
 gkm.events.on("key.pressed", () => {
-  ++keycount;
-  let user = firebase.auth().currentUser;
-  let keyboardRef = firebase
-    .database()
-    .ref(`users/${user.uid}/keyboard/${date}/${hour}/keycount`);
-  keyboardRef.transaction(keycount => {
-    keycount += 1;
-    return keycount;
+    console.log('keyboard');
+    ++keycount;
+    let user = firebase.auth().currentUser;
+    let keyboardRef = firebase
+      .database()
+      .ref(`users/${user.uid}/keyboard/${date}/${hour}/keycount`);
+    keyboardRef.transaction(keycount => {
+      keycount += 1;
+      return keycount;
+    });
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      keycount = 0;
+    }, 1000);
   });
-  clearTimeout(timeout);
-  timeout = setTimeout(() => {
-    keycount = 0;
-  }, 1000);
-});
 
 // --------- Timer for sit duration -------------
 function sitTimer() {
@@ -156,8 +152,8 @@ function sitTimer() {
     if (showSit % 1800 == 0) {
       notifier.notify({
         title: "Go get some rest",
-        message: "You work for 1 hour"
-      });
+         message: "You work for 1 hour"
+        });
     }
     const formatted = moment.utc(showSit * 1000).format("HH:mm:ss");
     document.getElementById("sit").innerHTML = `${formatted}`;
@@ -185,84 +181,83 @@ setInterval(sitTimer, 1000);
 // --------- Load data after login -----------
 window.onload = () => {
   firebase.auth().onAuthStateChanged(user => {
-    if (user) {
-      let bendRef = firebase
-        .database()
-        .ref(`users/${user.uid}/bends/${date}/${hour}/count`);
-      let keyboardRef = firebase
-        .database()
-        .ref(`users/${user.uid}/keyboard/${date}/${hour}/keycount`);
-      let mouseRef = firebase
-        .database()
-        .ref(`users/${user.uid}/mouse/${date}/${hour}/mouseClickCount`);
-      let sitRef = firebase
-        .database()
-        .ref(`users/${user.uid}/sit/${date}/${hour}/duration`);
-      let relaxRef = firebase
-        .database()
-        .ref(`users/${user.uid}/relax/${date}/${hour}/duration`);
+      if (user) {
+        let bendRef = firebase
+          .database()
+          .ref(`users/${user.uid}/bends/${date}/${hour}/count`);
+        let keyboardRef = firebase
+          .database()
+          .ref(`users/${user.uid}/keyboard/${date}/${hour}/keycount`);
+        let mouseRef = firebase
+          .database()
+          .ref(`users/${user.uid}/mouse/${date}/${hour}/mouseClickCount`);
+        let sitRef = firebase
+          .database()
+          .ref(`users/${user.uid}/sit/${date}/${hour}/duration`);
+        let relaxRef = firebase
+          .database()
+          .ref(`users/${user.uid}/relax/${date}/${hour}/duration`);
 
-      bendRef.on("value", received => {
-        let data = received.val();
-        if (data) {
-          document.getElementById("showBend").innerHTML = data;
-        } else {
-          document.getElementById("showBend").innerHTML = "0";
-        }
-      });
-      keyboardRef.on("value", received => {
-        let keyboardCountData = received.val();
-        if (keyboardCountData) {
-          if (keyboardCountData == 12000) {
-            notifier.notify({
-              title: "DANGER",
-              message: "Number of keystroke is too many"
-            });
+        bendRef.on("value", received => {
+          let data = received.val();
+          if (data) {
+            document.getElementById("showBend").innerHTML = data;
+          } else {
+            document.getElementById("showBend").innerHTML = "0";
           }
-          document.getElementById("keyboard").innerHTML = keyboardCountData;
-        } else {
-          document.getElementById("keyboard").innerHTML = "0";
-        }
-      });
-
-      mouseRef.on("value", received => {
-        let mouseCountData = received.val();
-        if (mouseCountData) {
-          if (mouseCountData == 100) {
-            notifier.notify({
-              title: "DANGER",
-              message: "Number of mouse click is too many"
-            });
+        });
+        keyboardRef.on("value", received => {
+          let keyboardCountData = received.val();
+          if (keyboardCountData) {
+            if (keyboardCountData % 8000 == 0) {
+              notifier.notify({
+                title: "DANGER",
+                message: "Number of keystroke is too many"
+              });
+            }
+            document.getElementById("keyboard").innerHTML = keyboardCountData;
+          } else {
+            document.getElementById("keyboard").innerHTML = "0";
           }
-          document.getElementById("mouse").innerHTML = mouseCountData;
-        } else {
-          document.getElementById("mouse").innerHTML = "0";
-        }
-      });
+        });
 
+        mouseRef.on("value", received => {
+          let mouseCountData = received.val();
+          if (mouseCountData) {
+            if (mouseCountData % 100 == 0) {
+              notifier.notify({
+                title: "DANGER", 
+                message: "Number of mouse click is too many"
+              });
+            }
+            document.getElementById("mouse").innerHTML = mouseCountData;
+          } else {
+            document.getElementById("mouse").innerHTML = "0";
+          }
+        });
 
-      sitRef.on("value", received => {
-        let sitDuration = received.val();
-        if (sitDuration) {
-          showSit = sitDuration;
-          const formatted = moment.utc(sitDuration * 1000).format("HH:mm:ss");
-          document.getElementById("sit").innerHTML = `${formatted}`;
-        } else {
-          document.getElementById("sit").innerHTML = "00:00:00";
-        }
-      });
-      relaxRef.on("value", received => {
-        let sitRelax = received.val();
-        if (sitRelax) {
-          showRelax = sitRelax;
-          const formatted = moment.utc(sitRelax * 1000).format("HH:mm:ss");
-          document.getElementById("relax").innerHTML = `${formatted}`;
-        } else {
-          document.getElementById("relax").innerHTML = "00:00:00";
-        }
-      });
-    }
-  });
+        sitRef.on("value", received => {
+          let sitDuration = received.val();
+          if (sitDuration) {
+            showSit = sitDuration;
+            const formatted = moment.utc(sitDuration * 1000).format("HH:mm:ss");
+            document.getElementById("sit").innerHTML = `${formatted}`;
+          } else {
+            document.getElementById("sit").innerHTML = "00:00:00";
+          }
+        });
+        relaxRef.on("value", received => {
+          let sitRelax = received.val();
+          if (sitRelax) {
+            showRelax = sitRelax;
+            const formatted = moment.utc(sitRelax * 1000).format("HH:mm:ss");
+            document.getElementById("relax").innerHTML = `${formatted}`;
+          } else {
+            document.getElementById("relax").innerHTML = "00:00:00";
+          }
+        });
+      }
+    });
 };
 
 // -------- Logout ------------
