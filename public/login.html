@@ -26,7 +26,7 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon">
-                                    <img src="img/mes.png" height="20px">
+                                    <img src="img/email.png" height="20px">
                                 </div>
                                 <input type="email" class="form-control" name="email" id="email" placeholder="email">
                             </div>
@@ -50,7 +50,7 @@
 
             <div class="row justify-content-center text-center">
                 <div class="col-md-6 col-xl-4">
-                    <button type="button" class="btn" id="signInBtn">LOG IN</button>
+                    <button type="button" class="btn" id="signInBtn" onclick="login()">LOG IN</button>
                 </div>
             </div>
 
@@ -58,7 +58,7 @@
         <div class="fixed-bottom">
             <div class="row justify-content-center text-center foot">
                 <div class="col-md-2">
-                    <span id="signUpBtn">SIGN UP</span>
+                    <span id="navMain" onclick="backtoSignup()">SIGN UP</span>
                 </div>
                 <div class="col-md-3">
                     <span id="ready" onClick="ipcRenderer.send('quitAndInstall')">NO UPDATE AVAILABLE</span>

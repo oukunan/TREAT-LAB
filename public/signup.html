@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <div>
+            <div class="row justify-content-center text-center">
+                <div class="col-md-4">
+                    <h3 id="topic">TREATLAB</h3>
+                </div>
+            </div>
+            <div class="row justify-content-center text-center">
+                <div class="col-md-6 col-xl-4">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <img src="img/email.png" height="20px">
+                            </div>
+                            <input type="email" class="form-control" name="email" id="email" placeholder="email">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <img src="img/lock.png" height="20px">
+                            </div>
+                            <input type="password" class="form-control" name="password" id="password" placeholder="password">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-3 col-xl-2">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <img src="img/gender.png" height="20px">
+                            </div>
+                            <select class="form-control" id="gender">
+                                <option selected hidden>gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xl-2">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <img src="img/profile.png" height="20px">
+                            </div>
+                            <input type="number" class="form-control" name="age" id="age" placeholder="age">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-3 col-xl-2">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <img src="img/height.png" height="20px">
+                            </div>
+                            <input type="number" class="form-control" name="height" id="height" placeholder="height">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xl-2">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <img src="img/scale.png" height="20px">
+                            </div>
+                            <input type="number" class="form-control" name="weight" id="weight" placeholder="weight">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center text-center">
+                <div class="col-md-6 col-xl-4">
+                    <button type="button" class="btn" id="signUpBtn" onclick="signup()">SIGN UP</button>
+                </div>
+            </div>
+
+        </div>
+        <div class="fixed-bottom">
+            <div class="row justify-content-center text-center foot">
+                <div class="col-md-2">
+                    <span id="navMain" onclick="backToLogin()">LOGIN</span>
+                </div>
+                <div class="col-md-3">
+                    <span id="ready" onClick="ipcRenderer.send('quitAndInstall')">NO UPDATE AVAILABLE</span>
+                </div>
+                <div class="col-md-2">
+                    <span>VERSION 1.0.5</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/init_firebase.js"></script>
+    <script src="js/login.js"></script>
+    <script>
+        const ipcRenderer = require('electron').ipcRenderer
+        ipcRenderer.on('updateReady', function (event, text) {
+            var container = document.getElementById('ready');
+            container.innerHTML = "NEW VERSION AVAILABLE";
+        })
+    </script>
+</body>
+
+</html>
