@@ -8,7 +8,7 @@ const {
 } = require("electron");
 const url = require("url");
 const path = require("path");
-const { autoUpdater } = require("electron-updater");
+const {autoUpdater} = require("electron-updater");
 
 let main = null;
 let myWindows;
@@ -30,17 +30,18 @@ if (shouldQuit) {
 app.setAppUserModelId("treatlab.com");
 app.on("ready", () => {
   main = new BrowserWindow({
-    minWidth: 860,
-    minHeight: 620,
-    webPreferences: { backgroundThrottling: false }
+    center: true,
+    minWidth: 1024,
+    minHeight: 768,
+    webPreferences: {
+      backgroundThrottling: false
+    }
   });
-  main.loadURL(
-    url.format({
-      pathname: path.join(__dirname, "public/login.html"),
-      protocol: "file",
-      slashes: true
-    })
-  );
+  main.loadURL(url.format({
+    pathname: path.join(__dirname, "public/login.html"),
+    protocol: "file",
+    slashes: true
+  }));
 
   // Check update when window loaded
   autoUpdater.checkForUpdates();
@@ -55,7 +56,9 @@ app.on("ready", () => {
 });
 
 autoUpdater.on("update-downloaded", info => {
-  main.webContents.send("updateReady");
+  main
+    .webContents
+    .send("updateReady");
 });
 
 ipcMain.on("quitAndInstall", (event, arg) => {
@@ -68,7 +71,9 @@ const menuTemplate = [
     submenu: [
       {
         label: "Quit",
-        accelerator: process.platform === "darwin" ? "Command+Q" : "Ctrl+Q",
+        accelerator: process.platform === "darwin"
+          ? "Command+Q"
+          : "Ctrl+Q",
         click() {
           app.quit();
         }
@@ -87,12 +92,13 @@ if (process.env.NODE_ENV !== "production") {
     submenu: [
       {
         label: "Toggle DevTools",
-        accelerator: process.platform === "darwin" ? "Command+I" : "Ctrl+I",
+        accelerator: process.platform === "darwin"
+          ? "Command+I"
+          : "Ctrl+I",
         click(Item, focusedWindow) {
           focusedWindow.toggleDevTools();
         }
-      },
-      {
+      }, {
         role: "reload"
       }
     ]
