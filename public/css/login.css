@@ -1,7 +1,9 @@
 body {
-  padding: 40px;
+  font-family: Roboto;
+  padding-top: 70px;
   color: white;
-  background-color: #191414;
+  background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../img/login.jpg) no-repeat center center fixed;
+  background-size: cover;
 }
 
 input {
@@ -10,30 +12,36 @@ input {
   border-radius: 0 !important;
 }
 
+#topic {
+  font-size: 40px;
+  font-weight: bold;
+  padding-bottom: 25px;
+}
+
 #signInBtn {
-  background-color: #1db954;
+  background: #75BD00;
+  width: 120px;
+  height: 40px;
   color: white;
-  padding-left: 40px;
-  padding-right: 40px;
+  border-radius: 50px;
+  margin-top: 20px;
 }
 
 #signInBtn:hover {
-  background-color: #43d677;
+  background-color: #84d600;
   transform: scale(1.05);
 }
 
 #signInBtn:active {
-  background-color: #358c54;
+  background-color: #629f00;
   transform: scale(0.95);
 }
 
-#signUpBtn,
-#ready {
+#signUpBtn, #ready {
   cursor: pointer;
 }
 
-#signUpBtn:hover,
-#ready:hover {
+#signUpBtn:hover, #ready:hover {
   text-decoration: underline;
 }
 
@@ -42,29 +50,53 @@ input {
   margin-bottom: 35px;
 }
 
-.btn:focus,
-.btn:active:focus,
-.btn.active:focus {
+.btn:focus, .btn:active:focus, .btn.active:focus {
   outline: none;
   box-shadow: none;
 }
 
-::-moz-placeholder {
-  color: white;
+.form-control {
+  /* -webkit-border-radius: 35px !important;
+  -moz-border-radius: 35px !important; */
+  /* border-radius: 35px !important; */
+  border-top-right-radius: 50px !important;
+  border-bottom-right-radius: 50px !important;
 }
 
-input[type="email"],
-input[type="password"] {
-  color: white;
-  background-color: #333333;
-  border: 1px solid #333333;
+.input-group-addon {
+  background: rgba(221, 221, 221, 0.4);
+  border: 0px;
+  height: 45px;
+  padding-left: 20px;
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
 }
 
-input[type="email"]:focus,
-input[type="password"]:focus {
-  background-color: #333333;
-  border: 1px solid #333333;
+input[type="email"], input[type="password"] {
+  padding-left: 25px;
+  border: 0px;
+  background: rgba(221, 221, 221, 0.4);
+  color: white;
+  height: 45px;
+  padding-left: 0px;
+}
+
+input[type="email"]:focus, input[type="password"]:focus {
+  background: rgba(221, 221, 221, 0.4);
   outline: none;
   box-shadow: none;
   color: white;
+}
+
+input[type="email"]::-webkit-input-placeholder, input[type="password"]::-webkit-input-placeholder {
+  color: white;
+  font-size: 15px;
+}
+
+input[type="email"]:focus::-webkit-input-placeholder, input[type="password"]:focus::-webkit-input-placeholder {
+  color: transparent
+}
+
+#remember {
+  font-size: 15px;
 }
