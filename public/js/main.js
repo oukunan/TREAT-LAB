@@ -1,5 +1,5 @@
 const notifier = require("node-notifier");
-var gkm = require("gkm");
+const gkm = require("gkm");
 
 let ctracker;
 let trigHeight = 0;
@@ -121,7 +121,6 @@ gkm.events.on("mouse.pressed", () => {
 
 // --------- Keyboard tracking --------------
 gkm.events.on("key.pressed", () => {
-    console.log('keyboard');
     ++keycount;
     let user = firebase.auth().currentUser;
     let keyboardRef = firebase
@@ -246,6 +245,7 @@ window.onload = () => {
             document.getElementById("sit").innerHTML = "00:00:00";
           }
         });
+      
         relaxRef.on("value", received => {
           let sitRelax = received.val();
           if (sitRelax) {
