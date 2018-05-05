@@ -1,14 +1,15 @@
 {
   "name": "treatlab",
-  "version": "1.0.4",
-  "description": "",
+  "version": "1.0.5",
+  "description":
+    "System of Behavior and Risk analysis of the Computer in Office",
   "main": "main.js",
   "repository": "https://github.com/futurouz/TREAT-LAB",
   "scripts": {
     "start": "electron .",
     "dist": "build",
     "package-win":
-      "electron-packager . electron-tutorial-app --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"TreatLab\"",
+      "electron-packager . electron-tutorial-app --overwrite --asar=false --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"TreatLab\" always",
     "build": "build --win",
     "ship": "build --win -p always"
   },
@@ -33,7 +34,8 @@
         "owner": "futurouz",
         "repo": "TREAT-LAB"
       }
-    ]
+    ],
+    "asar": false
   },
   "devDependencies": {
     "electron": "^1.8.4",
