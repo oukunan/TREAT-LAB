@@ -1,6 +1,11 @@
+let loginSection = document.getElementById('login-section')
+let signupSection = document.getElementById('signup-section')
+let navSignup = document.getElementById('navSignup')
+let navLogin = document.getElementById('navLogin')
+
 function signup() {
-  let email = document.getElementById("email").value;
-  let password = document.getElementById("password").value;
+  let email = document.getElementById("signEmail").value;
+  let password = document.getElementById("signPassword").value;
   firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
@@ -19,7 +24,7 @@ function signup() {
         weight
       }).then(() => {
         alert('Registration completed')
-        window.location.href = "login.html"
+        showLogin()
       })
     })
     .catch(function(err) {
@@ -47,10 +52,17 @@ function login(){
     });   
 }
 
-function backToLogin() {
-  document.location.href = "login.html"
+
+function showLogin() {
+  signupSection.style.display = "none"
+  loginSection.style.display = "block"
+  navSignup.style.display = "block"
+  navLogin.style.display = "none"
 }
 
-function backtoSignup() {
-  document.location.href = 'signup.html'
+function showSignup() {
+  loginSection.style.display = "none"
+  signupSection.style.display = "block"
+  navSignup.style.display = "none"
+  navLogin.style.display = "block"
 }

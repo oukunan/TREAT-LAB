@@ -37,11 +37,30 @@ input {
   transform: scale(0.95);
 }
 
-#signUpBtn, #ready {
+#signUpBtn {
+  background: #75BD00;
+  width: 120px;
+  height: 40px;
+  color: white;
+  border-radius: 50px;
+  margin-top: 20px;
+}
+
+#signUpBtn:hover {
+  background-color: #84d600;
+  transform: scale(1.05);
+}
+
+#signUpBtn:active {
+  background-color: #629f00;
+  transform: scale(0.95);
+}
+
+.navMain, #ready {
   cursor: pointer;
 }
 
-#signUpBtn:hover, #ready:hover {
+.navMain:hover, #ready:hover {
   text-decoration: underline;
 }
 
@@ -72,7 +91,7 @@ input {
   border-bottom-left-radius: 50px;
 }
 
-input[type="email"], input[type="password"] {
+input[type="email"], input[type="password"], input[type="number"], #gender {
   padding-left: 25px;
   border: 0px;
   background: rgba(221, 221, 221, 0.4);
@@ -81,22 +100,26 @@ input[type="email"], input[type="password"] {
   padding-left: 0px;
 }
 
-input[type="email"]:focus, input[type="password"]:focus {
+input[type="email"]:focus, input[type="password"]:focus, input[type="number"]:focus, #gender:focus {
   background: rgba(221, 221, 221, 0.4);
   outline: none;
   box-shadow: none;
   color: white;
 }
 
-input[type="email"]::-webkit-input-placeholder, input[type="password"]::-webkit-input-placeholder {
+input[type="email"]::-webkit-input-placeholder, input[type="password"]::-webkit-input-placeholder, input[type="number"]::-webkit-input-placeholder {
   color: white;
   font-size: 15px;
 }
 
-input[type="email"]:focus::-webkit-input-placeholder, input[type="password"]:focus::-webkit-input-placeholder {
+input[type="email"]:focus::-webkit-input-placeholder, input[type="password"]:focus::-webkit-input-placeholder, input[type="number"]:focus::-webkit-input-placeholder {
   color: transparent
 }
 
 #remember {
   font-size: 15px;
+}
+
+#navLogin, #signup-section {
+  display: none;
 }
