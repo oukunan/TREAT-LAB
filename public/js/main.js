@@ -36,9 +36,6 @@ function setup() {
   ctracker = new clm.tracker();
   ctracker.init(pModel);
   ctracker.start(videoInput.elt);
-
-  button = createButton("set height");
-  button.mousePressed(setHeight);
 }
 
 function draw() {
@@ -261,7 +258,7 @@ window.onload = () => {
 };
 
 // -------- Logout ------------
-logoutBtn.addEventListener("click", () => {
+function logout() {
   firebase
     .auth()
     .signOut()
@@ -271,4 +268,7 @@ logoutBtn.addEventListener("click", () => {
     .catch(err => {
       alert(err);
     });
-});
+}
+
+
+document.getElementById('dateValue').innerHTML = moment().format('LL');

@@ -5,8 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+    <title>TreatLab</title>
+    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+    <link rel="stylesheet" href="css/main.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
     <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
     <script src="libraries/clmtrackr.js"></script>
     <script src="libraries/model_pca_20_svm.js"></script>
@@ -14,43 +25,118 @@
     <script src="libraries/p5.dom.js" type="text/javascript"></script>
     <script src="libraries/moment.js"></script>
     <style>
-        #sketch-holder2 {
-            position: fixed;
-            top: 0px;
-        }
     </style>
 </head>
 
 <body>
-    <div id="sketch-holder">
-    </div>
-    <div id="sketch-holder2">
-    </div>
-    <button id="logoutBtn">Logout</button>
-    <div>
-        <h5>Bad posture</h5>
-        <p id="showBend">0</p>
-    </div>
-    <div>
-        <h5>Spent on your Laptop</h5>
-        <p id="sit">00:00:00</p>
-    </div>
-    <div>
-        <h5>Relax time </h5>
-        <p id="relax">00:00:00</p>
-    </div>
-    <div>
-        <h5>Keybroad press counting</h5>
-        <p id="keyboard">0</p>
-    </div>
-    <div>
-        <h5>Mouse clicked</h5>
-        <p id="mouse">0</p>
+    <div class="container">
+        <div class="row float-right">
+            <div class="col-md-12 top-img">
+                <select class="form-control" onchange="logout()" id="logout-section">
+                    <option selected disabled hidden>Kunanan T.</option>
+                    <option id="logoutBtn">Logout</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <img src="img/default.png" class="img-responsive rounded-circle" alt="" height="160px" width="160px">
+                <span id="name">Kunanan T.</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#overview" role="tab" data-toggle="tab">OVERVIEW</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#history" role="tab" data-toggle="tab">HISTORY</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="overview">
+                        <div class="date_section">
+                            <span class="date" id="dateLabel">Today: </span>
+                            <span class="date" id="dateValue"></span>
+                        </div>
+                        <div class="col">
+                            <div class="row justify-content-center text-center">
+                                <div class="col-md-6 col-xl-5">
+                                    <div id="sketch-holder">
+                                        <div id="sketch-holder2">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="row justify-content-center text-center">
+                                <div class="col-md-11 col-xl-10">
+                                    <button class="btn btn-block" id="heightBtn" onclick="setHeight()">Set height</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="row justify-content-center text-center">
+                                <div class="col-md-2">
+                                    <div class="main_detail">
+                                        <h5>Bad Posture</h5>
+                                        <p id="showBend">0</p>
+                                        <h5>times</h5>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="main_detail">
+                                        <h5>Sitting Hours</h5>
+                                        <p id="sit">00:00:00</p>
+                                        <h5>hh:mm:ss</h5>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="main_detail">
+                                        <h5>Relax time </h5>
+                                        <p id="relax">00:00:00</p>
+                                        <h5>hh:mm:ss</h5>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-xl-2">
+                                    <div class="main_detail">
+                                        <h5>Typing Keyboard</h5>
+                                        <p id="keyboard">0</p>
+                                        <h5>times</h5>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="main_detail">
+                                        <h5>Click</h5>
+                                        <p id="mouse">0</p>
+                                        <h5>times</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane fade" id="history">
+                        <div class="row text-center">
+                            <div class="col-md-12">
+                                <h2>COMING SOON :)</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="js/init_firebase.js"></script>
     <script src="js/main.js"></script>
-    
+
 </body>
 
 </html>
