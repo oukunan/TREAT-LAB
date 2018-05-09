@@ -93,7 +93,9 @@ setInterval(headUp, 1000);
 
 // -------- Save beding data -------------
 function bendCount() {
-  let user = firebase.auth().currentUser;
+  let user = firebase
+    .auth()
+    .currentUser;
   let bendRef = firebase
     .database()
     .ref(`users/${user.uid}/bends/${date}/${hour}/count`);
@@ -104,9 +106,13 @@ function bendCount() {
 }
 
 // -------- Mouse part -------------
-gkm.events.on("mouse.pressed", () => {
+gkm
+  .events
+  .on("mouse.pressed", () => {
     ++mouseClickCount;
-    let user = firebase.auth().currentUser;
+    let user = firebase
+      .auth()
+      .currentUser;
     let mouseRef = firebase
       .database()
       .ref(`users/${user.uid}/mouse/${date}/${hour}/mouseClickCount`);
@@ -117,9 +123,13 @@ gkm.events.on("mouse.pressed", () => {
   });
 
 // --------- Keyboard tracking --------------
-gkm.events.on("key.pressed", () => {
+gkm
+  .events
+  .on("key.pressed", () => {
     ++keycount;
-    let user = firebase.auth().currentUser;
+    let user = firebase
+      .auth()
+      .currentUser;
     let keyboardRef = firebase
       .database()
       .ref(`users/${user.uid}/keyboard/${date}/${hour}/keycount`);
@@ -135,7 +145,9 @@ gkm.events.on("key.pressed", () => {
 
 // --------- Timer for sit duration -------------
 function sitTimer() {
-  let user = firebase.auth().currentUser;
+  let user = firebase
+    .auth()
+    .currentUser;
   let sitRef = firebase
     .database()
     .ref(`users/${user.uid}/sit/${date}/${hour}/duration`);
@@ -146,13 +158,14 @@ function sitTimer() {
     ++secSit;
     ++showSit;
     if (showSit % 1800 == 0) {
-      notifier.notify({
-        title: "Go get some rest",
-         message: "You work for 1 hour"
-        });
+      notifier.notify({title: "Go get some rest", message: "You work for 1 hour"});
     }
-    const formatted = moment.utc(showSit * 1000).format("HH:mm:ss");
-    document.getElementById("sit").innerHTML = `${formatted}`;
+    const formatted = moment
+      .utc(showSit * 1000)
+      .format("HH:mm:ss");
+    document
+      .getElementById("sit")
+      .innerHTML = `${formatted}`;
     let tmpSecRelax = secRelex;
     relaxRef.transaction(duration => {
       duration += tmpSecRelax;
@@ -162,8 +175,12 @@ function sitTimer() {
   } else {
     ++secRelex;
     ++showRelax;
-    const formatted = moment.utc(showRelax * 1000).format("HH:mm:ss");
-    document.getElementById("relax").innerHTML = `${formatted}`;
+    const formatted = moment
+      .utc(showRelax * 1000)
+      .format("HH:mm:ss");
+    document
+      .getElementById("relax")
+      .innerHTML = `${formatted}`;
     let tmpSecSit = secSit;
     sitRef.transaction(duration => {
       duration += tmpSecSit;
@@ -176,8 +193,13 @@ setInterval(sitTimer, 1000);
 
 // --------- Load data after login -----------
 window.onload = () => {
-  firebase.auth().onAuthStateChanged(user => {
+  firebase
+    .auth()
+    .onAuthStateChanged(user => {
       if (user) {
+        let nameRef = firebase
+          .database()
+          .ref(`users/${user.uid}/name`)
         let bendRef = firebase
           .database()
           .ref(`users/${user.uid}/bends/${date}/${hour}/count`);
@@ -194,26 +216,42 @@ window.onload = () => {
           .database()
           .ref(`users/${user.uid}/relax/${date}/${hour}/duration`);
 
+        nameRef.on('value', received => {
+          let name = received.val();
+          if (name) {
+            document
+              .getElementById('name')
+              .innerHTML = name
+            document
+              .getElementById('topName')
+              .innerHTML = name
+          }
+        })
         bendRef.on("value", received => {
           let data = received.val();
           if (data) {
-            document.getElementById("showBend").innerHTML = data;
+            document
+              .getElementById("showBend")
+              .innerHTML = data;
           } else {
-            document.getElementById("showBend").innerHTML = "0";
+            document
+              .getElementById("showBend")
+              .innerHTML = "0";
           }
         });
         keyboardRef.on("value", received => {
           let keyboardCountData = received.val();
           if (keyboardCountData) {
             if (keyboardCountData % 8000 == 0) {
-              notifier.notify({
-                title: "DANGER",
-                message: "Number of keystroke is too many"
-              });
+              notifier.notify({title: "DANGER", message: "Number of keystroke is too many"});
             }
-            document.getElementById("keyboard").innerHTML = keyboardCountData;
+            document
+              .getElementById("keyboard")
+              .innerHTML = keyboardCountData;
           } else {
-            document.getElementById("keyboard").innerHTML = "0";
+            document
+              .getElementById("keyboard")
+              .innerHTML = "0";
           }
         });
 
@@ -221,14 +259,15 @@ window.onload = () => {
           let mouseCountData = received.val();
           if (mouseCountData) {
             if (mouseCountData % 100 == 0) {
-              notifier.notify({
-                title: "DANGER", 
-                message: "Number of mouse click is too many"
-              });
+              notifier.notify({title: "DANGER", message: "Number of mouse click is too many"});
             }
-            document.getElementById("mouse").innerHTML = mouseCountData;
+            document
+              .getElementById("mouse")
+              .innerHTML = mouseCountData;
           } else {
-            document.getElementById("mouse").innerHTML = "0";
+            document
+              .getElementById("mouse")
+              .innerHTML = "0";
           }
         });
 
@@ -236,21 +275,33 @@ window.onload = () => {
           let sitDuration = received.val();
           if (sitDuration) {
             showSit = sitDuration;
-            const formatted = moment.utc(sitDuration * 1000).format("HH:mm:ss");
-            document.getElementById("sit").innerHTML = `${formatted}`;
+            const formatted = moment
+              .utc(sitDuration * 1000)
+              .format("HH:mm:ss");
+            document
+              .getElementById("sit")
+              .innerHTML = `${formatted}`;
           } else {
-            document.getElementById("sit").innerHTML = "00:00:00";
+            document
+              .getElementById("sit")
+              .innerHTML = "00:00:00";
           }
         });
-      
+
         relaxRef.on("value", received => {
           let sitRelax = received.val();
           if (sitRelax) {
             showRelax = sitRelax;
-            const formatted = moment.utc(sitRelax * 1000).format("HH:mm:ss");
-            document.getElementById("relax").innerHTML = `${formatted}`;
+            const formatted = moment
+              .utc(sitRelax * 1000)
+              .format("HH:mm:ss");
+            document
+              .getElementById("relax")
+              .innerHTML = `${formatted}`;
           } else {
-            document.getElementById("relax").innerHTML = "00:00:00";
+            document
+              .getElementById("relax")
+              .innerHTML = "00:00:00";
           }
         });
       }
@@ -270,5 +321,6 @@ function logout() {
     });
 }
 
-
-document.getElementById('dateValue').innerHTML = moment().format('LL');
+document
+  .getElementById('dateValue')
+  .innerHTML = moment().format('LL');
