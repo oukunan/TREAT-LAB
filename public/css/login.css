@@ -75,9 +75,6 @@ input {
 }
 
 .form-control {
-  /* -webkit-border-radius: 35px !important;
-  -moz-border-radius: 35px !important; */
-  /* border-radius: 35px !important; */
   border-top-right-radius: 50px !important;
   border-bottom-right-radius: 50px !important;
 }
@@ -91,7 +88,7 @@ input {
   border-bottom-left-radius: 50px;
 }
 
-input[type="email"], input[type="password"], input[type="number"], #gender {
+input[type="email"], input[type="password"], input[type="number"], input[type="text"], #gender {
   padding-left: 25px;
   border: 0px;
   background: rgba(221, 221, 221, 0.4);
@@ -100,19 +97,19 @@ input[type="email"], input[type="password"], input[type="number"], #gender {
   padding-left: 0px;
 }
 
-input[type="email"]:focus, input[type="password"]:focus, input[type="number"]:focus, #gender:focus {
+input[type="email"]:focus, input[type="password"]:focus, input[type="number"]:focus, input[type="text"]:focus, #gender:focus {
   background: rgba(221, 221, 221, 0.4);
   outline: none;
   box-shadow: none;
   color: white;
 }
 
-input[type="email"]::-webkit-input-placeholder, input[type="password"]::-webkit-input-placeholder, input[type="number"]::-webkit-input-placeholder {
+input[type="email"]::-webkit-input-placeholder, input[type="password"]::-webkit-input-placeholder, input[type="number"]::-webkit-input-placeholder, input[type="text"]::-webkit-input-placeholder {
   color: white;
   font-size: 15px;
 }
 
-input[type="email"]:focus::-webkit-input-placeholder, input[type="password"]:focus::-webkit-input-placeholder, input[type="number"]:focus::-webkit-input-placeholder {
+input[type="email"]:focus::-webkit-input-placeholder, input[type="password"]:focus::-webkit-input-placeholder, input[type="number"]:focus::-webkit-input-placeholder, input[type="text"]:focus::-webkit-input-placeholder {
   color: transparent
 }
 
