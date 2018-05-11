@@ -23,6 +23,7 @@ let showRelax = 0;
 let logoutBtn = document.getElementById("logoutBtn");
 let date = moment(new Date()).format("DD-MM-YYYY ");
 let hour = moment(new Date()).format("HH");
+const pressedKeys = {};
 
 //------- Image proceessing -----------
 function setup() {
@@ -91,7 +92,7 @@ function timer() {
 
 setInterval(headUp, 1000);
 
-// -------- Save beding data -------------
+// -------- Save bending data -------------
 function bendCount() {
   let user = firebase
     .auth()
@@ -125,7 +126,12 @@ gkm
 // --------- Keyboard tracking --------------
 gkm
   .events
-  .on("key.pressed", () => {
+  .on("key.pressed", (data) => {
+    if (pressedKeys[data]) {
+      return;
+    }
+
+    pressedKeys[data] = true;
     ++keycount;
     let user = firebase
       .auth()
@@ -141,6 +147,12 @@ gkm
     timeout = setTimeout(() => {
       keycount = 0;
     }, 1000);
+  });
+
+gkm
+  .events
+  .on('key.released', function (data) {
+    delete pressedKeys[data];
   });
 
 // --------- Timer for sit duration -------------
