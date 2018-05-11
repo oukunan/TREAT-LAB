@@ -10,6 +10,7 @@ function signup() {
     .auth()
     .createUserWithEmailAndPassword(email, password)
     .then(function() {
+      let name = document.getElementById('name').value
       let gender = document.getElementById('gender').value;
       let age = document.getElementById('age').value;
       let height = document.getElementById('height').value;
@@ -18,6 +19,7 @@ function signup() {
       let user = firebase.auth().currentUser;
       let userRef = firebase.database().ref(`users/${user.uid}`);
       userRef.set({
+        name,
         gender,
         age,
         height,
