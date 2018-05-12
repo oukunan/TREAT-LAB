@@ -15,11 +15,15 @@ let secRelex = 0;
 let timeout = null;
 let keycount = 0;
 let mouseClickCount = 0;
+let mouseCounter = 0
 let sumKeycount = 0;
 let alwaySit = 0;
 let alwayRelax = 0;
 let showSit = 0;
 let showRelax = 0;
+let showMouse = 0;
+let mouseTimerout;
+let mouseBoolean = false
 let logoutBtn = document.getElementById("logoutBtn");
 let date = moment(new Date()).format("DD-MM-YYYY ");
 let hour = moment(new Date()).format("HH");
@@ -69,7 +73,6 @@ function headUp() {
       timer();
       if (counter == 2) {
         notifier.notify({title: "Mind your posture", message: "Your Head is bending down."});
-
         bendCount();
         alarm = false;
         counter = 0;
@@ -107,30 +110,48 @@ function bendCount() {
 }
 
 // -------- Mouse part -------------
-gkm
-  .events
-  .on("mouse.pressed", () => {
-    ++mouseClickCount;
-    let user = firebase
-      .auth()
-      .currentUser;
-    let mouseRef = firebase
-      .database()
-      .ref(`users/${user.uid}/mouse/${date}/${hour}/mouseClickCount`);
-    mouseRef.transaction(mouseClickCount => {
-      mouseClickCount += 1;
-      return mouseClickCount;
-    });
-  });
+gkm.events.on('mouse.*', () => {
+    mouseBoolean = true
+    const formatted = moment.utc(showMouse * 1000).format("HH:mm:ss");
+    document.getElementById('mouse').innerHTML = `${formatted}`
+    if (mouseTimerout) {
+      clearTimeout(mouseTimerout);
+    }
+    mouseTimerout = setTimeout(mouseStop, 150);
+  })
 
-// --------- Keyboard tracking --------------
+function mouseStop() {
+  mouseBoolean = false
+  let user = firebase.auth().currentUser;
+  let mouseRef = firebase.database().ref(`users/${user.uid}/mouse/${date}/${hour}/mouseClickCount`);
+  let tmpMouseCounter = mouseCounter;
+  
+  mouseRef.transaction(mouseClickCount => {
+    mouseClickCount += tmpMouseCounter;
+    mouseCounter = 0
+    return mouseClickCount;
+  });
+}
+
+function checkMouseTimer() {
+  if (mouseBoolean) {
+    mouseTimer()
+  }
+}
+
+function mouseTimer() {
+  setInterval(++mouseCounter, ++showMouse, 1000)
+}
+
+setInterval(checkMouseTimer, 1000)
+
+//---------Keyboard tracking--------------
 gkm
   .events
   .on("key.pressed", (data) => {
     if (pressedKeys[data]) {
       return;
     }
-
     pressedKeys[data] = true;
     ++keycount;
     let user = firebase
@@ -270,16 +291,19 @@ window.onload = () => {
         mouseRef.on("value", received => {
           let mouseCountData = received.val();
           if (mouseCountData) {
-            if (mouseCountData % 100 == 0) {
-              notifier.notify({title: "DANGER", message: "Number of mouse click is too many"});
-            }
+            showMouse = mouseCountData;
+            // if (mouseCountData % 100 == 0) {   notifier.notify({title: "DANGER", message:
+            // "Number of mouse click is too many"}); }
+            const formatted = moment
+              .utc(mouseCountData * 1000)
+              .format("HH:mm:ss");
             document
               .getElementById("mouse")
-              .innerHTML = mouseCountData;
+              .innerHTML = formatted;
           } else {
             document
               .getElementById("mouse")
-              .innerHTML = "0";
+              .innerHTML = "00:00:00";
           }
         });
 
