@@ -72,7 +72,7 @@ function headUp() {
     if (ypos > trigHeight && alarm) {
       timer();
       if (counter == 2) {
-        notifier.notify({title: "Mind your posture", message: "Your Head is bending down."});
+        notifier.notify({title: "Mind your posture", message: "Your head is bending down"});
         bendCount();
         alarm = false;
         counter = 0;
@@ -191,7 +191,7 @@ function sitTimer() {
     ++secSit;
     ++showSit;
     if (showSit % 1800 == 0) {
-      notifier.notify({title: "Go get some rest", message: "You work for 1 hour"});
+      notifier.notify({ title: "Go get some rest", message: "Now you have to sit for 30 minutes"});
     }
     const formatted = moment
       .utc(showSit * 1000)
@@ -276,7 +276,7 @@ window.onload = () => {
           let keyboardCountData = received.val();
           if (keyboardCountData) {
             if (keyboardCountData % 8000 == 0) {
-              notifier.notify({title: "DANGER", message: "Number of keystroke is too many"});
+              notifier.notify({title: "Go get some rest", message: "Number of keystroke is too many"});
             }
             document
               .getElementById("keyboard")
