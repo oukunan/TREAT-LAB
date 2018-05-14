@@ -190,7 +190,7 @@ function sitTimer() {
   if (typeof positions === "object") {
     ++secSit;
     ++showSit;
-    if (showSit % 10 == 0) {
+    if (showSit % 30 == 0) {
       notifier.notify({ title: "Go get some rest", message: "Now you have to sit for 30 minutes"});
     }
     const formatted = moment
