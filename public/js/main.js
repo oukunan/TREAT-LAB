@@ -190,7 +190,7 @@ function sitTimer() {
   if (typeof positions === "object") {
     ++secSit;
     ++showSit;
-    if (showSit % 1800 == 0) {
+    if (showSit % 10 == 0) {
       notifier.notify({ title: "Go get some rest", message: "Now you have to sit for 30 minutes"});
     }
     const formatted = moment
@@ -275,7 +275,7 @@ window.onload = () => {
         keyboardRef.on("value", received => {
           let keyboardCountData = received.val();
           if (keyboardCountData) {
-            if (keyboardCountData % 8000 == 0) {
+            if (keyboardCountData % 15 == 0) {
               notifier.notify({title: "Go get some rest", message: "Number of keystroke is too many"});
             }
             document
