@@ -29,6 +29,7 @@ let date = moment(new Date()).format("DD-MM-YYYY ");
 let hour = moment(new Date()).format("HH");
 const pressedKeys = {};
 
+
 //------- Image proceessing -----------
 function setup() {
   let videoInput = createCapture(VIDEO);
@@ -72,7 +73,7 @@ function headUp() {
     if (ypos > trigHeight && alarm) {
       timer();
       if (counter == 2) {
-        notifier.notify({title: "Mind your posture", message: "Your head is bending down"});
+        notifier.notify({ title: "Mind your posture", message: "Your head is bending down" });
         bendCount();
         alarm = false;
         counter = 0;
@@ -111,21 +112,21 @@ function bendCount() {
 
 // -------- Mouse part -------------
 gkm.events.on('mouse.*', () => {
-    mouseBoolean = true
-    const formatted = moment.utc(showMouse * 1000).format("HH:mm:ss");
-    document.getElementById('mouse').innerHTML = `${formatted}`
-    if (mouseTimerout) {
-      clearTimeout(mouseTimerout);
-    }
-    mouseTimerout = setTimeout(mouseStop, 150);
-  })
+  mouseBoolean = true
+  const formatted = moment.utc(showMouse * 1000).format("HH:mm:ss");
+  document.getElementById('mouse').innerHTML = `${formatted}`
+  if (mouseTimerout) {
+    clearTimeout(mouseTimerout);
+  }
+  mouseTimerout = setTimeout(mouseStop, 150);
+})
 
 function mouseStop() {
   mouseBoolean = false
   let user = firebase.auth().currentUser;
   let mouseRef = firebase.database().ref(`users/${user.uid}/mouse/${date}/${hour}/mouseClickCount`);
   let tmpMouseCounter = mouseCounter;
-  
+
   mouseRef.transaction(mouseClickCount => {
     mouseClickCount += tmpMouseCounter;
     mouseCounter = 0
@@ -191,7 +192,7 @@ function sitTimer() {
     ++secSit;
     ++showSit;
     if (showSit % 30 == 0) {
-      notifier.notify({ title: "Go get some rest", message: "Now you have to sit for 30 minutes"});
+      notifier.notify({ title: "Go get some rest", message: "Now you have to sit for 30 minutes" });
     }
     const formatted = moment
       .utc(showSit * 1000)
@@ -224,7 +225,72 @@ function sitTimer() {
 }
 setInterval(sitTimer, 1000);
 
+//---------- History part ------------
+function historyGraph() {
+  let bendCountDataRef = null;
+  let timeVariableForGraph = [];
+  let countVariableForGraph = [];
+  let user = firebase.auth().currentUser;
+  let bendCountData = null;
+
+
+
+  for (i = 1; i < 24; i++) {
+    i = moment(i.toString(), "LT").format('HH');
+
+    bendCountDataRef = firebase
+      .database()
+      .ref(`users/${user.uid}/bends/${date}/${i}/count`);
+
+    try {
+      bendCountDataRef.once("value", (snapshot) => {
+        console.log(snapshot.val());
+        bendCountData = snapshot.val();
+
+
+      });
+    } catch (ex) {
+      console.log(ex);
+
+    }
+
+    countVariableForGraph.push(bendCountData);
+    timeVariableForGraph.push(i);
+    console.log(timeVariableForGraph + "____" + countVariableForGraph);
+  }
+
+  let bendHistoryInThisDay = {
+    x: timeVariableForGraph,
+    y: countVariableForGraph,
+    type: 'scatter'
+  };
+
+  let trace1 = {
+    x: [1, 2, 3, 4],
+    y: [60, 50, 10, 90],
+    type: 'scatter'
+  };
+
+  let trace2 = {
+    x: [1, 2, 3, 4],
+    y: [16, 5, 11, 9],
+    type: 'scatter'
+  };
+
+  let data = [bendHistoryInThisDay, trace2];
+  let GRAPH = document.getElementById("showGraph");
+
+  Plotly.newPlot(GRAPH, data);
+
+}
+
+firebase.auth().onAuthStateChanged(function (user) {
+  window.onload = historyGraph();
+});
+
+
 // --------- Load data after login -----------
+
 window.onload = () => {
   firebase
     .auth()
@@ -276,7 +342,7 @@ window.onload = () => {
           let keyboardCountData = received.val();
           if (keyboardCountData) {
             if (keyboardCountData % 15 == 0) {
-              notifier.notify({title: "Go get some rest", message: "Number of keystroke is too many"});
+              notifier.notify({ title: "Go get some rest", message: "Number of keystroke is too many" });
             }
             document
               .getElementById("keyboard")
