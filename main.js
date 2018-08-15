@@ -31,8 +31,8 @@ app.setAppUserModelId("treatlab.com");
 app.on("ready", () => {
   main = new BrowserWindow({
     center: true,
-    minWidth: 1024,
-    minHeight: 768,
+    minWidth: 1440,
+    minHeight: 900,
     webPreferences: {
       backgroundThrottling: false
     }

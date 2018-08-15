@@ -1,5 +1,5 @@
-const notifier = require('node-notifier');
-const gkm = require('gkm');
+const notifier = require("node-notifier");
+const gkm = require("gkm");
 
 let ctracker;
 let trigHeight = 0;
@@ -16,7 +16,6 @@ let timeout = null;
 let keycount = 0;
 let mouseClickCount = 0;
 let mouseCounter = 0;
-let sumKeycount = 0;
 let alwaySit = 0;
 let alwayRelax = 0;
 let showSit = 0;
@@ -24,19 +23,19 @@ let showRelax = 0;
 let showMouse = 0;
 let mouseTimerout;
 let mouseBoolean = false;
-let logoutBtn = document.getElementById('logoutBtn');
-let date = moment(new Date()).format('DD-MM-YYYY ');
-let hour = moment(new Date()).format('HH');
+let logoutBtn = document.getElementById("logoutBtn");
+let date = moment(new Date()).format("DD-MM-YYYY ");
+let hour = moment(new Date()).format("HH");
 const pressedKeys = {};
 
 //------- Image proceessing -----------
 function setup() {
   let videoInput = createCapture(VIDEO);
   videoInput.size(400, 300);
-  videoInput.parent('sketch-holder');
+  videoInput.parent("sketch-holder");
 
   let cnv = createCanvas(400, 300);
-  cnv.parent('sketch-holder2');
+  cnv.parent("sketch-holder2");
 
   ctracker = new clm.tracker();
   ctracker.init(pModel);
@@ -55,7 +54,7 @@ function draw() {
       ypos = positions[i][1];
     }
   }
-  stroke('rgb(0,255,0)');
+  stroke("rgb(0,255,0)");
   strokeWeight(4);
   isLine && line(0, trigHeight, width * 2, trigHeight);
 }
@@ -72,7 +71,10 @@ function headUp() {
     if (ypos > trigHeight && alarm) {
       timer();
       if (counter == 2) {
-        notifier.notify({ title: 'Mind your posture', message: 'Your head is bending down' });
+        notifier.notify({
+          title: "Mind your posture",
+          message: "Your head is bending down"
+        });
         bendCount();
         alarm = false;
         counter = 0;
@@ -98,7 +100,9 @@ setInterval(headUp, 1000);
 // -------- Save bending data -------------
 function bendCount() {
   let user = firebase.auth().currentUser;
-  let bendRef = firebase.database().ref(`users/${user.uid}/bends/${date}/${hour}/count`);
+  let bendRef = firebase
+    .database()
+    .ref(`users/${user.uid}/bends/${date}/${hour}/count`);
   bendRef.transaction(count => {
     count += 1;
     return count;
@@ -106,10 +110,10 @@ function bendCount() {
 }
 
 // -------- Mouse part -------------
-gkm.events.on('mouse.*', () => {
+gkm.events.on("mouse.*", () => {
   mouseBoolean = true;
-  const formatted = moment.utc(showMouse * 1000).format('HH:mm:ss');
-  document.getElementById('mouse').innerHTML = `${formatted}`;
+  const formatted = moment.utc(showMouse * 1000).format("HH:mm:ss");
+  document.getElementById("mouse").innerHTML = `${formatted}`;
   if (mouseTimerout) {
     clearTimeout(mouseTimerout);
   }
@@ -119,7 +123,9 @@ gkm.events.on('mouse.*', () => {
 function mouseStop() {
   mouseBoolean = false;
   let user = firebase.auth().currentUser;
-  let mouseRef = firebase.database().ref(`users/${user.uid}/mouse/${date}/${hour}/mouseClickCount`);
+  let mouseRef = firebase
+    .database()
+    .ref(`users/${user.uid}/mouse/${date}/${hour}/mouseClickCount`);
   let tmpMouseCounter = mouseCounter;
 
   mouseRef.transaction(mouseClickCount => {
@@ -142,14 +148,16 @@ function mouseTimer() {
 setInterval(checkMouseTimer, 1000);
 
 //---------Keyboard tracking--------------
-gkm.events.on('key.pressed', data => {
+gkm.events.on("key.pressed", data => {
   if (pressedKeys[data]) {
     return;
   }
   pressedKeys[data] = true;
   ++keycount;
   let user = firebase.auth().currentUser;
-  let keyboardRef = firebase.database().ref(`users/${user.uid}/keyboard/${date}/${hour}/keycount`);
+  let keyboardRef = firebase
+    .database()
+    .ref(`users/${user.uid}/keyboard/${date}/${hour}/keycount`);
   keyboardRef.transaction(keycount => {
     keycount += 1;
     return keycount;
@@ -160,23 +168,30 @@ gkm.events.on('key.pressed', data => {
   }, 1000);
 });
 
-gkm.events.on('key.released', function(data) {
+gkm.events.on("key.released", function(data) {
   delete pressedKeys[data];
 });
 
 // --------- Timer for sit duration -------------
 function sitTimer() {
   let user = firebase.auth().currentUser;
-  let sitRef = firebase.database().ref(`users/${user.uid}/sit/${date}/${hour}/duration`);
-  let relaxRef = firebase.database().ref(`users/${user.uid}/relax/${date}/${hour}/duration`);
-  if (typeof positions === 'object') {
+  let sitRef = firebase
+    .database()
+    .ref(`users/${user.uid}/sit/${date}/${hour}/duration`);
+  let relaxRef = firebase
+    .database()
+    .ref(`users/${user.uid}/relax/${date}/${hour}/duration`);
+  if (typeof positions === "object") {
     ++secSit;
     ++showSit;
     if (showSit % 1800 == 0) {
-      notifier.notify({ title: 'Go get some rest', message: 'Now you have to sit for 30 minutes' });
+      notifier.notify({
+        title: "Go get some rest",
+        message: "Now you have to sit for 30 minutes"
+      });
     }
-    const formatted = moment.utc(showSit * 1000).format('HH:mm:ss');
-    document.getElementById('sit').innerHTML = `${formatted}`;
+    const formatted = moment.utc(showSit * 1000).format("HH:mm:ss");
+    document.getElementById("sit").innerHTML = `${formatted}`;
     let tmpSecRelax = secRelex;
     relaxRef.transaction(duration => {
       duration += tmpSecRelax;
@@ -186,8 +201,8 @@ function sitTimer() {
   } else {
     ++secRelex;
     ++showRelax;
-    const formatted = moment.utc(showRelax * 1000).format('HH:mm:ss');
-    document.getElementById('relax').innerHTML = `${formatted}`;
+    const formatted = moment.utc(showRelax * 1000).format("HH:mm:ss");
+    document.getElementById("relax").innerHTML = `${formatted}`;
     let tmpSecSit = secSit;
     sitRef.transaction(duration => {
       duration += tmpSecSit;
@@ -198,110 +213,94 @@ function sitTimer() {
 }
 setInterval(sitTimer, 1000);
 
-//---------- History part ------------
-function historyGraph(user) {
-  let ar1 = [];
-  let ar2 = [];
-  let bendGraph = firebase.database().ref(`users/${user.uid}/bends/${date}`);
-  bendGraph.on('value', snap => {
-    snap.forEach(item => {
-      ar1.push(item.key);
-      ar2.push(item.val().count);
-    });
-  });
-  let bendScatter = {
-    x: ar1,
-    y: ar2,
-    type: 'scatter',
-  };
-
-  let data = [bendScatter];
-  let GRAPH = document.getElementById('showGraph');
-
-  Plotly.newPlot(GRAPH, data);
-}
-
 // --------- Load data after login -----------
 
 window.onload = () => {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       let nameRef = firebase.database().ref(`users/${user.uid}/name`);
-      let bendRef = firebase.database().ref(`users/${user.uid}/bends/${date}/${hour}/count`);
+      let bendRef = firebase
+        .database()
+        .ref(`users/${user.uid}/bends/${date}/${hour}/count`);
       let keyboardRef = firebase
         .database()
         .ref(`users/${user.uid}/keyboard/${date}/${hour}/keycount`);
       let mouseRef = firebase
         .database()
         .ref(`users/${user.uid}/mouse/${date}/${hour}/mouseClickCount`);
-      let sitRef = firebase.database().ref(`users/${user.uid}/sit/${date}/${hour}/duration`);
-      let relaxRef = firebase.database().ref(`users/${user.uid}/relax/${date}/${hour}/duration`);
+      let sitRef = firebase
+        .database()
+        .ref(`users/${user.uid}/sit/${date}/${hour}/duration`);
+      let relaxRef = firebase
+        .database()
+        .ref(`users/${user.uid}/relax/${date}/${hour}/duration`);
 
-      nameRef.on('value', received => {
+      nameRef.on("value", received => {
         let name = received.val();
         if (name) {
-          document.getElementById('name').innerHTML = name;
-          document.getElementById('topName').innerHTML = name;
+          document.getElementById("name").innerHTML = name;
+          document.getElementById("topName").innerHTML = name;
         }
       });
-      bendRef.on('value', received => {
+
+      bendRef.on("value", received => {
         let data = received.val();
         if (data) {
-          document.getElementById('showBend').innerHTML = data;
+          document.getElementById("showBend").innerHTML = data;
         } else {
-          document.getElementById('showBend').innerHTML = '0';
+          document.getElementById("showBend").innerHTML = "0";
         }
       });
-      keyboardRef.on('value', received => {
+      keyboardRef.on("value", received => {
         let keyboardCountData = received.val();
         if (keyboardCountData) {
           if (keyboardCountData % 10000 == 0) {
             notifier.notify({
-              title: 'Go get some rest',
-              message: 'Number of keystroke is too many',
+              title: "Go get some rest",
+              message: "Number of keystroke is too many"
             });
           }
-          document.getElementById('keyboard').innerHTML = keyboardCountData;
+          document.getElementById("keyboard").innerHTML = keyboardCountData;
         } else {
-          document.getElementById('keyboard').innerHTML = '0';
+          document.getElementById("keyboard").innerHTML = "0";
         }
       });
 
-      mouseRef.on('value', received => {
+      mouseRef.on("value", received => {
         let mouseCountData = received.val();
         if (mouseCountData) {
           showMouse = mouseCountData;
           // if (mouseCountData % 100 == 0) {   notifier.notify({title: "DANGER", message:
           // "Number of mouse click is too many"}); }
-          const formatted = moment.utc(mouseCountData * 1000).format('HH:mm:ss');
-          document.getElementById('mouse').innerHTML = formatted;
+          const formatted = moment
+            .utc(mouseCountData * 1000)
+            .format("HH:mm:ss");
+          document.getElementById("mouse").innerHTML = formatted;
         } else {
-          document.getElementById('mouse').innerHTML = '00:00:00';
+          document.getElementById("mouse").innerHTML = "00:00:00";
         }
       });
 
-      sitRef.on('value', received => {
+      sitRef.on("value", received => {
         let sitDuration = received.val();
         if (sitDuration) {
           showSit = sitDuration;
-          const formatted = moment.utc(sitDuration * 1000).format('HH:mm:ss');
-          document.getElementById('sit').innerHTML = `${formatted}`;
+          const formatted = moment.utc(sitDuration * 1000).format("HH:mm:ss");
+          document.getElementById("sit").innerHTML = `${formatted}`;
         } else {
-          document.getElementById('sit').innerHTML = '00:00:00';
+          document.getElementById("sit").innerHTML = "00:00:00";
         }
       });
-
-      relaxRef.on('value', received => {
+      relaxRef.on("value", received => {
         let sitRelax = received.val();
         if (sitRelax) {
           showRelax = sitRelax;
-          const formatted = moment.utc(sitRelax * 1000).format('HH:mm:ss');
-          document.getElementById('relax').innerHTML = `${formatted}`;
+          const formatted = moment.utc(sitRelax * 1000).format("HH:mm:ss");
+          document.getElementById("relax").innerHTML = `${formatted}`;
         } else {
-          document.getElementById('relax').innerHTML = '00:00:00';
+          document.getElementById("relax").innerHTML = "00:00:00";
         }
       });
-      historyGraph(user);
     }
   });
 };
@@ -312,11 +311,11 @@ function logout() {
     .auth()
     .signOut()
     .then(() => {
-      document.location.href = 'login.html';
+      document.location.href = "login.html";
     })
     .catch(err => {
       alert(err);
     });
 }
 
-document.getElementById('dateValue').innerHTML = moment().format('LL');
+document.getElementById("dateValue").innerHTML = moment().format("LL");
