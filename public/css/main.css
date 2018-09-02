@@ -1,103 +1,115 @@
 body {
-    font-family: Roboto;
-    padding-bottom: 30px;
-    padding-top: 30px;
+  font-family: Roboto;
+  padding-bottom: 30px;
+  padding-top: 30px;
 }
 
 #name {
-    font-weight: bold;
-    font-size: 40px;
-    margin-left: 40px;
+  font-weight: bold;
+  font-size: 40px;
+  margin-left: 40px;
 }
 
 .top-img {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 #logout-section {
-    border: 0px;
+  border: 0px;
 }
 
 .main_detail {
-    margin-top: 15px;
-    margin-left: 0px;
-    border: 1px solid #333333;
-    border-radius: 25px;
-    padding: 20px 15px 20px 15px;
+  margin-top: 15px;
+  margin-left: 0px;
+  border: 1px solid #333333;
+  border-radius: 25px;
+  padding: 20px 15px 20px 15px;
 }
 
 .main_detail h5 {
-    font-size: 12.2px;
-    font-weight: bold;
+  font-size: 12.2px;
+  font-weight: bold;
 }
 
 #sketch-holder2 {
-    position: absolute;
-    top: 0px;
+  position: absolute;
+  top: 0px;
 }
 
 .main_detail p {
-    font-size: 25px;
-    font-weight: bold;
-    margin-top: 16px;
+  font-size: 25px;
+  font-weight: bold;
+  margin-top: 16px;
 }
 
 #heightBtn {
-    border: 1px solid #333333;
-    margin-top: 10px;
-    border-radius: 50px;
-    background-color: white;
-    font-weight: bold;
-    color: #333333;
+  border: 1px solid #333333;
+  margin-top: 10px;
+  border-radius: 50px;
+  background-color: white;
+  font-weight: bold;
+  color: #333333;
 }
 
 #heightBtn:hover {
-    background-color: #333333;
-    color: white;
+  background-color: #333333;
+  color: white;
 }
 
 #heightBtn:active {
-    transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .date_section {
-    margin-top: 15px;
-    margin-bottom: 10px;
+  margin-top: 15px;
+  margin-bottom: 10px;
 }
 
 .date {
-    font-size: 25px;
-    font-weight: bold;
+  font-size: 25px;
+  font-weight: bold;
 }
 
 #dateValue {
-    color: #75BD00;
+  color: #75bd00;
 }
 
 .nav-item a {
-    color: inherit
+  color: inherit;
 }
 
 .nav-item a:hover {
-    color: inherit
+  color: inherit;
 }
 
 .nav-item a.active {
-    border: 0px;
-    font-weight: bold;
-    color: #75BD00 !important;
+  border: 0px;
+  font-weight: bold;
+  color: #75bd00 !important;
 }
 
 .canvas_wrapper {
-    position: relative;
+  position: relative;
 }
 
-#sketch-holder, #sketch-holder2 {
-    width: 50px;
+#sketch-holder,
+#sketch-holder2 {
+  width: 50px;
 }
 
 ul.nav.nav-tabs {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
-    
+.historyItem {
+  margin-bottom: 15px;
+  border: 1px solid #333333;
+  border-radius: 15px;
+  width: 250px;
+  height: 150px;
+  padding: 10px
+}
+
+#eachDay {
+  margin-top: 15px;
+}

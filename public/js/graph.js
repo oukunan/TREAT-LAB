@@ -5,7 +5,7 @@ function getData(cb) {
     if (user) {
       let bendGraphRef = firebase
         .database()
-        .ref(`users/${user.uid}/bends/${date}`);
+        .ref(`users/${user.uid}/behavior/bends/${date}`);
       bendGraphRef.on("value", snapshot => {
         cb(snapshot.val());
       });

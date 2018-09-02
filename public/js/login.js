@@ -54,6 +54,17 @@ function login(){
     });   
 }
 
+function logout() {
+  firebase
+    .auth()
+    .signOut()
+    .then(() => {
+      document.location.href = "login.html";
+    })
+    .catch(err => {
+      alert(err);
+    });
+}
 
 function showLogin() {
   signupSection.style.display = "none"

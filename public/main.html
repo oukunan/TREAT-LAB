@@ -26,6 +26,7 @@
     <script src="libraries/moment.js"></script>
     <script src="js/init_firebase.js"></script>
 </head>
+
 <body>
     <div class="container">
         <div class="row float-right">
@@ -49,8 +50,12 @@
                         <a class="nav-link active" href="#overview" role="tab" data-toggle="tab">OVERVIEW</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="#today" role="tab" data-toggle="tab">TODAY</a>
+                    </li>
+                    <li class="nav-item" onclick="getHistory()">
                         <a class="nav-link" href="#history" role="tab" data-toggle="tab">HISTORY</a>
                     </li>
+
                 </ul>
             </div>
         </div>
@@ -119,17 +124,20 @@
                             </div>
                         </div>
                     </div>
-                    <div role="tabpanel" class="tab-pane fade" id="history">
+                    <div role="tabpanel" class="tab-pane fade" id="today">
                         <div class="row text-center">
                             <div class="col-md-12">
                                 <canvas id="myChart"></canvas>
                             </div>
                         </div>
                     </div>
+                    <div role="tabpanel" class="tab-pane fade" id="history">
+                        <div class="row text-center" id="eachDay">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 
     <script src="js/graph.js"></script>
