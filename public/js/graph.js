@@ -1,11 +1,12 @@
 window.addEventListener("load", getData(genFunction));
 
+//---------- First get data ---------------
 function getData(cb) {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       let bendGraphRef = firebase
         .database()
-        .ref(`users/${user.uid}/behavior/bends/${date}`);
+        .ref(`users/${user.uid}/behavior/${date}/bends`);
       bendGraphRef.on("value", snapshot => {
         cb(snapshot.val());
       });
@@ -14,8 +15,8 @@ function getData(cb) {
 }
 
 function genFunction(data) {
-  let label = [];
-  let detail = [];
+  const label = [];
+  const detail = [];
   for (let key in data) {
     label.push(key);
     detail.push(data[key].count);
@@ -38,6 +39,9 @@ function updateData(label, detail) {
   chart.update();
 }
 
+
+
+//--------- Graoh sketch ------------------
 var ctx = document.getElementById("myChart");
 var chart = new Chart(ctx, {
   type: "line",

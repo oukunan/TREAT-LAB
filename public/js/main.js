@@ -1,33 +1,33 @@
 const notifier = require("node-notifier");
-// const gkm = require("gkm");
-
-let tmpCounterHistor = 0;
-let ctracker;
-let trigHeight = 0;
-let ypos = 0;
-let button;
-let alarm = false;
-let isLine = false;
-let checkFace = false;
-let counter = 0;
-let positions;
-let secSit = 0;
-let secRelex = 0;
-let timeout = null;
-let keycount = 0;
-let mouseClickCount = 0;
-let mouseCounter = 0;
-let alwaySit = 0;
-let alwayRelax = 0;
-let showSit = 0;
-let showRelax = 0;
-let showMouse = 0;
-let mouseTimerout;
-let mouseBoolean = false;
-let logoutBtn = document.getElementById("logoutBtn");
-let date = moment(new Date()).format("DD-MM-YYYY");
-let hour = moment(new Date()).format("HH");
+const gkm = require("gkm");
 const pressedKeys = {};
+
+let tmpCounterHistory = 0,
+  ctracker,
+  trigHeight = 0,
+  ypos = 0,
+  button,
+  alarm = false,
+  isLine = false,
+  checkFace = false,
+  counter = 0,
+  positions,
+  secSit = 0,
+  secRelex = 0,
+  timeout = null,
+  keycount = 0,
+  mouseClickCount = 0,
+  mouseCounter = 0,
+  alwaySit = 0,
+  alwayRelax = 0,
+  showSit = 0,
+  showRelax = 0,
+  showMouse = 0,
+  mouseTimerout,
+  mouseBoolean = false,
+  // logoutBtn = document.getElementById("logoutBtn"),
+  date = moment(new Date()).format("DD-MM-YYYY"),
+  hour = moment(new Date()).format("HH");
 
 //------- Image proceessing -----------
 function setup() {
@@ -90,7 +90,6 @@ function headUp() {
 }
 
 function timer() {
-  console.log(counter);
   setTimeout(function() {
     ++counter;
   }, 1000);
@@ -103,7 +102,7 @@ function bendCount() {
   let user = firebase.auth().currentUser;
   let bendRef = firebase
     .database()
-    .ref(`users/${user.uid}/behavior/bends//${date}/${hour}/count`);
+    .ref(`users/${user.uid}/behavior/${date}/bends/${hour}/count`);
   bendRef.transaction(count => {
     count += 1;
     return count;
@@ -111,22 +110,22 @@ function bendCount() {
 }
 
 // -------- Mouse part -------------
-// gkm.events.on("mouse.*", () => {
-//   mouseBoolean = true;
-//   const formatted = moment.utc(showMouse * 1000).format("HH:mm:ss");
-//   document.getElementById("mouse").innerHTML = `${formatted}`;
-//   if (mouseTimerout) {
-//     clearTimeout(mouseTimerout);
-//   }
-//   mouseTimerout = setTimeout(mouseStop, 150);
-// });
+gkm.events.on("mouse.*", () => {
+  mouseBoolean = true;
+  const formatted = moment.utc(showMouse * 1000).format("HH:mm:ss");
+  document.getElementById("mouse").innerHTML = `${formatted}`;
+  if (mouseTimerout) {
+    clearTimeout(mouseTimerout);
+  }
+  mouseTimerout = setTimeout(mouseStop, 150);
+});
 
 function mouseStop() {
   mouseBoolean = false;
   let user = firebase.auth().currentUser;
   let mouseRef = firebase
     .database()
-    .ref(`users/${user.uid}/behavior/mouse/${date}/${hour}/mouseClickCount`);
+    .ref(`users/${user.uid}/behavior/${date}/mouse/${hour}/mouseClickCount`);
   let tmpMouseCounter = mouseCounter;
 
   mouseRef.transaction(mouseClickCount => {
@@ -149,39 +148,39 @@ function mouseTimer() {
 setInterval(checkMouseTimer, 1000);
 
 //---------Keyboard tracking--------------
-// gkm.events.on("key.pressed", data => {
-//   if (pressedKeys[data]) {
-//     return;
-//   }
-//   pressedKeys[data] = true;
-//   ++keycount;
-//   let user = firebase.auth().currentUser;
-//   let keyboardRef = firebase
-//     .database()
-//     .ref(`users/${user.uid}/behavior/keyboard/${date}/${hour}/keycount`);
-//   keyboardRef.transaction(keycount => {
-//     keycount += 1;
-//     return keycount;
-//   });
-//   clearTimeout(timeout);
-//   timeout = setTimeout(() => {
-//     keycount = 0;
-//   }, 1000);
-// });
+gkm.events.on("key.pressed", data => {
+  if (pressedKeys[data]) {
+    return;
+  }
+  pressedKeys[data] = true;
+  ++keycount;
+  let user = firebase.auth().currentUser;
+  let keyboardRef = firebase
+    .database()
+    .ref(`users/${user.uid}/behavior/${date}/keyboard/${hour}/keycount`);
+  keyboardRef.transaction(keycount => {
+    keycount += 1;
+    return keycount;
+  });
+  clearTimeout(timeout);
+  timeout = setTimeout(() => {
+    keycount = 0;
+  }, 1000);
+});
 
-// gkm.events.on("key.released", function(data) {
-//   delete pressedKeys[data];
-// });
+gkm.events.on("key.released", function(data) {
+  delete pressedKeys[data];
+});
 
 // --------- Timer for sit duration -------------
 function sitTimer() {
   let user = firebase.auth().currentUser;
   let sitRef = firebase
     .database()
-    .ref(`users/${user.uid}/behavior/sit/${date}/${hour}/duration`);
+    .ref(`users/${user.uid}/behavior/${date}/sit/${hour}/duration`);
   let relaxRef = firebase
     .database()
-    .ref(`users/${user.uid}/behavior/relax/${date}/${hour}/duration`);
+    .ref(`users/${user.uid}/behavior/${date}/relax/${hour}/duration`);
   if (typeof positions === "object") {
     ++secSit;
     ++showSit;
@@ -215,28 +214,27 @@ function sitTimer() {
 setInterval(sitTimer, 1000);
 
 // --------- Load data after login -----------
-
 window.onload = () => {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       let nameRef = firebase.database().ref(`users/${user.uid}/info/name`);
       let bendRef = firebase
         .database()
-        .ref(`users/${user.uid}/behavior/bends/${date}/${hour}/count`);
+        .ref(`users/${user.uid}/behavior/${date}/bends/${hour}/count`);
       let keyboardRef = firebase
         .database()
-        .ref(`users/${user.uid}/behavior/keyboard/${date}/${hour}/keycount`);
+        .ref(`users/${user.uid}/behavior/${date}/keyboard/${hour}/keycount`);
       let mouseRef = firebase
         .database()
         .ref(
-          `users/${user.uid}/behavior/mouse/${date}/${hour}/mouseClickCount`
+          `users/${user.uid}/behavior/${date}/mouse/${hour}/mouseClickCount`
         );
       let sitRef = firebase
         .database()
-        .ref(`users/${user.uid}/behavior/sit/${date}/${hour}/duration`);
+        .ref(`users/${user.uid}/behavior/${date}/sit/${hour}/duration`);
       let relaxRef = firebase
         .database()
-        .ref(`users/${user.uid}/behavior/relax/${date}/${hour}/duration`);
+        .ref(`users/${user.uid}/behavior/${date}/relax/${hour}/duration`);
 
       nameRef.on("value", received => {
         let name = received.val();
@@ -309,37 +307,37 @@ window.onload = () => {
   });
 };
 
-//---- History ------
-function getHistory() {
-  tmpCounterHistor++;
-  if (tmpCounterHistor > 2) {
-    return;
-  }
-  let data = [];
+//------- History --------------
+// function getHistory() {
+//   tmpCounterHistory++;
+//   if (tmpCounterHistory > 2) {
+//     return;
+//   }
+//   let data = [];
 
-  let user = firebase.auth().currentUser;
-  let bendWeek = firebase.database().ref(`users/${user.uid}/behavior/bends`);
-  bendWeek.on("child_added", snapshot => {
-    let sum = 0;
-    let obj = {};
-    let val = snapshot.val();
-    for (let i in val) {
-      sum += val[i].count;
-    }
-    obj[snapshot.key] = sum;
-    data.push(obj);
-  });
+//   let user = firebase.auth().currentUser;
+//   let bendWeek = firebase.database().ref(`users/${user.uid}/behavior/bends`);
+//   bendWeek.on("child_added", snapshot => {
+//     let sum = 0;
+//     let obj = {};
+//     let val = snapshot.val();
+//     for (let i in val) {
+//       sum += val[i].count;
+//     }
+//     obj[snapshot.key] = sum;
+//     data.push(obj);
+//   });
 
-  for (let i = 0; i < data.length; i++) {
-    $("#eachDay").append(
-      `<div class="col-md-4">
-        <div class="col-md-12 historyItem">
-            <h4>${Object.keys(data[i])}</h4>
-            <p><strong>Bending: </strong>${data[i][Object.keys(data[i])]}</p>
-        </div>
-      </div>`
-    );
-  }
-}
+//   for (let i = 0; i < data.length; i++) {
+//     $("#eachDay").append(
+//       `<div class="col-md-4">
+//         <div class="col-md-12 historyItem">
+//             <h4>${Object.keys(data[i])}</h4>
+//             <p><strong>Bending: </strong>${data[i][Object.keys(data[i])]}</p>
+//         </div>
+//       </div>`
+//     );
+//   }
+// }
 
 document.getElementById("dateValue").innerHTML = moment().format("LL");
