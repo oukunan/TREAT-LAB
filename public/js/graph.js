@@ -6,8 +6,8 @@ function getData(cb) {
     if (user) {
       let bendGraphRef = firebase
         .database()
-        .ref(`users/${user.uid}/behavior/${date}/bends`);
-      bendGraphRef.on("value", snapshot => {
+        .ref(`users/${user.uid}/behavior/${date}`);
+      bendGraphRef.once("value", snapshot => {
         cb(snapshot.val());
       });
     }
@@ -19,7 +19,7 @@ function genFunction(data) {
   const detail = [];
   for (let key in data) {
     label.push(key);
-    detail.push(data[key].count);
+    detail.push(data[key].bends.count);
   }
   updateData(label, detail);
 }
@@ -34,12 +34,10 @@ function updateData(label, detail) {
     }
   }
 
-  chart.data.labels = l.map(i => i+':00')
+  chart.data.labels = l.map(i => i + ":00");
   chart.data.datasets[0].data = d;
   chart.update();
 }
-
-
 
 //--------- Graoh sketch ------------------
 var ctx = document.getElementById("myChart");
@@ -52,9 +50,7 @@ var chart = new Chart(ctx, {
         label: "Bending count",
         data: [],
         fill: false,
-        borderColor: [
-          "rgba(255,99,132,1)"
-        ],
+        borderColor: ["rgba(255,99,132,1)"],
         borderWidth: 4
       }
     ]
