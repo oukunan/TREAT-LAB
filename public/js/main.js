@@ -157,7 +157,7 @@ gkm.events.on("key.pressed", data => {
   let user = firebase.auth().currentUser;
   let keyboardRef = firebase
     .database()
-    .ref(`users/${user.uid}/behavior/${date}/keyboard/${hour}/keycount`);
+    .ref(`users/${user.uid}/behavior/${date}/${hour}/keyboard/keycount`);
   keyboardRef.transaction(keycount => {
     keycount += 1;
     return keycount;
