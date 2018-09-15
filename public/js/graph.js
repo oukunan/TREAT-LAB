@@ -7,7 +7,7 @@ function getData(cb) {
       let bendGraphRef = firebase
         .database()
         .ref(`users/${user.uid}/behavior/${date}`);
-      bendGraphRef.once("value", snapshot => {
+      bendGraphRef.on("value", snapshot => {
         cb(snapshot.val());
       });
     }
@@ -15,6 +15,7 @@ function getData(cb) {
 }
 
 function genFunction(data) {
+
   const label = [];
   const detail = [];
   for (let key in data) {
