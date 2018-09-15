@@ -346,25 +346,42 @@ function getHistory() {
     }
     finalData.push(objectData);
   });
-
   for (let i = 0; i < finalData.length; i++) {
+    const formattedSit = formatShow(
+      finalData[i][Object.keys(finalData[i])].sit
+    );
+    const formattedRelax = formatShow(
+      finalData[i][Object.keys(finalData[i])].relax
+    );
+
+    const formattedMouse = formatShow(
+      finalData[i][Object.keys(finalData[i])].mouse
+    );
     $("#eachDay").append(
       `<div class="col-md-4">
             <div class="col-md-12 historyItem">
                 <h4>${Object.keys(finalData[i])}</h4>
-                <p><strong>Bending: </strong>${
-                  finalData[i][Object.keys(finalData[i])].bends
-                }</p>
-                <p><strong>Sit: </strong>${
-                  finalData[i][Object.keys(finalData[i])].sit
-                }</p>
-                <p><strong>Relax: </strong>${
-                  finalData[i][Object.keys(finalData[i])].relax
-                }</p>
+                <p><strong>Bending: </strong>${finalData[i][
+                  Object.keys(finalData[i])
+                ].bends || 0}</p>
+                <p><strong>Sit: </strong>${formattedSit || 0}</p>
+                <p><strong>Relax: </strong>${formattedRelax || 0}</p>
+                <p><strong>Mouse: </strong>${formattedMouse || 0}</p>
+                <p><strong>Keyboard: </strong>${finalData[i][
+                  Object.keys(finalData[i])
+                ].relax || 0}</p>
             </div>
           </div>`
     );
   }
+}
+
+function formatShow(data) {
+  if (data) {
+    return moment.utc(data * 1000).format("HH:mm:ss");
+  }
+
+  return moment.utc(0 * 1000).format("HH:mm:ss");
 }
 
 document.getElementById("dateValue").innerHTML = moment().format("LL");
