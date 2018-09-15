@@ -346,29 +346,39 @@ function getHistory() {
     }
     finalData.push(objectData);
   });
-  for (let i = 0; i < finalData.length; i++) {
+
+  const today = moment().format("DD-MM-YYYY");
+  const lastSevenDay = moment()
+    .subtract(7, "d")
+    .format("DD-MM-YYYY");
+
+  const filteredData = finalData.filter(i => {
+    return Object.keys(i) < today && Object.keys(i) >= lastSevenDay;
+  });
+
+  for (let i = 0; i < filteredData.length; i++) {
     const formattedSit = formatShow(
-      finalData[i][Object.keys(finalData[i])].sit
+      filteredData[i][Object.keys(filteredData[i])].sit
     );
     const formattedRelax = formatShow(
-      finalData[i][Object.keys(finalData[i])].relax
+      filteredData[i][Object.keys(filteredData[i])].relax
     );
 
     const formattedMouse = formatShow(
-      finalData[i][Object.keys(finalData[i])].mouse
+      filteredData[i][Object.keys(filteredData[i])].mouse
     );
     $("#eachDay").append(
       `<div class="col-md-4">
             <div class="col-md-12 historyItem">
-                <h4>${Object.keys(finalData[i])}</h4>
-                <p><strong>Bending: </strong>${finalData[i][
-                  Object.keys(finalData[i])
+                <h4>${Object.keys(filteredData[i])}</h4>
+                <p><strong>Bending: </strong>${filteredData[i][
+                  Object.keys(filteredData[i])
                 ].bends || 0}</p>
                 <p><strong>Sit: </strong>${formattedSit || 0}</p>
                 <p><strong>Relax: </strong>${formattedRelax || 0}</p>
                 <p><strong>Mouse: </strong>${formattedMouse || 0}</p>
-                <p><strong>Keyboard: </strong>${finalData[i][
-                  Object.keys(finalData[i])
+                <p><strong>Keyboard: </strong>${filteredData[i][
+                  Object.keys(filteredData[i])
                 ].relax || 0}</p>
             </div>
           </div>`
@@ -380,7 +390,6 @@ function formatShow(data) {
   if (data) {
     return moment.utc(data * 1000).format("HH:mm:ss");
   }
-
   return moment.utc(0 * 1000).format("HH:mm:ss");
 }
 

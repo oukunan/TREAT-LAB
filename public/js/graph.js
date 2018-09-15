@@ -15,7 +15,7 @@ function getData(cb) {
 }
 
 function genFunction(data) {
-
+  console.log(data)
   const label = [];
   const detail = [];
   for (let key in data) {
