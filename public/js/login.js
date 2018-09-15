@@ -1,8 +1,11 @@
-let loginSection = document.getElementById('login-section')
-let signupSection = document.getElementById('signup-section')
-let navSignup = document.getElementById('navSignup')
-let navLogin = document.getElementById('navLogin')
+let loginSection = document.getElementById("login-section");
+let signupSection = document.getElementById("signup-section");
+let navSignup = document.getElementById("navSignup");
+let navLogin = document.getElementById("navLogin");
 
+window.onload = function() {
+  document.getElementById("email").focus();
+};
 function signup() {
   let email = document.getElementById("signEmail").value;
   let password = document.getElementById("signPassword").value;
@@ -10,24 +13,26 @@ function signup() {
     .auth()
     .createUserWithEmailAndPassword(email, password)
     .then(function() {
-      let name = document.getElementById('name').value
-      let gender = document.getElementById('gender').value;
-      let age = document.getElementById('age').value;
-      let height = document.getElementById('height').value;
-      let weight = document.getElementById('weight').value;
+      let name = document.getElementById("name").value;
+      let gender = document.getElementById("gender").value;
+      let age = document.getElementById("age").value;
+      let height = document.getElementById("height").value;
+      let weight = document.getElementById("weight").value;
 
       let user = firebase.auth().currentUser;
       let userRef = firebase.database().ref(`users/${user.uid}`);
-      userRef.set({
-        name,
-        gender,
-        age,
-        height,
-        weight
-      }).then(() => {
-        alert('Registration completed')
-        showLogin()
-      })
+      userRef
+        .set({
+          name,
+          gender,
+          age,
+          height,
+          weight
+        })
+        .then(() => {
+          alert("Registration completed");
+          showLogin();
+        });
     })
     .catch(function(err) {
       if (err != null) {
@@ -37,7 +42,7 @@ function signup() {
     });
 }
 
-function login(){
+function login() {
   let email = document.getElementById("email").value;
   let password = document.getElementById("password").value;
   firebase
@@ -51,7 +56,7 @@ function login(){
         console.log(err.message);
         return;
       }
-    });   
+    });
 }
 
 function logout() {
@@ -67,15 +72,15 @@ function logout() {
 }
 
 function showLogin() {
-  signupSection.style.display = "none"
-  loginSection.style.display = "block"
-  navSignup.style.display = "block"
-  navLogin.style.display = "none"
+  signupSection.style.display = "none";
+  loginSection.style.display = "block";
+  navSignup.style.display = "block";
+  navLogin.style.display = "none";
 }
 
 function showSignup() {
-  loginSection.style.display = "none"
-  signupSection.style.display = "block"
-  navSignup.style.display = "none"
-  navLogin.style.display = "block"
+  loginSection.style.display = "none";
+  signupSection.style.display = "block";
+  navSignup.style.display = "none";
+  navLogin.style.display = "block";
 }

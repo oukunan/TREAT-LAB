@@ -15,12 +15,11 @@ function getData(cb) {
 }
 
 function genFunction(data) {
-  console.log(data)
   const label = [];
   const detail = [];
   for (let key in data) {
     label.push(key);
-    detail.push(data[key].bends.count);
+    detail.push(data[key].hasOwnProperty("bends") ? data[key].bends.count : 0);
   }
   updateData(label, detail);
 }

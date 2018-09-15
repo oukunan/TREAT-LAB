@@ -65,7 +65,8 @@ body {
   margin-bottom: 10px;
 }
 
-.date {
+.date,
+.history__title {
   font-size: 25px;
   font-weight: bold;
 }

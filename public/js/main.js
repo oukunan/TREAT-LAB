@@ -1,9 +1,9 @@
 const notifier = require("node-notifier");
 const gkm = require("gkm");
-const pressedKeys = {};
 
+const pressedKeys = {};
 let tmpCounterHistory = 0,
-  ctracker,
+  tracker,
   trigHeight = 0,
   ypos = 0,
   button,
@@ -13,7 +13,7 @@ let tmpCounterHistory = 0,
   counter = 0,
   positions,
   secSit = 0,
-  secRelex = 0,
+  secRelax = 0,
   timeout = null,
   keycount = 0,
   mouseClickCount = 0,
@@ -25,11 +25,11 @@ let tmpCounterHistory = 0,
   showMouse = 0,
   mouseTimerout,
   mouseBoolean = false,
-  // logoutBtn = document.getElementById("logoutBtn"),
   date = moment(new Date()).format("DD-MM-YYYY"),
   hour = moment(new Date()).format("HH");
+document.getElementById("dateValue").innerHTML = moment().format("LL");
 
-//------- Image proceessing -----------
+//------- Image processing -----------
 function setup() {
   let videoInput = createCapture(VIDEO);
   videoInput.size(400, 300);
@@ -38,16 +38,16 @@ function setup() {
   let cnv = createCanvas(400, 300);
   cnv.parent("sketch-holder2");
 
-  ctracker = new clm.tracker();
-  ctracker.init(pModel);
-  ctracker.start(videoInput.elt);
+  tracker = new clm.tracker();
+  tracker.init(pModel);
+  tracker.start(videoInput.elt);
 }
 
 function draw() {
   clear();
   noStroke();
 
-  positions = ctracker.getCurrentPosition();
+  positions = tracker.getCurrentPosition();
   for (var i = 0; i < positions.length; i++) {
     fill(0, 255, 0);
     rect(positions[i][0], positions[i][1], 3, 3);
@@ -72,10 +72,7 @@ function headUp() {
     if (ypos > trigHeight && alarm) {
       timer();
       if (counter == 2) {
-        notifier.notify({
-          title: "Mind your posture",
-          message: "Your head is bending down"
-        });
+        notification("Mind your posture", "Your head is bending down");
         bendCount();
         alarm = false;
         counter = 0;
@@ -88,14 +85,6 @@ function headUp() {
     }
   }
 }
-
-function timer() {
-  setTimeout(function() {
-    ++counter;
-  }, 1000);
-}
-
-setInterval(headUp, 1000);
 
 // -------- Save bending data -------------
 function bendCount() {
@@ -135,19 +124,7 @@ function mouseStop() {
   });
 }
 
-function checkMouseTimer() {
-  if (mouseBoolean) {
-    mouseTimer();
-  }
-}
-
-function mouseTimer() {
-  setInterval(++mouseCounter, ++showMouse, 1000);
-}
-
-setInterval(checkMouseTimer, 1000);
-
-//---------Keyboard tracking--------------
+// //---------Keyboard tracking--------------
 gkm.events.on("key.pressed", data => {
   if (pressedKeys[data]) {
     return;
@@ -185,21 +162,18 @@ function sitTimer() {
     ++secSit;
     ++showSit;
     if (showSit % 1800 == 0) {
-      notifier.notify({
-        title: "Go get some rest",
-        message: "Now you have to sit for 30 minutes"
-      });
+      notification("Go get some rest", "Now you have to sit for 30 minutes");
     }
     const formatted = moment.utc(showSit * 1000).format("HH:mm:ss");
     document.getElementById("sit").innerHTML = `${formatted}`;
-    let tmpSecRelax = secRelex;
+    let tmpSecRelax = secRelax;
     relaxRef.transaction(duration => {
       duration += tmpSecRelax;
-      secRelex = 0;
+      secRelax = 0;
       return duration;
     });
   } else {
-    ++secRelex;
+    ++secRelax;
     ++showRelax;
     const formatted = moment.utc(showRelax * 1000).format("HH:mm:ss");
     document.getElementById("relax").innerHTML = `${formatted}`;
@@ -211,7 +185,6 @@ function sitTimer() {
     });
   }
 }
-setInterval(sitTimer, 1000);
 
 // --------- Load data after login -----------
 window.onload = () => {
@@ -256,10 +229,7 @@ window.onload = () => {
         let keyboardCountData = received.val();
         if (keyboardCountData) {
           if (keyboardCountData % 10000 == 0) {
-            notifier.notify({
-              title: "Go get some rest",
-              message: "Number of keystroke is too many"
-            });
+            notification("Go get some rest", "Number of keystroke is too many");
           }
           document.getElementById("keyboard").innerHTML = keyboardCountData;
         } else {
@@ -271,8 +241,9 @@ window.onload = () => {
         let mouseCountData = received.val();
         if (mouseCountData) {
           showMouse = mouseCountData;
-          // if (mouseCountData % 100 == 0) {   notifier.notify({title: "DANGER", message:
-          // "Number of mouse click is too many"}); }
+          // if (mouseCountData % 100 == 0) {
+          //   notification("DANGER", "Number of mouse click is too many");
+          // }
           const formatted = moment
             .utc(mouseCountData * 1000)
             .format("HH:mm:ss");
@@ -324,9 +295,9 @@ function getHistory() {
   const notFilterHistory = firebase
     .database()
     .ref(`users/${user.uid}/behavior`);
-  notFilterHistory.on("child_added", snapshot => {
-    behaviorValue.push(snapshot.val());
-    key.push(snapshot.key);
+  notFilterHistory.on("child_added", received => {
+    behaviorValue.push(received.val());
+    key.push(received.key);
 
     for (let i = 0; i < behaviorValue.length; i++) {
       bendTotal = 0;
@@ -334,9 +305,15 @@ function getHistory() {
       relaxTotal = 0;
       objectData = {};
       for (let day in behaviorValue[i]) {
-        bendTotal += behaviorValue[i][day].bends.count;
-        sitTotal += behaviorValue[i][day].sit.duration;
-        relaxTotal += behaviorValue[i][day].relax.duration;
+        bendTotal += behaviorValue[i][day].hasOwnProperty("bends")
+          ? behaviorValue[i][day].bends.count
+          : 0;
+        sitTotal += behaviorValue[i][day].hasOwnProperty("sit")
+          ? behaviorValue[i][day].sit.duration
+          : 0;
+        relaxTotal += behaviorValue[i][day].hasOwnProperty("relax")
+          ? behaviorValue[i][day].relax.duration
+          : 0;
       }
       objectData[key[i]] = {
         bends: bendTotal,
@@ -386,6 +363,7 @@ function getHistory() {
   }
 }
 
+//------- Utility ---------------------------
 function formatShow(data) {
   if (data) {
     return moment.utc(data * 1000).format("HH:mm:ss");
@@ -393,4 +371,29 @@ function formatShow(data) {
   return moment.utc(0 * 1000).format("HH:mm:ss");
 }
 
-document.getElementById("dateValue").innerHTML = moment().format("LL");
+function notification(title, message) {
+  notifier.notify({
+    title,
+    message
+  });
+}
+
+//------ Timer ----------------------
+function checkMouseTimer() {
+  if (mouseBoolean) {
+    mouseTimer();
+  }
+}
+function mouseTimer() {
+  setInterval(++mouseCounter, ++showMouse, 1000);
+}
+function timer() {
+  setTimeout(function() {
+    ++counter;
+  }, 1000);
+}
+
+//------ Interval function ----------
+setInterval(headUp, 1000);
+setInterval(checkMouseTimer, 1000);
+setInterval(sitTimer, 1000);
