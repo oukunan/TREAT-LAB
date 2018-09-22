@@ -1,5 +1,5 @@
 const notifier = require("node-notifier");
-const gkm = require("gkm");
+// const gkm = require("gkm");
 
 const pressedKeys = {};
 let tmpCounterHistory = 0,
@@ -99,15 +99,15 @@ function bendCount() {
 }
 
 // -------- Mouse part -------------
-gkm.events.on("mouse.*", () => {
-  mouseBoolean = true;
-  const formatted = moment.utc(showMouse * 1000).format("HH:mm:ss");
-  document.getElementById("mouse").innerHTML = `${formatted}`;
-  if (mouseTimerout) {
-    clearTimeout(mouseTimerout);
-  }
-  mouseTimerout = setTimeout(mouseStop, 150);
-});
+// gkm.events.on("mouse.*", () => {
+//   mouseBoolean = true;
+//   const formatted = moment.utc(showMouse * 1000).format("HH:mm:ss");
+//   document.getElementById("mouse").innerHTML = `${formatted}`;
+//   if (mouseTimerout) {
+//     clearTimeout(mouseTimerout);
+//   }
+//   mouseTimerout = setTimeout(mouseStop, 150);
+// });
 
 function mouseStop() {
   mouseBoolean = false;
@@ -125,29 +125,29 @@ function mouseStop() {
 }
 
 // //---------Keyboard tracking--------------
-gkm.events.on("key.pressed", data => {
-  if (pressedKeys[data]) {
-    return;
-  }
-  pressedKeys[data] = true;
-  ++keycount;
-  let user = firebase.auth().currentUser;
-  let keyboardRef = firebase
-    .database()
-    .ref(`users/${user.uid}/behavior/${date}/${hour}/keyboard/keycount`);
-  keyboardRef.transaction(keycount => {
-    keycount += 1;
-    return keycount;
-  });
-  clearTimeout(timeout);
-  timeout = setTimeout(() => {
-    keycount = 0;
-  }, 1000);
-});
+// gkm.events.on("key.pressed", data => {
+//   if (pressedKeys[data]) {
+//     return;
+//   }
+//   pressedKeys[data] = true;
+//   ++keycount;
+//   let user = firebase.auth().currentUser;
+//   let keyboardRef = firebase
+//     .database()
+//     .ref(`users/${user.uid}/behavior/${date}/${hour}/keyboard/keycount`);
+//   keyboardRef.transaction(keycount => {
+//     keycount += 1;
+//     return keycount;
+//   });
+//   clearTimeout(timeout);
+//   timeout = setTimeout(() => {
+//     keycount = 0;
+//   }, 1000);
+// });
 
-gkm.events.on("key.released", function(data) {
-  delete pressedKeys[data];
-});
+// gkm.events.on("key.released", function(data) {
+//   delete pressedKeys[data];
+// });
 
 // --------- Timer for sit duration -------------
 function sitTimer() {
