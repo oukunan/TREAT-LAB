@@ -1,5 +1,32 @@
 window.addEventListener("load", getData(genFunction));
 
+const timeLabel = [
+  "00",
+  "01",
+  "02",
+  "03",
+  "04",
+  "05",
+  "06",
+  "07",
+  "08",
+  "09",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23"
+];
+
 // //---------- First get data ---------------
 function getData(cb) {
   firebase.auth().onAuthStateChanged(user => {
@@ -25,15 +52,18 @@ function genFunction(data) {
 
   for (let key in data) {
     let timeKey = parseInt(key);
-
-    sitLabel.push(timeKey);
-    sitData.push(data[key].sit.duration);
-
-    relaxLabel.push(timeKey);
-    relaxData.push(data[key].relax.duration);
-
-    mouseLabel.push(timeKey);
-    mouseData.push(data[key].mouse.mouseClickCount);
+    if (data[key].hasOwnProperty("sit")) {
+      sitLabel.push(timeKey);
+      sitData.push(data[key].sit.duration);
+    }
+    if (data[key].hasOwnProperty("relax")) {
+      relaxLabel.push(timeKey);
+      relaxData.push(data[key].relax.duration);
+    }
+    if (data[key].hasOwnProperty("mouse")) {
+      mouseLabel.push(timeKey);
+      mouseData.push(data[key].mouse.mouseClickCount);
+    }
   }
 
   const sitFinal = new Array(24);
@@ -64,32 +94,7 @@ let ctx = document.getElementById("timeChart");
 let timeChart = new Chart(ctx, {
   type: "line",
   data: {
-    labels: [
-      "00",
-      "01",
-      "02",
-      "03",
-      "04",
-      "05",
-      "06",
-      "07",
-      "08",
-      "09",
-      "10",
-      "11",
-      "12",
-      "13",
-      "14",
-      "15",
-      "16",
-      "17",
-      "18",
-      "19",
-      "20",
-      "21",
-      "22",
-      "23"
-    ],
+    labels: timeLabel,
     datasets: [
       {
         label: "Sit",
@@ -126,8 +131,19 @@ let timeChart = new Chart(ctx, {
     scales: {
       yAxes: [
         {
-          ticks: {
-            beginAtZero: true
+          scaleLabel: {
+            display: true,
+            labelString: "Time usage (seconds)"
+          }
+        }
+      ]
+    },
+    scales: {
+      xAxes: [
+        {
+          scaleLabel: {
+            display: true,
+            labelString: "Hour"
           }
         }
       ]
