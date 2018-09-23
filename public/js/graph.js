@@ -31,10 +31,10 @@ const timeLabel = [
 function getData(cb) {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
-      let bendGraphRef = firebase
+      let graphData = firebase
         .database()
         .ref(`users/${user.uid}/behavior/${date}`);
-      bendGraphRef.on("value", snapshot => {
+      graphData.on("value", snapshot => {
         cb(snapshot.val());
       });
     }
