@@ -11,3 +11,7 @@ function notification(title, message) {
     message
   });
 }
+
+function formatBehaviorTime(data) {
+  return moment.utc(data * 1000).format("HH:mm:ss");
+}
