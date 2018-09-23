@@ -1,6 +1,6 @@
 {
   "name": "treatlab",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "System of Behavior and Risk analysis of the Computer in Office",
   "main": "main.js",
   "repository": "https://github.com/futurouz/TREAT-LAB",
@@ -17,9 +17,7 @@
     "electron-packager": "^11.1.0",
     "electron-updater": "^2.21.8",
     "gkm": "^0.2.0",
-    "global": "^4.3.2",
     "jquery": "^3.3.1",
-    "jshint": "^2.9.6",
     "node-notifier": "^5.2.1"
   },
   "build": {
