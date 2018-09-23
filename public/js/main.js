@@ -6,7 +6,6 @@ let tmpCounterHistory = 0,
   tracker,
   trigHeight = 0,
   ypos = 0,
-  button,
   alarm = false,
   isLine = false,
   checkFace = false,
@@ -18,13 +17,17 @@ let tmpCounterHistory = 0,
   keycount = 0,
   mouseClickCount = 0,
   mouseCounter = 0,
-  alwaySit = 0,
-  alwayRelax = 0,
   showSit = 0,
   showRelax = 0,
   showMouse = 0,
   mouseTimerout,
   mouseBoolean = false,
+  oneDayData = null,
+  sumBends = 0,
+  sumSit = 0,
+  sumRelax = 0,
+  sumKeyboard = 0,
+  sumMouse = 0,
   date = moment(new Date()).format("DD-MM-YYYY"),
   hour = moment(new Date()).format("HH");
 document.getElementById("dateValue").innerHTML = moment().format("LL");
@@ -158,14 +161,18 @@ function sitTimer() {
   let relaxRef = firebase
     .database()
     .ref(`users/${user.uid}/behavior/${date}/${hour}/relax/duration`);
+
   if (typeof positions === "object") {
     ++secSit;
     ++showSit;
+
     if (showSit % 1800 == 0) {
       notification("Go get some rest", "Now you have to sit for 30 minutes");
     }
+
     const formatted = moment.utc(showSit * 1000).format("HH:mm:ss");
     document.getElementById("sit").innerHTML = `${formatted}`;
+
     let tmpSecRelax = secRelax;
     relaxRef.transaction(duration => {
       duration += tmpSecRelax;
@@ -175,8 +182,10 @@ function sitTimer() {
   } else {
     ++secRelax;
     ++showRelax;
+
     const formatted = moment.utc(showRelax * 1000).format("HH:mm:ss");
     document.getElementById("relax").innerHTML = `${formatted}`;
+
     let tmpSecSit = secSit;
     sitRef.transaction(duration => {
       duration += tmpSecSit;
@@ -190,10 +199,12 @@ function sitTimer() {
 window.onload = () => {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
-      let nameRef = firebase.database().ref(`users/${user.uid}/info/name`);
-      let bendRef = firebase
+      let oneDayRef = firebase
         .database()
-        .ref(`users/${user.uid}/behavior/${date}//${hour}/bends/count`);
+        .ref(`users/${user.uid}/behavior/${date}`);
+
+      let nameRef = firebase.database().ref(`users/${user.uid}/info/name`);
+
       let keyboardRef = firebase
         .database()
         .ref(`users/${user.uid}/behavior/${date}/${hour}/keyboard/keycount`);
@@ -202,75 +213,16 @@ window.onload = () => {
         .ref(
           `users/${user.uid}/behavior/${date}/${hour}/mouse/mouseClickCount`
         );
-      let sitRef = firebase
-        .database()
-        .ref(`users/${user.uid}/behavior/${date}/${hour}/sit/duration`);
-      let relaxRef = firebase
-        .database()
-        .ref(`users/${user.uid}/behavior/${date}/${hour}/relax/duration`);
+
+      oneDayRef.on("value", received => {
+        generateEachBehavior(received.val());
+      });
 
       nameRef.on("value", received => {
         let name = received.val();
         if (name) {
           document.getElementById("name").innerHTML = name;
           document.getElementById("topName").innerHTML = name;
-        }
-      });
-
-      bendRef.on("value", received => {
-        let data = received.val();
-        if (data) {
-          document.getElementById("showBend").innerHTML = data;
-        } else {
-          document.getElementById("showBend").innerHTML = "0";
-        }
-      });
-      keyboardRef.on("value", received => {
-        let keyboardCountData = received.val();
-        if (keyboardCountData) {
-          if (keyboardCountData % 10000 == 0) {
-            notification("Go get some rest", "Number of keystroke is too many");
-          }
-          document.getElementById("keyboard").innerHTML = keyboardCountData;
-        } else {
-          document.getElementById("keyboard").innerHTML = "0";
-        }
-      });
-
-      mouseRef.on("value", received => {
-        let mouseCountData = received.val();
-        if (mouseCountData) {
-          showMouse = mouseCountData;
-          // if (mouseCountData % 100 == 0) {
-          //   notification("DANGER", "Number of mouse click is too many");
-          // }
-          const formatted = moment
-            .utc(mouseCountData * 1000)
-            .format("HH:mm:ss");
-          document.getElementById("mouse").innerHTML = formatted;
-        } else {
-          document.getElementById("mouse").innerHTML = "00:00:00";
-        }
-      });
-
-      sitRef.on("value", received => {
-        let sitDuration = received.val();
-        if (sitDuration) {
-          showSit = sitDuration;
-          const formatted = moment.utc(sitDuration * 1000).format("HH:mm:ss");
-          document.getElementById("sit").innerHTML = `${formatted}`;
-        } else {
-          document.getElementById("sit").innerHTML = "00:00:00";
-        }
-      });
-      relaxRef.on("value", received => {
-        let sitRelax = received.val();
-        if (sitRelax) {
-          showRelax = sitRelax;
-          const formatted = moment.utc(sitRelax * 1000).format("HH:mm:ss");
-          document.getElementById("relax").innerHTML = `${formatted}`;
-        } else {
-          document.getElementById("relax").innerHTML = "00:00:00";
         }
       });
     }
@@ -361,6 +313,43 @@ function getHistory() {
           </div>`
     );
   }
+}
+
+function generateEachBehavior(data) {
+  sumBends = 0;
+  sumSit = 0;
+  sumRelax = 0;
+  sumKeyboard = 0;
+  sumMouse = 0;
+
+  for (let key in data) {
+    sumBends += data[key].bends ? data[key].bends.count : 0;
+    sumSit += data[key].sit ? data[key].sit.duration : 0;
+    sumRelax += data[key].relax ? data[key].relax.duration : 0;
+    sumKeyboard += data[key].keyboard ? data[key].keyboard.keycount : 0;
+    sumMouse += data[key].mouse ? data[key].mouse.mouseClickCount : 0;
+  }
+
+  document.getElementById("showBend").innerHTML = sumBends;
+
+  showSit = sumSit;
+  document.getElementById("sit").innerHTML = `${formatBehaviorTime(sumSit)}`;
+
+  showRelax = sumRelax;
+  document.getElementById("relax").innerHTML = `${formatBehaviorTime(
+    sumRelax
+  )}`;
+
+  if (sumKeyboard % 10000 == 0 && sumKeyboard !== 0) {
+    notification("Go get some rest", "Number of keystroke is too many");
+  }
+  document.getElementById("keyboard").innerHTML = sumKeyboard;
+
+  showMouse = sumMouse;
+  if (sumMouse % 100 == 0 && sumMouse !== 0) {
+    notification("DANGER", "Number of mouse click is too many");
+  }
+  document.getElementById("mouse").innerHTML = formatBehaviorTime(sumMouse);
 }
 
 //------ Timer ----------------------
