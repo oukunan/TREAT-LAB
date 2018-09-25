@@ -1,9 +1,23 @@
 body {
   font-family: Roboto;
   padding-top: 70px;
-  color: white;
-  background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../img/login.jpg) no-repeat center center fixed;
+  /* color: white; */
+  /* background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url(../img/login.jpg) no-repeat center center fixed; */
   background-size: cover;
+}
+
+.top-sec {
+  margin-bottom: 60px;
+}
+
+.logo {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  color: #A0CA68;
+  letter-spacing: 5px;
 }
 
 input {
@@ -14,12 +28,15 @@ input {
 
 #topic {
   font-size: 40px;
-  font-weight: bold;
+  font-weight: 500px;
   padding-bottom: 25px;
+  font-family: "Roboto", sans-serif;
+  color: #4c4d4f;
+  font-size: 24px;
 }
 
 #signInBtn {
-  background: #75BD00;
+  background: #A0CA68;
   width: 120px;
   height: 40px;
   color: white;
@@ -28,7 +45,7 @@ input {
 }
 
 #signInBtn:hover {
-  background-color: #84d600;
+  background-color: #8baf5b;
   transform: scale(1.05);
 }
 
@@ -38,7 +55,7 @@ input {
 }
 
 #signUpBtn {
-  background: #75BD00;
+  background: #A0CA68;
   width: 120px;
   height: 40px;
   color: white;
@@ -47,29 +64,34 @@ input {
 }
 
 #signUpBtn:hover {
-  background-color: #84d600;
+  background-color: #8baf5b;
   transform: scale(1.05);
 }
 
 #signUpBtn:active {
-  background-color: #629f00;
+  background-color: #6e8c47
   transform: scale(0.95);
 }
 
-.navMain, #ready {
+.navMain,
+#ready {
   cursor: pointer;
 }
 
-.navMain:hover, #ready:hover {
+.navMain:hover,
+#ready:hover {
   text-decoration: underline;
 }
 
 .foot {
-  font-size: 12px;
+  font-size: 14px;
   margin-bottom: 35px;
+  color: #4C4D4F;
 }
 
-.btn:focus, .btn:active:focus, .btn.active:focus {
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus {
   outline: none;
   box-shadow: none;
 }
@@ -80,43 +102,89 @@ input {
 }
 
 .input-group-addon {
-  background: rgba(221, 221, 221, 0.4);
+  /* background: rgba(221, 221, 221, 0.4); */
   border: 0px;
   height: 45px;
   padding-left: 20px;
   border-top-left-radius: 50px;
   border-bottom-left-radius: 50px;
+  background: white;
+  border: 1px solid #C3C3C4;
 }
 
-input[type="email"], input[type="password"], input[type="number"], input[type="text"], #gender {
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="text"],
+#gender {
   padding-left: 25px;
   border: 0px;
-  background: rgba(221, 221, 221, 0.4);
-  color: white;
+  color: #4c4d4f;
   height: 45px;
   padding-left: 0px;
+  border-top: 1px solid #C3C3C4;
+  border-bottom: 1px solid #C3C3C4;
+  border-right: 1px solid #C3C3C4;
 }
 
-input[type="email"]:focus, input[type="password"]:focus, input[type="number"]:focus, input[type="text"]:focus, #gender:focus {
-  background: rgba(221, 221, 221, 0.4);
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="text"]:focus,
+#gender:focus {
   outline: none;
   box-shadow: none;
-  color: white;
+  color: #4c4d4f;
+  border-top: 1px solid #C3C3C4;
+  border-bottom: 1px solid #C3C3C4;
+  border-right: 1px solid #C3C3C4;
 }
 
-input[type="email"]::-webkit-input-placeholder, input[type="password"]::-webkit-input-placeholder, input[type="number"]::-webkit-input-placeholder, input[type="text"]::-webkit-input-placeholder {
-  color: white;
+input[type="email"]::-webkit-input-placeholder,
+input[type="password"]::-webkit-input-placeholder,
+input[type="number"]::-webkit-input-placeholder,
+input[type="text"]::-webkit-input-placeholder {
+  color: #C3C3C4;
   font-size: 15px;
 }
 
-input[type="email"]:focus::-webkit-input-placeholder, input[type="password"]:focus::-webkit-input-placeholder, input[type="number"]:focus::-webkit-input-placeholder, input[type="text"]:focus::-webkit-input-placeholder {
-  color: transparent
+input[type="email"]:focus::-webkit-input-placeholder,
+input[type="password"]:focus::-webkit-input-placeholder,
+input[type="number"]:focus::-webkit-input-placeholder,
+input[type="text"]:focus::-webkit-input-placeholder {
+  color: transparent;
 }
 
 #remember {
-  font-size: 15px;
+  font-size: 14px;
+  color:#4C4D4F;
 }
 
-#navLogin, #signup-section {
+#navLogin,
+#signup-section {
   display: none;
+}
+
+#navSignup,#navLogin {
+  font-family: Roboto;
+  font-size: 14px;
+  color:#A0CA68;
+}
+
+#forgetPassworld {
+  margin-top: 20px;
+  font-family: Roboto;
+  font-size: 14px;
+  color: #A0CA68;
+  cursor: pointer;
+}
+
+.forget-section {
+  margin-top: 20px;
+}
+
+#email-error, #password-error {  
+  font-family: Roboto;
+  font-size: 12px;
+  color: #EB5757;
 }

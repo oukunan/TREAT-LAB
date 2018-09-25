@@ -6,17 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+        integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+
     <link rel="stylesheet" href="css/login.css">
 </head>
 
 <body>
 
     <div class="container">
+        <div class="top-sec">
+            <div class="row">
+                <div class="col-md-4 justify-content-center">
+                    <div class="logo">TREATLAP.</div>
+                </div>
+                <div class="col-md-4 offset-md-4 d-flex justify-content-end">
+                    <span class="navMain" id="navSignup" onclick="showSignup()">Sign Up</span>
+                    <span class="navMain" id="navLogin" onclick="showLogin()">Log In</span>
+                </div>
+            </div>
+        </div>
         <div class="row justify-content-center text-center">
             <div class="col-md-4">
-                <h3 id="topic">TREATLAB</h3>
+                <h3 id="topic">Login</h3>
             </div>
         </div>
         <div id="login-section">
@@ -25,32 +38,43 @@
                     <form>
                         <div class="form-group">
                             <div class="input-group">
-                                <div class="input-group-addon">
+                                <div class="input-group-addon" id="addon-email">
                                     <img src="img/email.png" height="20px">
                                 </div>
-                                <input type="email" class="form-control" name="email" id="email" placeholder="email">
+                                <input type="email" class="form-control" name="email" id="loginEmail" placeholder="Email address"
+                                    onclick="handleError()">
                             </div>
+                            <span id="email-error"></span>
+
                         </div>
                         <div class="form-group">
                             <div class="input-group">
-                                <div class="input-group-addon">
+                                <div class="input-group-addon" id="addon-password">
                                     <img src="img/lock.png" height="20px">
                                 </div>
-                                <input type="password" class="form-control" name="password" id="password" placeholder="password">
+                                <input type="password" class="form-control" name="password" id="loginPassword"
+                                    placeholder="Password" onclick="handleError()">
                             </div>
+                            <span id="password-error"></span>
+
                         </div>
                     </form>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6 offset-md-3 col-xl-6 offset-xl-4">
-                    <!-- <span id="remember">Remember me</span> -->
+                    <span id="remember">Remember me</span>
                 </div>
             </div>
 
             <div class="row justify-content-center text-center">
                 <div class="col-md-6 col-xl-4">
                     <button type="button" class="btn" id="signInBtn" onclick="login()">LOG IN</button>
+                </div>
+            </div>
+            <div class="row justify-content-center text-center forget-section">
+                <div class="col-md-6 col-xl-4">
+                    <span id="forgetPassworld">Forget Password?</span>
                 </div>
             </div>
         </div>
@@ -63,7 +87,7 @@
                             <div class="input-group-addon">
                                 <img src="img/email.png" height="20px">
                             </div>
-                            <input type="email" class="form-control" name="email" id="signEmail" placeholder="email">
+                            <input type="email" class="form-control" name="email" id="signupEmail" placeholder="email">
                         </div>
                     </div>
                     <div class="form-group">
@@ -71,7 +95,7 @@
                             <div class="input-group-addon">
                                 <img src="img/lock.png" height="20px">
                             </div>
-                            <input type="password" class="form-control" name="password" id="signPassword" placeholder="password">
+                            <input type="password" class="form-control" name="password" id="signupPassword" placeholder="password">
                         </div>
                     </div>
                     <div class="form-group">
@@ -136,7 +160,7 @@
             </div>
             <div class="row justify-content-center text-center">
                 <div class="col-md-6 col-xl-4">
-                    <button type="button" class="btn" id="signUpBtn" onclick="signup()">SIGN UP</button>
+                    <!-- <button type="button" class="btn" id="signUpBtn" onclick="signup()">SIGN UP</button> -->
                 </div>
             </div>
         </div>
@@ -144,16 +168,12 @@
 
 
         <div class="fixed-bottom">
-            <div class="row justify-content-center text-center foot">
-                <div class="col-md-2">
-                    <span class="navMain" id="navSignup" onclick="showSignup()">SIGN UP</span>
-                    <span class="navMain" id="navLogin" onclick="showLogin()">LOGIN</span>
-                </div>
-                <div class="col-md-3">
-                    <span id="ready" onClick="ipcRenderer.send('quitAndInstall')">NO UPDATE AVAILABLE</span>
+            <div class="row justify-content-center text-center foot btm-text">
+                <div class="offset-md-2 col-md-3">
+                    <span>Version 1.2.1</span>
                 </div>
                 <div class="col-md-2">
-                    <span>VERSION 1.2.1</span>
+                    <span id="ready" onClick="ipcRenderer.send('quitAndInstall')">No update available</span>
                 </div>
             </div>
         </div>
