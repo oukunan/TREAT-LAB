@@ -6,6 +6,7 @@ let emailError = document.getElementById("email-error");
 let passwordError = document.getElementById("password-error");
 let signupEmail = document.getElementById("signupEmail");
 let signupPassword = document.getElementById("signupPassword");
+let topic = document.getElementById("topic");
 
 let loginEmail = document.getElementById("loginEmail");
 let loginPassword = document.getElementById("loginPassword");
@@ -13,8 +14,13 @@ let loginPassword = document.getElementById("loginPassword");
 let addonEmail = document.getElementById("addon-email");
 let addonPassword = document.getElementById("addon-password");
 
+let addonEmailSignup = document.getElementById("addon-email-signup");
+
+let emailSignupError = document.getElementById("email-signup-error");
+
 let error = false;
-const errLogin = "1px solid #EB5757";
+let signUpError = false;
+const errLoginStyle = "1px solid #EB5757";
 
 window.onload = function() {
   loginEmail.focus();
@@ -24,35 +30,51 @@ function signup() {
     .auth()
     .createUserWithEmailAndPassword(signupEmail.value, signupPassword.value)
     .then(function() {
-      let name = document.getElementById("name").value;
-      let gender = document.getElementById("gender").value;
-      let age = document.getElementById("age").value;
-      let height = document.getElementById("height").value;
-      let weight = document.getElementById("weight").value;
+      let name = document.getElementById("signupName");
+      let gender = document.getElementById("gender");
+      let age = document.getElementById("age");
+      let height = document.getElementById("height");
+      let weight = document.getElementById("weight");
 
       let user = firebase.auth().currentUser;
       let userRef = firebase.database().ref(`users/${user.uid}`);
       userRef
         .set({
-          name,
-          gender,
-          age,
-          height,
-          weight
+          name: name.value,
+          gender: gender.value,
+          age: age.value,
+          height: age.value,
+          weight: weight.value
         })
         .then(() => {
           alert("Registration completed");
+          signupEmail.value = "";
+          signupPassword.value = "";
+          name.value = "";
+          gender.value = "";
+          age.value = "";
+          height.value = "";
+          weight.value = "";
           showLogin();
         });
     })
     .catch(function(err) {
+      console.log(err);
+      signUpError = true;
+      emailSignupError.style.display = "inline";
+
       if (err != null) {
-        alert(err.message);
+        const errCode = err.code;
+
+        if (errCode === "auth/invalid-email") {
+          signupEmail.focus();
+          emailSignupError.innerHTML =
+            "Invalid email address. Please try again.";
+        }
         return;
       }
     });
 }
-
 
 function login() {
   firebase
@@ -67,18 +89,18 @@ function login() {
       passwordError.style.display = "inline";
 
       if (err != null) {
-        const errMessage = err.code;
-        if (errMessage === "auth/invalid-email") {
+        const errCode = err.code;
+        if (errCode === "auth/invalid-email") {
           loginEmail.focus();
           emailError.innerHTML = "Invalid email address. Please try again.";
         }
 
-        if (errMessage === "auth/wrong-password") {
+        if (errCode === "auth/wrong-password") {
           loginPassword.focus();
           passwordError.innerHTML = "Invalid password. Please try again.";
         }
 
-        if (errMessage === "auth/user-not-found") {
+        if (errCode === "auth/user-not-found") {
           loginEmail.focus();
           emailError.innerHTML = "User not found. Please try again.";
         }
@@ -104,6 +126,7 @@ function showLogin() {
   loginSection.style.display = "block";
   navSignup.style.display = "block";
   navLogin.style.display = "none";
+  topic.innerHTML = "Login";
 }
 
 function showSignup() {
@@ -111,6 +134,7 @@ function showSignup() {
   signupSection.style.display = "block";
   navSignup.style.display = "none";
   navLogin.style.display = "block";
+  topic.innerHTML = "Sign up";
 }
 
 function handleError() {
@@ -120,19 +144,11 @@ function handleError() {
     emailError.innerHTML = "";
     passwordError.innerHTML = "";
 
-    addonEmail.style.borderTop = "";
-    addonEmail.style.borderLeft = "";
-    addonEmail.style.borderBottom = "";
-    loginEmail.style.borderTop = "";
-    loginEmail.style.borderBottom = "";
-    loginEmail.style.borderRight = "";
+    addonEmail.style = {};
+    loginEmail.style = {};
 
-    addonPassword.style.borderTop = "";
-    addonPassword.style.borderLeft = "";
-    addonPassword.style.borderBottom = "";
-    loginPassword.style.borderTop = "";
-    loginPassword.style.borderBottom = "";
-    loginPassword.style.borderRight = "";
+    addonPassword.style = {};
+    loginPassword.style = {};
 
     error = false;
   }
@@ -140,22 +156,46 @@ function handleError() {
 
 loginEmail.addEventListener("focus", function() {
   if (error) {
-    addonEmail.style.borderTop = errLogin;
-    addonEmail.style.borderLeft = errLogin;
-    addonEmail.style.borderBottom = errLogin;
-    this.style.borderTop = errLogin;
-    this.style.borderBottom = errLogin;
-    this.style.borderRight = errLogin;
+    addonEmail.style.borderTop = errLoginStyle;
+    addonEmail.style.borderLeft = errLoginStyle;
+    addonEmail.style.borderBottom = errLoginStyle;
+    this.style.borderTop = errLoginStyle;
+    this.style.borderBottom = errLoginStyle;
+    this.style.borderRight = errLoginStyle;
   }
 });
 
 loginPassword.addEventListener("focus", function() {
   if (error) {
-    addonPassword.style.borderTop = errLogin;
-    addonPassword.style.borderLeft = errLogin;
-    addonPassword.style.borderBottom = errLogin;
-    this.style.borderTop = errLogin;
-    this.style.borderBottom = errLogin;
-    this.style.borderRight = errLogin;
+    addonPassword.style.borderTop = errLoginStyle;
+    addonPassword.style.borderLeft = errLoginStyle;
+    addonPassword.style.borderBottom = errLoginStyle;
+    this.style.borderTop = errLoginStyle;
+    this.style.borderBottom = errLoginStyle;
+    this.style.borderRight = errLoginStyle;
+  }
+});
+
+function handleSignUpError() {
+  if (signUpError) {
+    emailSignupError.style.display = "none";
+    // passwordError.style.display = "none";
+    emailSignupError.innerHTML = "";
+    // passwordError.innerHTML = "";
+
+    addonEmailSignup.style = {};
+    signupEmail.style = {};
+  }
+}
+
+signupEmail.addEventListener("focus", function() {
+  if (signUpError) {
+    addonEmailSignup.style.borderTop = errLoginStyle;
+    addonEmailSignup.style.borderLeft = errLoginStyle;
+    addonEmailSignup.style.borderBottom = errLoginStyle;
+
+    this.style.borderTop = errLoginStyle;
+    this.style.borderBottom = errLoginStyle;
+    this.style.borderRight = errLoginStyle;
   }
 });

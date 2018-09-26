@@ -32,6 +32,9 @@
                 <h3 id="topic">Login</h3>
             </div>
         </div>
+
+        <!--  Login section  -->
+
         <div id="login-section">
             <div class="row justify-content-center text-center">
                 <div class="col-md-6 col-xl-4">
@@ -44,7 +47,7 @@
                                 <input type="email" class="form-control" name="email" id="loginEmail" placeholder="Email address"
                                     onclick="handleError()">
                             </div>
-                            <span id="email-error"></span>
+                            <span class="error" id="email-error"></span>
 
                         </div>
                         <div class="form-group">
@@ -55,7 +58,7 @@
                                 <input type="password" class="form-control" name="password" id="loginPassword"
                                     placeholder="Password" onclick="handleError()">
                             </div>
-                            <span id="password-error"></span>
+                            <span class="error" id="password-error"></span>
 
                         </div>
                     </form>
@@ -79,31 +82,36 @@
             </div>
         </div>
 
+
+        <!--  Sign Up section -->
+
         <div id="signup-section">
             <div class="row justify-content-center text-center">
                 <div class="col-md-6 col-xl-4">
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-addon">
+                                <img src="img/edit.png" height="20px">
+                            </div>
+                            <input type="text" class="form-control" name="name" id="signupName" placeholder="Name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon" id="addon-email-signup">
                                 <img src="img/email.png" height="20px">
                             </div>
-                            <input type="email" class="form-control" name="email" id="signupEmail" placeholder="email">
+                            <input type="email" class="form-control" name="email" id="signupEmail" placeholder="Email address"
+                                onclick="handleSignUpError()">
                         </div>
+                        <span class="error" id="email-signup-error"></span>
                     </div>
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-addon">
                                 <img src="img/lock.png" height="20px">
                             </div>
-                            <input type="password" class="form-control" name="password" id="signupPassword" placeholder="password">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-addon">
-                                <img src="img/edit.png" height="20px">
-                            </div>
-                            <input type="text" class="form-control" name="name" id="name" placeholder="name">
+                            <input type="password" class="form-control" name="password" id="signupPassword" placeholder="Password">
                         </div>
                     </div>
                 </div>
@@ -130,7 +138,7 @@
                             <div class="input-group-addon">
                                 <img src="img/profile.png" height="20px">
                             </div>
-                            <input type="number" class="form-control" name="age" id="age" placeholder="age">
+                            <input type="number" class="form-control" name="age" id="age" placeholder="Age">
                         </div>
                     </div>
                 </div>
@@ -143,7 +151,7 @@
                             <div class="input-group-addon">
                                 <img src="img/height.png" height="20px">
                             </div>
-                            <input type="number" class="form-control" name="height" id="height" placeholder="height">
+                            <input type="number" class="form-control" name="height" id="height" placeholder="Height">
                         </div>
                     </div>
                 </div>
@@ -153,14 +161,14 @@
                             <div class="input-group-addon">
                                 <img src="img/scale.png" height="20px">
                             </div>
-                            <input type="number" class="form-control" name="weight" id="weight" placeholder="weight">
+                            <input type="number" class="form-control" name="weight" id="weight" placeholder="Weight">
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row justify-content-center text-center">
                 <div class="col-md-6 col-xl-4">
-                    <!-- <button type="button" class="btn" id="signUpBtn" onclick="signup()">SIGN UP</button> -->
+                    <button type="button" class="btn" id="signUpBtn" onclick="signup()">SIGN UP</button>
                 </div>
             </div>
         </div>
