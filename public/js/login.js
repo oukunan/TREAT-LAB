@@ -26,6 +26,7 @@ window.onload = function() {
   loginEmail.focus();
 };
 function signup() {
+  validity();
   firebase
     .auth()
     .createUserWithEmailAndPassword(signupEmail.value, signupPassword.value)
@@ -59,18 +60,37 @@ function signup() {
         });
     })
     .catch(function(err) {
-      console.log(err);
       signUpError = true;
-      emailSignupError.style.display = "inline";
-
+      $("#email-signup-error").css("display", "inline");
+      $("#password-signup-error").css("display", "inline");
+      console.log(err);
       if (err != null) {
         const errCode = err.code;
 
         if (errCode === "auth/invalid-email") {
-          signupEmail.focus();
-          emailSignupError.innerHTML =
-            "Invalid email address. Please try again.";
+          $("#email-signup-error").html(
+            "Invalid email address. Please try again."
+          );
+          $("#addon-email-signup").addClass("addon-error");
+          $("#signupEmail").addClass("input-error");
         }
+
+        if (errCode === "auth/weak-password") {
+          $("#password-signup-error").html(
+            "The password must be of minimum length 6 characters."
+          );
+          $("#addon-password-signup").addClass("addon-error");
+          $("#signupPassword").addClass("input-error");
+        }
+
+        if (errCode === "auth/email-already-in-use") {
+          $("#email-signup-error").html(
+            "Email address is already in use. Please use another email."
+          );
+          $("#addon-email-signup").addClass("addon-error");
+          $("#signupEmail").addClass("input-error");
+        }
+
         return;
       }
     });
@@ -176,26 +196,110 @@ loginPassword.addEventListener("focus", function() {
   }
 });
 
-function handleSignUpError() {
+function handleEmailSignupError() {
   if (signUpError) {
-    emailSignupError.style.display = "none";
-    // passwordError.style.display = "none";
-    emailSignupError.innerHTML = "";
-    // passwordError.innerHTML = "";
-
-    addonEmailSignup.style = {};
-    signupEmail.style = {};
+    $("#email-signup-error").css("display", "none");
+    $("#email-signup-error").html("");
+    $("#addon-email-signup").removeClass("addon-error");
+    $("#signupEmail").removeClass("input-error");
   }
 }
 
-signupEmail.addEventListener("focus", function() {
+function handlePasswordSignupError() {
   if (signUpError) {
-    addonEmailSignup.style.borderTop = errLoginStyle;
-    addonEmailSignup.style.borderLeft = errLoginStyle;
-    addonEmailSignup.style.borderBottom = errLoginStyle;
-
-    this.style.borderTop = errLoginStyle;
-    this.style.borderBottom = errLoginStyle;
-    this.style.borderRight = errLoginStyle;
+    $("#password-signup-error").css("display", "none");
+    $("#password-signup-error").html("");
+    $("#addon-password-signup").removeClass("addon-error");
+    $("#signupPassword").removeClass("input-error");
   }
-});
+}
+
+function handleNameSignupError() {
+  if (signUpError) {
+    $("#name-signup-error").css("display", "none");
+    $("#name-signup-error").html("");
+    $("#addon-name").removeClass("addon-error");
+    $("#signupName").removeClass("input-error");
+  }
+}
+function handleHeightError() {
+  if (signUpError) {
+    $("#height-error").css("display", "none");
+    $("#height-error").html("");
+    $("#addon-height").removeClass("addon-error");
+    $("#height").removeClass("input-error");
+  }
+}
+
+function handleWeightError() {
+  if (signUpError) {
+    $("#weight-error").css("display", "none");
+    $("#weight-error").html("");
+    $("#addon-weight").removeClass("addon-error");
+    $("#weight").removeClass("input-error");
+  }
+}
+function validity() {
+  if (!$("#signupName").val()) {
+    signUpError = true;
+    $("#signupName").addClass("input-error");
+    $("#addon-name").addClass("addon-error");
+    $("#name-signup-error").css("display", "inline");
+    $("#name-signup-error").html("Please enter your name.");
+  }
+  if (!$("#signupEmail").val()) {
+    signUpError = true;
+    $("#signupEmail").addClass("input-error");
+    $("#addon-email-signup").addClass("addon-error");
+    $("#email-signup-error").css("display", "inline");
+    $("#email-signup-error").html("Please enter your email address.");
+  }
+
+  if (!$("#signupPassword").val()) {
+    signUpError = true;
+    $("#signupPassword").addClass("input-error");
+    $("#addon-password-signup").addClass("addon-error");
+    $("#password-signup-error").css("display", "inline");
+    $("#password-signup-error").html("Please enter your password.");
+  }
+
+  if (!$("#height").val()) {
+    signUpError = true;
+    $("#height").addClass("input-error");
+    $("#addon-height").addClass("addon-error");
+    $("#height-error").css("display", "inline");
+    $("#height-error").html("Please enter your height.");
+  }
+
+  if (!$("#weight").val()) {
+    signUpError = true;
+    $("#weight").addClass("input-error");
+    $("#addon-weight").addClass("addon-error");
+    $("#weight-error").css("display", "inline");
+    $("#weight-error").html("Please enter your height.");
+  }
+
+  if (
+    parseInt($("#height").val()) < 120 ||
+    parseInt($("#height").val()) > 200
+  ) {
+    signUpError = true;
+    $("#height").addClass("input-error");
+    $("#addon-height").addClass("addon-error");
+    $("#height-error").css("display", "inline");
+    $("#height-error").html("Invalid value. Please try again.");
+  }
+
+  if (parseInt($("#weight").val()) < 30 || parseInt($("#weight").val()) > 200) {
+    signUpError = true;
+
+    $("#weight").addClass("input-error");
+    $("#addon-weight").addClass("addon-error");
+    $("#weight-error").css("display", "inline");
+    $("#weight-error").html("Invalid value. Please try again.");
+  }
+
+  if (signUpError) {
+    throw "input error";
+  }
+}

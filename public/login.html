@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
     <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
         integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
@@ -37,7 +41,7 @@
 
         <div id="login-section">
             <div class="row justify-content-center text-center">
-                <div class="col-md-6 col-xl-4">
+                <div class="col-md-6 col-xl-6">
                     <form>
                         <div class="form-group">
                             <div class="input-group">
@@ -65,7 +69,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 offset-md-3 col-xl-6 offset-xl-4">
+                <div class="col-md-6 offset-md-3 col-xl-6 offset-xl-3">
                     <span id="remember">Remember me</span>
                 </div>
             </div>
@@ -87,14 +91,16 @@
 
         <div id="signup-section">
             <div class="row justify-content-center text-center">
-                <div class="col-md-6 col-xl-4">
+                <div class="col-md-6 col-xl-6">
                     <div class="form-group">
                         <div class="input-group">
-                            <div class="input-group-addon">
+                            <div class="input-group-addon" id="addon-name">
                                 <img src="img/edit.png" height="20px">
                             </div>
-                            <input type="text" class="form-control" name="name" id="signupName" placeholder="Name">
+                            <input type="text" class="form-control" name="name" id="signupName" placeholder="Name"
+                                onclick="handleNameSignupError()">
                         </div>
+                        <span class="error" id="name-signup-error"></span>
                     </div>
                     <div class="form-group">
                         <div class="input-group">
@@ -102,67 +108,76 @@
                                 <img src="img/email.png" height="20px">
                             </div>
                             <input type="email" class="form-control" name="email" id="signupEmail" placeholder="Email address"
-                                onclick="handleSignUpError()">
+                                onclick="handleEmailSignupError()">
                         </div>
                         <span class="error" id="email-signup-error"></span>
                     </div>
                     <div class="form-group">
                         <div class="input-group">
-                            <div class="input-group-addon">
+                            <div class="input-group-addon" id="addon-password-signup">
                                 <img src="img/lock.png" height="20px">
                             </div>
-                            <input type="password" class="form-control" name="password" id="signupPassword" placeholder="Password">
+                            <input type="password" class="form-control" name="password" id="signupPassword" placeholder="Password"
+                                onclick="handlePasswordSignupError()">
                         </div>
+                        <span class="error" id="password-signup-error"></span>
+
                     </div>
                 </div>
             </div>
 
             <div class="row justify-content-center text-center">
-                <div class="col-md-3 col-xl-2">
+                <div class="col-md-3 col-xl-3">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <img src="img/profile.png" height="20px">
+                            </div>
+                            <input type="date" class="form-control" name="date" id="date" placeholder="date">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xl-3">
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-addon">
                                 <img src="img/gender.png" height="20px">
                             </div>
                             <select class="form-control" id="gender">
-                                <option selected hidden>gender</option>
+                                <option selected hidden value=null>Gender</option>
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                             </select>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 col-xl-2">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-addon">
-                                <img src="img/profile.png" height="20px">
-                            </div>
-                            <input type="number" class="form-control" name="age" id="age" placeholder="Age">
-                        </div>
-                    </div>
-                </div>
             </div>
 
-            <div class="row justify-content-center">
-                <div class="col-md-3 col-xl-2">
+            <div class="row justify-content-center text-center">
+                <div class="col-md-3 col-xl-3">
                     <div class="form-group">
                         <div class="input-group">
-                            <div class="input-group-addon">
+                            <div class="input-group-addon" id="addon-height">
                                 <img src="img/height.png" height="20px">
                             </div>
-                            <input type="number" class="form-control" name="height" id="height" placeholder="Height">
+                            <input type="number" class="form-control" name="height" id="height" placeholder="Height"
+                                onclick="handleHeightError()">
                         </div>
+                        <span class="error" id="height-error"></span>
+
                     </div>
                 </div>
-                <div class="col-md-3 col-xl-2">
+                <div class="col-md-3 col-xl-3  text-center">
                     <div class="form-group">
                         <div class="input-group">
-                            <div class="input-group-addon">
+                            <div class="input-group-addon" id="addon-weight">
                                 <img src="img/scale.png" height="20px">
                             </div>
-                            <input type="number" class="form-control" name="weight" id="weight" placeholder="Weight">
+                            <input type="number" class="form-control" name="weight" id="weight" placeholder="Weight"
+                                onclick="handleWeightError()">
                         </div>
+                        <span class="error" id="weight-error"></span>
+
                     </div>
                 </div>
             </div>
@@ -170,6 +185,7 @@
                 <div class="col-md-6 col-xl-4">
                     <button type="button" class="btn" id="signUpBtn" onclick="signup()">SIGN UP</button>
                 </div>
+
             </div>
         </div>
 
