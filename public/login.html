@@ -130,25 +130,29 @@
                 <div class="col-md-3 col-xl-3">
                     <div class="form-group">
                         <div class="input-group">
-                            <div class="input-group-addon">
+                            <div class="input-group-addon" id="addon-date">
                                 <img src="img/profile.png" height="20px">
                             </div>
-                            <input type="date" class="form-control" name="date" id="date" placeholder="date">
+                            <input type="date" class="form-control" name="date" id="date" placeholder="date" onclick="handleDateError()">
                         </div>
+                        <span class="error" id="date-error"></span>
+
                     </div>
                 </div>
                 <div class="col-md-3 col-xl-3">
                     <div class="form-group">
                         <div class="input-group">
-                            <div class="input-group-addon">
+                            <div class="input-group-addon" id="addon-gender">
                                 <img src="img/gender.png" height="20px">
                             </div>
-                            <select class="form-control" id="gender">
-                                <option selected hidden value=null>Gender</option>
+                            <select class="form-control" id="gender" onclick="handleGenderError()">
+                                <option value="" selected disabled hidden>Gender</option>
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                             </select>
                         </div>
+                        <span class="error" id="gender-error"></span>
+
                     </div>
                 </div>
             </div>

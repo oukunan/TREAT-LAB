@@ -18,9 +18,21 @@ let addonEmailSignup = document.getElementById("addon-email-signup");
 
 let emailSignupError = document.getElementById("email-signup-error");
 
+let someVariable = false;
 let error = false;
 let signUpError = false;
+
 const errLoginStyle = "1px solid #EB5757";
+const emailRegex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+let signUpNameErr = false,
+  signUpEmailErr = false,
+  signUpEmailErr2 = false,
+  signUpPasswordErr = false,
+  height = false,
+  weight = false,
+  gender = false,
+  birth = false;
 
 window.onload = function() {
   loginEmail.focus();
@@ -30,22 +42,23 @@ function signup() {
   firebase
     .auth()
     .createUserWithEmailAndPassword(signupEmail.value, signupPassword.value)
-    .then(function() {
+    .then(data => {
       let name = document.getElementById("signupName");
       let gender = document.getElementById("gender");
-      let age = document.getElementById("age");
+      let date = document.getElementById("date");
       let height = document.getElementById("height");
       let weight = document.getElementById("weight");
+      var usersRef = firebase.database().ref(`users/${data.uid}`);
 
-      let user = firebase.auth().currentUser;
-      let userRef = firebase.database().ref(`users/${user.uid}`);
-      userRef
-        .set({
-          name: name.value,
-          gender: gender.value,
-          age: age.value,
-          height: age.value,
-          weight: weight.value
+      usersRef
+        .update({
+          info: {
+            name: name.value,
+            gender: gender.value,
+            date: date.value,
+            height: height.value,
+            weight: weight.value
+          }
         })
         .then(() => {
           alert("Registration completed");
@@ -53,7 +66,7 @@ function signup() {
           signupPassword.value = "";
           name.value = "";
           gender.value = "";
-          age.value = "";
+          date.value = "";
           height.value = "";
           weight.value = "";
           showLogin();
@@ -63,7 +76,6 @@ function signup() {
       signUpError = true;
       $("#email-signup-error").css("display", "inline");
       $("#password-signup-error").css("display", "inline");
-      console.log(err);
       if (err != null) {
         const errCode = err.code;
 
@@ -239,67 +251,150 @@ function handleWeightError() {
     $("#weight").removeClass("input-error");
   }
 }
+
+function handleDateError() {
+  if (signUpError) {
+    $("#date-error").css("display", "none");
+    $("#date-error").html("");
+    $("#addon-date").removeClass("addon-error");
+    $("#date").removeClass("input-error");
+  }
+}
+
+function handleGenderError() {
+  if (signUpError) {
+    $("#gender-error").css("display", "none");
+    $("#gender-error").html("");
+    $("#addon-gender").removeClass("addon-error");
+    $("#gender").removeClass("input-error");
+  }
+}
+
 function validity() {
-  if (!$("#signupName").val()) {
+  if ($("#signupName").val() == "") {
     signUpError = true;
+    signUpNameErr = true;
     $("#signupName").addClass("input-error");
     $("#addon-name").addClass("addon-error");
     $("#name-signup-error").css("display", "inline");
     $("#name-signup-error").html("Please enter your name.");
+  } else {
+    signUpNameErr = false;
   }
+
+  if (
+    !emailRegex.test($("#signupEmail").val()) &&
+    $("#signupEmail").val() === ""
+  ) {
+    signUpError = true;
+    signUpEmailErr = true;
+    $("#signupEmail").addClass("input-error");
+    $("#addon-email-signup").addClass("addon-error");
+    $("#email-signup-error").css("display", "inline");
+    $("#email-signup-error").html("Invalid email address. Please try again.");
+  } else {
+    signUpEmailErr = false;
+  }
+
   if (!$("#signupEmail").val()) {
     signUpError = true;
+    signUpEmailErr2 = true;
     $("#signupEmail").addClass("input-error");
     $("#addon-email-signup").addClass("addon-error");
     $("#email-signup-error").css("display", "inline");
     $("#email-signup-error").html("Please enter your email address.");
+  } else {
+    signUpEmailErr2 = false;
   }
 
   if (!$("#signupPassword").val()) {
     signUpError = true;
+    signUpPasswordErr = true;
     $("#signupPassword").addClass("input-error");
     $("#addon-password-signup").addClass("addon-error");
     $("#password-signup-error").css("display", "inline");
     $("#password-signup-error").html("Please enter your password.");
+  } else {
+    signUpPasswordErr = false;
   }
 
   if (!$("#height").val()) {
     signUpError = true;
+    height = true;
     $("#height").addClass("input-error");
     $("#addon-height").addClass("addon-error");
     $("#height-error").css("display", "inline");
     $("#height-error").html("Please enter your height.");
+  } else {
+    height = false;
   }
 
   if (!$("#weight").val()) {
     signUpError = true;
+    weight = true;
     $("#weight").addClass("input-error");
     $("#addon-weight").addClass("addon-error");
     $("#weight-error").css("display", "inline");
     $("#weight-error").html("Please enter your height.");
+  } else {
+    weight = false;
   }
 
-  if (
-    parseInt($("#height").val()) < 120 ||
-    parseInt($("#height").val()) > 200
-  ) {
+  if ($("#date").val().length === 0) {
     signUpError = true;
-    $("#height").addClass("input-error");
-    $("#addon-height").addClass("addon-error");
-    $("#height-error").css("display", "inline");
-    $("#height-error").html("Invalid value. Please try again.");
+    birth = true;
+    $("#date").addClass("input-error");
+    $("#addon-date").addClass("addon-error");
+    $("#date-error").css("display", "inline");
+    $("#date-error").html("Please choose your birthday.");
+  } else {
+    birth = false;
   }
 
-  if (parseInt($("#weight").val()) < 30 || parseInt($("#weight").val()) > 200) {
+  if (!$("#gender").val()) {
     signUpError = true;
-
-    $("#weight").addClass("input-error");
-    $("#addon-weight").addClass("addon-error");
-    $("#weight-error").css("display", "inline");
-    $("#weight-error").html("Invalid value. Please try again.");
+    gender = true;
+    $("#gender").addClass("input-error");
+    $("#addon-gender").addClass("addon-error");
+    $("#gender-error").css("display", "inline");
+    $("#gender-error").html("Please select your gender.");
+  } else {
+    gender = false;
   }
 
-  if (signUpError) {
+  if (signUpNameErr) {
+    throw "Input error";
+  }
+  if (signUpEmailErr) {
+    throw "Input error";
+  }
+  if (signUpEmailErr2) {
+    throw "Input error";
+  }
+  if (height) {
+    throw "Input error";
+  }
+  if (weight) {
+    throw "Input error";
+  }
+  if (gender) {
+    throw "Input error";
+  }
+  if (birth) {
     throw "input error";
+  }
+  if (
+    !(
+      signUpNameErr &&
+      signUpEmailErr &&
+      signUpEmailErr2 &&
+      signUpPasswordErr &&
+      height &&
+      weight &&
+      gender &&
+      birth
+    )
+  ) {
+    signUpError = false;
   }
 }
