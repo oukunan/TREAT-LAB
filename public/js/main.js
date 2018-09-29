@@ -1,5 +1,5 @@
 const notifier = require("node-notifier");
-// const gkm = require("gkm");
+const gkm = require("gkm");
 
 const pressedKeys = {};
 let tmpCounterHistory = 0,
@@ -32,8 +32,6 @@ let tmpCounterHistory = 0,
   date = moment(new Date()).format("DD-MM-YYYY"),
   hour = moment(new Date()).format("HH");
 
-const userUrl =
-  "https://www.googleapis.com/identitytoolkit/v3/relyingparty/getAccountInfo?key=AIzaSyAYRnraN167fSwfKHYoOWOGVA1GZcpWY58";
 
 // --------- Load data after login -----------
 window.onload = () => {
@@ -44,7 +42,7 @@ window.onload = () => {
     }
   }
 
-  const user = localStorage.getItem("userId");
+  user = localStorage.getItem("userId");
   const oneDayRef = firebase.database().ref(`users/${user}/behavior/${date}`);
   const nameRef = firebase.database().ref(`users/${user}/info/name`);
   const keyboardRef = firebase
