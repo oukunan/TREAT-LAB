@@ -64,10 +64,10 @@ window.onload = () => {
 function setup() {
   let videoInput = createCapture(VIDEO);
   videoInput.size(400, 300);
-  videoInput.parent('sketch-holder');
+  videoInput.parent("sketch-holder");
 
   let cnv = createCanvas(400, 300);
-  cnv.parent('sketch-holder2');
+  cnv.parent("sketch-holder2");
 
   tracker = new clm.tracker();
   tracker.init(pModel);
@@ -86,7 +86,7 @@ function draw() {
       ypos = positions[i][1];
     }
   }
-  stroke('rgb(0,255,0)');
+  stroke("rgb(0,255,0)");
   strokeWeight(4);
   isLine && line(0, trigHeight, width * 2, trigHeight);
 }
@@ -230,6 +230,8 @@ function getHistory() {
   let bendTotal = 0,
     sitTotal = 0,
     relaxTotal = 0,
+    keyboardTotal = 0,
+    mouseTotal = 0,
     objectData = {};
   const behaviorValue = [];
   const key = [];
@@ -243,6 +245,9 @@ function getHistory() {
       bendTotal = 0;
       sitTotal = 0;
       relaxTotal = 0;
+      keyboardTotal = 0;
+      mouseTotal = 0;
+
       objectData = {};
       for (let day in behaviorValue[i]) {
         bendTotal += behaviorValue[i][day].hasOwnProperty("bends")
@@ -254,15 +259,25 @@ function getHistory() {
         relaxTotal += behaviorValue[i][day].hasOwnProperty("relax")
           ? behaviorValue[i][day].relax.duration
           : 0;
+        keyboardTotal += behaviorValue[i][day].hasOwnProperty("keyboard")
+          ? behaviorValue[i][day].keyboard.keycount
+          : 0;
+        mouseTotal += behaviorValue[i][day].hasOwnProperty("mouse")
+          ? behaviorValue[i][day].mouse.mouseClickCount
+          : 0;
       }
       objectData[key[i]] = {
         bends: bendTotal,
         sit: sitTotal,
-        relax: relaxTotal
+        relax: relaxTotal,
+        keyboard: keyboardTotal,
+        mouse: mouseTotal
       };
     }
     finalData.push(objectData);
   });
+
+  console.log(finalData);
 
   const today = moment().format("DD-MM-YYYY");
   const lastSevenDay = moment()
@@ -280,10 +295,13 @@ function getHistory() {
     const formattedRelax = formatShow(
       filteredData[i][Object.keys(filteredData[i])].relax
     );
-
     const formattedMouse = formatShow(
       filteredData[i][Object.keys(filteredData[i])].mouse
     );
+    const formattedKeyboard = formatShow(
+      filteredData[i][Object.keys(filteredData[i])].keyboard
+    );
+
     $("#eachDay").append(
       `<div class="col-md-4">
             <div class="col-md-12 historyItem">
@@ -296,7 +314,7 @@ function getHistory() {
                 <p><strong>Mouse: </strong>${formattedMouse || 0}</p>
                 <p><strong>Keyboard: </strong>${filteredData[i][
                   Object.keys(filteredData[i])
-                ].relax || 0}</p>
+                ].keyboard || 0}</p>
             </div>
           </div>`
     );
