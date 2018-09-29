@@ -22,7 +22,6 @@ let someVariable = false;
 let error = false;
 let signUpError = false;
 
-const errLoginStyle = "1px solid #EB5757";
 const emailRegex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
 let signUpNameErr = false,
@@ -34,9 +33,26 @@ let signUpNameErr = false,
   gender = false,
   birth = false;
 
-window.onload = function() {
+const url =
+  "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyAYRnraN167fSwfKHYoOWOGVA1GZcpWY58";
+
+window.onload = () => {
+  authCheckState();
   loginEmail.focus();
 };
+
+function authCheckState() {
+  const token = localStorage.getItem("token");
+  if (token) {
+    const expirationDate = new Date(localStorage.getItem("expirationDate"));
+    if (expirationDate < new Date()) {
+      // Do nothing..
+    } else {
+      window.location.href = "main.html";
+    }
+  }
+}
+
 function signup() {
   validity();
   firebase
@@ -109,32 +125,51 @@ function signup() {
 }
 
 function login() {
-  firebase
-    .auth()
-    .signInWithEmailAndPassword(loginEmail.value, loginPassword.value)
-    .then(function() {
+  const isChecked = $("#checkbox").is(":checked");
+
+  const authData = {
+    email: loginEmail.value,
+    password: loginPassword.value,
+    returnSecureToken: true
+  };
+  axios
+    .post(url, authData)
+    .then(res => {
+      const expirationDate = new Date(
+        new Date().getTime() + res.data.expiresIn * 1000
+      );
+
+      if (isChecked) {
+        localStorage.setItem("token", res.data.idToken);
+        localStorage.setItem("expirationDate", expirationDate);
+      }
+      localStorage.setItem("userId", res.data.localId);
       window.location.href = "main.html";
     })
-    .catch(function(err) {
+    .catch(err => {
+      const errCode = err.response.data.error.message;
       error = true;
-      emailError.style.display = "inline";
-      passwordError.style.display = "inline";
+      
+      $("#email-error").css("display", "inline");
+      $("#password-error").css("display", "inline");
 
       if (err != null) {
-        const errCode = err.code;
-        if (errCode === "auth/invalid-email") {
-          loginEmail.focus();
-          emailError.innerHTML = "Invalid email address. Please try again.";
+        if (errCode === "INVALID_EMAIL") {
+          $("#loginEmail").addClass("input-error");
+          $("#addon-email").addClass("addon-error");
+          $("#email-error").html("Invalid email address. Please try again.");
         }
 
-        if (errCode === "auth/wrong-password") {
-          loginPassword.focus();
-          passwordError.innerHTML = "Invalid password. Please try again.";
+        if (errCode === "INVALID_PASSWORD" || errCode === "MISSING_PASSWORD") {
+          $("#loginPassword").addClass("input-error");
+          $("#addon-password").addClass("addon-error");
+          $("#password-error").html("Invalid password. Please try again.");
         }
 
-        if (errCode === "auth/user-not-found") {
-          loginEmail.focus();
-          emailError.innerHTML = "User not found. Please try again.";
+        if (errCode === "EMAIL_NOT_FOUND") {
+          $("#loginEmail").addClass("input-error");
+          $("#addon-email").addClass("addon-error");
+          $("#email-error").html("User not found. Please try again.");
         }
         return;
       }
@@ -146,6 +181,9 @@ function logout() {
     .auth()
     .signOut()
     .then(() => {
+      localStorage.removeItem("token");
+      localStorage.removeItem("expirationDate");
+      localStorage.removeItem("userId");
       document.location.href = "login.html";
     })
     .catch(err => {
@@ -171,42 +209,20 @@ function showSignup() {
 
 function handleError() {
   if (error) {
-    emailError.style.display = "none";
-    passwordError.style.display = "none";
-    emailError.innerHTML = "";
-    passwordError.innerHTML = "";
+    $("#email-error").css("display", "none");
+    $("#password-error").css("display", "none");
+    $("#email-error").html("");
+    $("#password-error").html("");
 
-    addonEmail.style = {};
-    loginEmail.style = {};
+    $("#addon-email").removeClass("addon-error");
+    $("#loginEmail").removeClass("input-error");
 
-    addonPassword.style = {};
-    loginPassword.style = {};
+    $("#addon-password").removeClass("addon-error");
+    $("#loginPassword").removeClass("input-error");
 
     error = false;
   }
 }
-
-loginEmail.addEventListener("focus", function() {
-  if (error) {
-    addonEmail.style.borderTop = errLoginStyle;
-    addonEmail.style.borderLeft = errLoginStyle;
-    addonEmail.style.borderBottom = errLoginStyle;
-    this.style.borderTop = errLoginStyle;
-    this.style.borderBottom = errLoginStyle;
-    this.style.borderRight = errLoginStyle;
-  }
-});
-
-loginPassword.addEventListener("focus", function() {
-  if (error) {
-    addonPassword.style.borderTop = errLoginStyle;
-    addonPassword.style.borderLeft = errLoginStyle;
-    addonPassword.style.borderBottom = errLoginStyle;
-    this.style.borderTop = errLoginStyle;
-    this.style.borderBottom = errLoginStyle;
-    this.style.borderRight = errLoginStyle;
-  }
-});
 
 function handleEmailSignupError() {
   if (signUpError) {
