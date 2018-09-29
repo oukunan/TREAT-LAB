@@ -1,3 +1,5 @@
+const axios = require('axios')
+
 let loginSection = document.getElementById('login-section');
 let signupSection = document.getElementById('signup-section');
 let navSignup = document.getElementById('navSignup');

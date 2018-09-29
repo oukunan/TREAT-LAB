@@ -14,6 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.18.0",
     "electron-packager": "^11.1.0",
     "electron-updater": "^2.21.8",
     "gkm": "^0.2.0",
