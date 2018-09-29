@@ -28,40 +28,77 @@ let tmpCounterHistory = 0,
   sumRelax = 0,
   sumKeyboard = 0,
   sumMouse = 0,
+  user = null,
   date = moment(new Date()).format("DD-MM-YYYY"),
   hour = moment(new Date()).format("HH");
-document.getElementById("dateValue").innerHTML = moment().format("LL");
+
+const userUrl =
+  "https://www.googleapis.com/identitytoolkit/v3/relyingparty/getAccountInfo?key=AIzaSyAYRnraN167fSwfKHYoOWOGVA1GZcpWY58";
+
+// --------- Load data after login -----------
+window.onload = () => {
+  const expireDate = localStorage.getItem("expirationDate");
+  if (expireDate) {
+    if (new Date(expireDate).getTime() < new Date().getTime()) {
+      logout();
+    }
+  }
+
+  const user = localStorage.getItem("userId");
+  const oneDayRef = firebase.database().ref(`users/${user}/behavior/${date}`);
+  const nameRef = firebase.database().ref(`users/${user}/info/name`);
+  const keyboardRef = firebase
+    .database()
+    .ref(`users/${user}/behavior/${date}/${hour}/keyboard/keycount`);
+  const mouseRef = firebase
+    .database()
+    .ref(`users/${user}/behavior/${date}/${hour}/mouse/mouseClickCount`);
+
+  oneDayRef.on("value", received => {
+    generateEachBehavior(received.val());
+  });
+
+  nameRef.on("value", received => {
+    let name = received.val();
+    if (name) {
+      document.getElementById("name").innerHTML = name;
+      document.getElementById("topName").innerHTML = name;
+    }
+  });
+
+  getHistory();
+};
 
 //------- Image processing -----------
-// function setup() {
-//   let videoInput = createCapture(VIDEO);
-//   videoInput.size(400, 300);
-//   videoInput.parent("sketch-holder");
+function setup() {
+  let videoInput = createCapture(VIDEO);
+  videoInput.size(400, 300);
+  videoInput.parent("sketch-holder");
 
-//   let cnv = createCanvas(400, 300);
-//   cnv.parent("sketch-holder2");
+  let cnv = createCanvas(400, 300);
+  cnv.parent("sketch-holder2");
 
-//   tracker = new clm.tracker();
-//   tracker.init(pModel);
-//   tracker.start(videoInput.elt);
-// }
+  tracker = new clm.tracker();
+  tracker.init(pModel);
+  tracker.start(videoInput.elt);
+}
 
-// function draw() {
-//   clear();
-//   noStroke();
+function draw() {
+  clear();
+  noStroke();
 
-//   positions = tracker.getCurrentPosition();
-//   for (var i = 0; i < positions.length; i++) {
-//     fill(0, 255, 0);
-//     rect(positions[i][0], positions[i][1], 3, 3);
-//     if (i == 20) {
-//       ypos = positions[i][1];
-//     }
-//   }
-//   stroke("rgb(0,255,0)");
-//   strokeWeight(4);
-//   isLine && line(0, trigHeight, width * 2, trigHeight);
-// }
+  positions = tracker.getCurrentPosition();
+  for (var i = 0; i < positions.length; i++) {
+    fill(0, 255, 0);
+    rect(positions[i][0], positions[i][1], 3, 3);
+    if (i == 20) {
+      ypos = positions[i][1];
+    }
+  }
+  stroke("rgb(0,255,0)");
+  strokeWeight(4);
+  isLine && line(0, trigHeight, width * 2, trigHeight);
+}
 
 function setHeight() {
   trigHeight = ypos + 15;
@@ -91,10 +128,9 @@ function headUp() {
 
 // -------- Save bending data -------------
 function bendCount() {
-  let user = firebase.auth().currentUser;
   let bendRef = firebase
     .database()
-    .ref(`users/${user.uid}/behavior/${date}/${hour}/bends/count`);
+    .ref(`users/${user}/behavior/${date}/${hour}/bends/count`);
   bendRef.transaction(count => {
     count += 1;
     return count;
@@ -102,22 +138,21 @@ function bendCount() {
 }
 
 // -------- Mouse part -------------
-// gkm.events.on("mouse.*", () => {
-//   mouseBoolean = true;
-//   const formatted = moment.utc(showMouse * 1000).format("HH:mm:ss");
-//   document.getElementById("mouse").innerHTML = `${formatted}`;
-//   if (mouseTimerout) {
-//     clearTimeout(mouseTimerout);
-//   }
-//   mouseTimerout = setTimeout(mouseStop, 150);
-// });
+gkm.events.on("mouse.*", () => {
+  mouseBoolean = true;
+  const formatted = moment.utc(showMouse * 1000).format("HH:mm:ss");
+  document.getElementById("mouse").innerHTML = `${formatted}`;
+  if (mouseTimerout) {
+    clearTimeout(mouseTimerout);
+  }
+  mouseTimerout = setTimeout(mouseStop, 150);
+});
 
 function mouseStop() {
   mouseBoolean = false;
-  let user = firebase.auth().currentUser;
   let mouseRef = firebase
     .database()
-    .ref(`users/${user.uid}/behavior/${date}/${hour}/mouse/mouseClickCount`);
+    .ref(`users/${user}/behavior/${date}/${hour}/mouse/mouseClickCount`);
   let tmpMouseCounter = mouseCounter;
 
   mouseRef.transaction(mouseClickCount => {
@@ -128,39 +163,37 @@ function mouseStop() {
 }
 
 // //---------Keyboard tracking--------------
-// gkm.events.on("key.pressed", data => {
-//   if (pressedKeys[data]) {
-//     return;
-//   }
-//   pressedKeys[data] = true;
-//   ++keycount;
-//   let user = firebase.auth().currentUser;
-//   let keyboardRef = firebase
-//     .database()
-//     .ref(`users/${user.uid}/behavior/${date}/${hour}/keyboard/keycount`);
-//   keyboardRef.transaction(keycount => {
-//     keycount += 1;
-//     return keycount;
-//   });
-//   clearTimeout(timeout);
-//   timeout = setTimeout(() => {
-//     keycount = 0;
-//   }, 1000);
-// });
+gkm.events.on("key.pressed", data => {
+  if (pressedKeys[data]) {
+    return;
+  }
+  pressedKeys[data] = true;
+  ++keycount;
+  let keyboardRef = firebase
+    .database()
+    .ref(`users/${user}/behavior/${date}/${hour}/keyboard/keycount`);
+  keyboardRef.transaction(keycount => {
+    keycount += 1;
+    return keycount;
+  });
+  clearTimeout(timeout);
+  timeout = setTimeout(() => {
+    keycount = 0;
+  }, 1000);
+});
 
-// gkm.events.on("key.released", function(data) {
-//   delete pressedKeys[data];
-// });
+gkm.events.on("key.released", function(data) {
+  delete pressedKeys[data];
+});
 
 // --------- Timer for sit duration -------------
 function sitTimer() {
-  let user = firebase.auth().currentUser;
   let sitRef = firebase
     .database()
-    .ref(`users/${user.uid}/behavior/${date}/${hour}/sit/duration`);
+    .ref(`users/${user}/behavior/${date}/${hour}/sit/duration`);
   let relaxRef = firebase
     .database()
-    .ref(`users/${user.uid}/behavior/${date}/${hour}/relax/duration`);
+    .ref(`users/${user}/behavior/${date}/${hour}/relax/duration`);
 
   if (typeof positions === "object") {
     ++secSit;
@@ -195,41 +228,6 @@ function sitTimer() {
   }
 }
 
-// --------- Load data after login -----------
-window.onload = () => {
-  firebase.auth().onAuthStateChanged(user => {
-    if (user) {
-      let oneDayRef = firebase
-        .database()
-        .ref(`users/${user.uid}/behavior/${date}`);
-
-      let nameRef = firebase.database().ref(`users/${user.uid}/info/name`);
-
-      let keyboardRef = firebase
-        .database()
-        .ref(`users/${user.uid}/behavior/${date}/${hour}/keyboard/keycount`);
-      let mouseRef = firebase
-        .database()
-        .ref(
-          `users/${user.uid}/behavior/${date}/${hour}/mouse/mouseClickCount`
-        );
-
-      oneDayRef.on("value", received => {
-        generateEachBehavior(received.val());
-      });
-
-      nameRef.on("value", received => {
-        let name = received.val();
-        if (name) {
-          document.getElementById("name").innerHTML = name;
-          document.getElementById("topName").innerHTML = name;
-        }
-      });
-    }
-    getHistory();
-  });
-};
-
 // ------- History --------------
 function getHistory() {
   tmpCounterHistory++;
@@ -243,10 +241,7 @@ function getHistory() {
   const behaviorValue = [];
   const key = [];
   let finalData = [];
-  const user = firebase.auth().currentUser;
-  const notFilterHistory = firebase
-    .database()
-    .ref(`users/${user.uid}/behavior`);
+  const notFilterHistory = firebase.database().ref(`users/${user}/behavior`);
   notFilterHistory.on("child_added", received => {
     behaviorValue.push(received.val());
     key.push(received.key);
@@ -371,3 +366,5 @@ function timer() {
 setInterval(headUp, 1000);
 setInterval(checkMouseTimer, 1000);
 setInterval(sitTimer, 1000);
+
+document.getElementById("dateValue").innerHTML = moment().format("LL");
