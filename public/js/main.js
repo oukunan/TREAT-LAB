@@ -56,7 +56,6 @@ window.onload = () => {
       document.getElementById("topName").innerHTML = name;
     }
   });
-
   getHistory();
 };
 
@@ -227,6 +226,7 @@ function getHistory() {
   if (tmpCounterHistory > 2) {
     return;
   }
+
   let bendTotal = 0,
     sitTotal = 0,
     relaxTotal = 0,
@@ -277,15 +277,14 @@ function getHistory() {
     finalData.push(objectData);
   });
 
-  console.log(finalData);
-
   const today = moment().format("DD-MM-YYYY");
   const lastSevenDay = moment()
     .subtract(7, "d")
     .format("DD-MM-YYYY");
 
   const filteredData = finalData.filter(i => {
-    return Object.keys(i) < today && Object.keys(i) >= lastSevenDay;
+    // return Object.keys(i) < today && Object.keys(i) >= lastSevenDay;
+    return Object.keys(i) >= lastSevenDay;
   });
 
   for (let i = 0; i < filteredData.length; i++) {
