@@ -1,38 +1,38 @@
-window.addEventListener('load', getData(genFunction));
+window.addEventListener("load", getData(genFunction));
 
 const timeLabel = [
-  '00',
-  '01',
-  '02',
-  '03',
-  '04',
-  '05',
-  '06',
-  '07',
-  '08',
-  '09',
-  '10',
-  '11',
-  '12',
-  '13',
-  '14',
-  '15',
-  '16',
-  '17',
-  '18',
-  '19',
-  '20',
-  '21',
-  '22',
-  '23',
+  "00",
+  "01",
+  "02",
+  "03",
+  "04",
+  "05",
+  "06",
+  "07",
+  "08",
+  "09",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23"
 ];
 
 // //---------- First get data ---------------
 function getData(cb) {
-  let user = localStorage.getItem('userId');
-  let date = moment(new Date()).format('DD-MM-YYYY');
+  let user = localStorage.getItem("userId");
+  let date = moment(new Date()).format("DD-MM-YYYY");
   let graphData = firebase.database().ref(`users/${user}/behavior/${date}`);
-  graphData.on('value', snapshot => {
+  graphData.on("value", snapshot => {
     cb(snapshot.val());
   });
 }
@@ -52,23 +52,23 @@ function genFunction(data) {
 
   for (let key in data) {
     let timeKey = parseInt(key);
-    if (data[key].hasOwnProperty('sit')) {
+    if (data[key].hasOwnProperty("sit")) {
       sitLabel.push(timeKey);
       sitData.push(data[key].sit.duration);
     }
-    if (data[key].hasOwnProperty('relax')) {
+    if (data[key].hasOwnProperty("relax")) {
       relaxLabel.push(timeKey);
       relaxData.push(data[key].relax.duration);
     }
-    if (data[key].hasOwnProperty('mouse')) {
+    if (data[key].hasOwnProperty("mouse")) {
       mouseLabel.push(timeKey);
       mouseData.push(data[key].mouse.mouseClickCount);
     }
-    if (data[key].hasOwnProperty('bends')) {
+    if (data[key].hasOwnProperty("bends")) {
       bendLabel.push(timeKey);
       bendData.push(data[key].bends.count);
     }
-    if (data[key].hasOwnProperty('keyboard')) {
+    if (data[key].hasOwnProperty("keyboard")) {
       keyboardLabel.push(timeKey);
       keyboardData.push(data[key].keyboard.keycount);
     }
@@ -112,114 +112,122 @@ function genFunction(data) {
 }
 
 //--------- Graph sketch ------------------
-let ctx = document.getElementById('timeChart');
-let cty = document.getElementById('normalChart');
+let ctx = document.getElementById("timeChart");
+let cty = document.getElementById("normalChart");
 
 let timeChart = new Chart(ctx, {
-  type: 'line',
+  type: "line",
   data: {
     labels: timeLabel,
     datasets: [
       {
-        label: 'Sit',
+        label: "Sitting Hours",
         fill: false,
-        borderColor: 'red',
+        borderColor: "#206491",
         data: [],
         spanGaps: false,
+        borderWidth: 7,
+        pointRadius: 0
       },
       {
-        label: 'Relax',
+        label: "Relax Time",
         fill: false,
-        borderColor: 'green',
+        borderColor: "#45aab4",
         data: [],
-        spanGaps: false,
+        spanGaps: false
       },
       {
-        label: 'Mouse',
+        label: "Mouse Usage",
         fill: false,
-        borderColor: 'orange',
+        borderColor: "#94d183",
         data: [],
-        spanGaps: false,
-      },
-    ],
+        spanGaps: false
+      }
+    ]
   },
   options: {
     tooltips: {
-      mode: 'index',
-      intersect: false,
+      mode: "index",
+      intersect: false
     },
     hover: {
-      mode: 'nearest',
-      intersect: true,
+      mode: "nearest",
+      intersect: true
     },
     scales: {
       yAxes: [
         {
           scaleLabel: {
             display: true,
-            labelString: 'Time usage (seconds)',
+            labelString: "Time usage (seconds)"
           },
-        },
+          ticks: {
+            beginAtZero: true
+          }
+        }
       ],
       xAxes: [
         {
           scaleLabel: {
             display: true,
-            labelString: 'Hour',
-          },
-        },
-      ],
-    },
-  },
+            labelString: "Hour"
+          }
+        }
+      ]
+    }
+  }
 });
 
 let chart = new Chart(cty, {
-  type: 'line',
+  type: "line",
   data: {
     labels: timeLabel,
     datasets: [
       {
-        label: 'Bending',
+        label: "Bad posture",
         fill: false,
-        borderColor: 'red',
+        borderColor: "#fbbc5c",
         data: [],
-        spanGaps: false,
+        spanGaps: false
       },
       {
-        label: 'Keyboard',
+        label: "Typing Keyboard",
         fill: false,
-        borderColor: 'green',
+        borderColor: "#f99db0",
         data: [],
-        spanGaps: false,
-      },
-    ],
+        spanGaps: false
+      }
+    ]
   },
   options: {
     tooltips: {
-      mode: 'index',
-      intersect: false,
+      mode: "index",
+      intersect: false
     },
     hover: {
-      mode: 'nearest',
-      intersect: true,
+      mode: "nearest",
+      intersect: true
     },
     scales: {
       yAxes: [
         {
           scaleLabel: {
             display: true,
-            labelString: 'Counts',
+            labelString: "Counts"
           },
-        },
+          ticks: {
+            beginAtZero: true
+          }
+        }
       ],
       xAxes: [
         {
           scaleLabel: {
             display: true,
-            labelString: 'Hour',
-          },
-        },
-      ],
-    },
-  },
+            labelString: "Hour"
+          }
+        }
+      ]
+    }
+  }
 });

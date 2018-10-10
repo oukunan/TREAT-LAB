@@ -1,5 +1,5 @@
 body {
-  font-family: Roboto;
+  font-family: Roboto !important;
   padding-bottom: 30px;
   padding-top: 30px;
 }
@@ -33,7 +33,7 @@ body {
   padding: 15px 10px 15px 10px;
   display: flex;
   justify-content: space-around;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 #sketch-holder2 {
@@ -72,8 +72,7 @@ body {
   margin-bottom: 10px;
 }
 
-.date,
-.history__title {
+.date {
   font-size: 16px;
 }
 
@@ -90,6 +89,8 @@ body {
 
 .nav-item a:hover {
   color: inherit;
+  border: 0px;
+  font-weight: bold;
 }
 
 .nav-item a.active {
@@ -114,12 +115,24 @@ ul.nav.nav-tabs {
 
 .historyItem {
   margin-bottom: 15px;
-  border: 1px solid #333333;
+  border: 1px solid #e5e5e5;
   border-radius: 15px;
   width: 250px;
   padding: 20px;
+  font-family: Roboto;
 }
 
 #eachDay {
   margin-top: 15px;
+}
+
+.activity {
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.historyDate {
+  color: #a0ca68;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e5e5e5;
 }
