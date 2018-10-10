@@ -126,7 +126,7 @@ let timeChart = new Chart(ctx, {
         borderColor: "#206491",
         data: [],
         spanGaps: false,
-        borderWidth: 7,
+        borderWidth: 5,
         pointRadius: 0
       },
       {
@@ -134,14 +134,18 @@ let timeChart = new Chart(ctx, {
         fill: false,
         borderColor: "#45aab4",
         data: [],
-        spanGaps: false
+        spanGaps: false,
+        borderWidth: 5,
+        pointRadius: 0
       },
       {
         label: "Mouse Usage",
         fill: false,
         borderColor: "#94d183",
         data: [],
-        spanGaps: false
+        spanGaps: false,
+        borderWidth: 5,
+        pointRadius: 0
       }
     ]
   },
@@ -188,14 +192,18 @@ let chart = new Chart(cty, {
         fill: false,
         borderColor: "#fbbc5c",
         data: [],
-        spanGaps: false
+        spanGaps: false,
+        borderWidth: 5,
+        pointRadius: 0
       },
       {
         label: "Typing Keyboard",
         fill: false,
         borderColor: "#f99db0",
         data: [],
-        spanGaps: false
+        spanGaps: false,
+        borderWidth: 5,
+        pointRadius: 0
       }
     ]
   },

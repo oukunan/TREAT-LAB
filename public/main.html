@@ -32,11 +32,16 @@
 <body>
     <div class="container">
         <div class="row float-right">
-            <div class="col-md-12 top-img">
-                <select class="form-control" onchange="logout()" id="logout-section">
-                    <option id="topName" selected disabled hidden></option>
-                    <option id="logoutBtn">Logout</option>
-                </select>
+            <div class="col-md-12">
+
+                <div class="dropdown">
+                    <button onclick="toggleMenu()" class="dropbtn" id="topName"><i class="arrow down"></i></button>
+                    <div id="myDropdown" class="dropdown-content">
+                        <a href="#">Settings</a>
+                        <a href="#">Report issue</a>
+                        <a href="#" onclick="logout()">Log out</a>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row">

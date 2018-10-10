@@ -17,14 +17,6 @@ body {
   font-size: 40px;
 }
 
-.top-img {
-  margin-bottom: 20px;
-}
-
-#logout-section {
-  border: 0px;
-}
-
 .main_detail {
   margin-top: 15px;
   margin-left: 0px;
@@ -135,4 +127,62 @@ ul.nav.nav-tabs {
   color: #a0ca68;
   padding-bottom: 15px;
   border-bottom: 1px solid #e5e5e5;
+}
+
+/* -------- Dropdown menu ------- */
+.dropbtn {
+  background-color: white;
+  color: black;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropbtn:hover,
+.dropbtn:focus {
+  outline: none;
+  box-shadow: 0;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #ebebeb;
+  min-width: 160px;
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  text-decoration: none;
+  color: black;
+  background-color: #d7d7d8;
+}
+
+.show {
+  display: block;
+}
+
+i {
+  border: solid black;
+  border-width: 0 1px 1px 0;
+  display: inline-block;
+  padding: 3px;
+  margin: 0 0 5px 5px;
+}
+
+.down {
+  transform: rotate(45deg);
 }
