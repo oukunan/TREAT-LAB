@@ -4,6 +4,14 @@ body {
   padding-top: 30px;
 }
 
+.logo {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  color: #a0ca68;
+  letter-spacing: 5px;
+}
+
 #name {
   font-weight: bold;
   font-size: 40px;
@@ -20,14 +28,12 @@ body {
 .main_detail {
   margin-top: 15px;
   margin-left: 0px;
-  border: 1px solid #333333;
+  border: 1px solid #e5e5e5;
   border-radius: 25px;
-  padding: 20px 15px 20px 15px;
-}
-
-.main_detail h5 {
-  font-size: 12.2px;
-  font-weight: bold;
+  padding: 15px 10px 15px 10px;
+  display: flex;
+  justify-content: space-around;
+  font-size: 14px;
 }
 
 #sketch-holder2 {
@@ -36,7 +42,7 @@ body {
 }
 
 .main_detail p {
-  font-size: 25px;
+  font-size: 18px;
   font-weight: bold;
   margin-top: 16px;
 }
@@ -51,11 +57,13 @@ body {
 }
 
 #heightBtn:hover {
-  background-color: #333333;
-  color: white;
+  color: #6a9951;
+  border: 1px solid #6a9951;
 }
 
-#heightBtn:active {
+#heightBtn:active,
+#heightBtn:focus {
+  box-shadow: none;
   transform: scale(0.98);
 }
 
@@ -66,14 +74,16 @@ body {
 
 .date,
 .history__title {
-  font-size: 25px;
-  font-weight: bold;
+  font-size: 16px;
 }
 
 #dateValue {
-  color: #75bd00;
+  color: ;
 }
 
+.nav-tabs {
+  border-bottom: 0px !important;
+}
 .nav-item a {
   color: inherit;
 }
@@ -85,7 +95,8 @@ body {
 .nav-item a.active {
   border: 0px;
   font-weight: bold;
-  color: #75bd00 !important;
+  color: #a0ca68 !important;
+  border-bottom: 2px solid #a0ca68 !important;
 }
 
 .canvas_wrapper {

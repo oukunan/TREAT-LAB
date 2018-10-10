@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>TreatLab</title>
     <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous">
@@ -40,7 +41,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <span class="userName" id="name"></span>
+                <div class="logo">TL.</div>
             </div>
         </div>
         <div class="row">
@@ -58,12 +59,12 @@
                 </ul>
             </div>
         </div>
+
         <div class="row">
             <div class="col-md-12">
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="overview">
                         <div class="date_section">
-                            <span class="date" id="dateLabel">Today: </span>
                             <span class="date" id="dateValue"></span>
                         </div>
                         <div class="col">
@@ -84,40 +85,37 @@
                             </div>
                         </div>
                         <div class="col">
-                            <div class="row justify-content-center text-center">
-                                <div class="col-md-2">
+                            <div class="row">
+                                <div class="col-md-4">
                                     <div class="main_detail">
-                                        <h5>Bad Posture</h5>
-                                        <p id="showBend">0</p>
-                                        <h5>times</h5>
+                                        <div>Bad Posture</div>
+                                        <div id="showBend">0</div>
+                                        <div>times</div>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-4">
                                     <div class="main_detail">
-                                        <h5>Sitting Hours</h5>
-                                        <p id="sit">00:00:00</p>
-                                        <h5>hh:mm:ss</h5>
+                                        <div>Sitting Hours</div>
+                                        <div id="sit">00:00:00</div>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-4">
                                     <div class="main_detail">
-                                        <h5>Relax time </h5>
-                                        <p id="relax">00:00:00</p>
-                                        <h5>hh:mm:ss</h5>
+                                        <div>Relax time </div>
+                                        <div id="relax">00:00:00</div>
                                     </div>
                                 </div>
-                                <div class="col-md-3 col-xl-2">
+                                <div class="col-md-4">
                                     <div class="main_detail">
-                                        <h5>Typing Keyboard</h5>
-                                        <p id="keyboard">0</p>
-                                        <h5>times</h5>
+                                        <div>Typing Keyboard</div>
+                                        <div id="keyboard">0</div>
+                                        <div>times</div>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-4">
                                     <div class="main_detail">
-                                        <h5>Mouse usage</h5>
-                                        <p id="mouse">00:00:00</p>
-                                        <h5>hh:mm:ss</h5>
+                                        <div>Mouse usage</div>
+                                        <div id="mouse">00:00:00</div>
                                     </div>
                                 </div>
                             </div>
