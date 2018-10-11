@@ -1,5 +1,5 @@
 const notifier = require('node-notifier');
-// const gkm = require("gkm");
+const gkm = require("gkm");
 
 const pressedKeys = {};
 let tmpCounterHistory = 0,
@@ -59,35 +59,35 @@ window.onload = () => {
 };
 
 //------- Image processing -----------
-// function setup() {
-//   let videoInput = createCapture(VIDEO);
-//   videoInput.size(400, 300);
-//   videoInput.parent("sketch-holder");
+function setup() {
+  let videoInput = createCapture(VIDEO);
+  videoInput.size(400, 300);
+  videoInput.parent("sketch-holder");
 
-//   let cnv = createCanvas(400, 300);
-//   cnv.parent("sketch-holder2");
+  let cnv = createCanvas(400, 300);
+  cnv.parent("sketch-holder2");
 
-//   tracker = new clm.tracker();
-//   tracker.init(pModel);
-//   tracker.start(videoInput.elt);
-// }
+  tracker = new clm.tracker();
+  tracker.init(pModel);
+  tracker.start(videoInput.elt);
+}
 
-// function draw() {
-//   clear();
-//   noStroke();
+function draw() {
+  clear();
+  noStroke();
 
-//   positions = tracker.getCurrentPosition();
-//   for (var i = 0; i < positions.length; i++) {
-//     fill(0, 255, 0);
-//     rect(positions[i][0], positions[i][1], 3, 3);
-//     if (i == 20) {
-//       ypos = positions[i][1];
-//     }
-//   }
-//   stroke("rgb(0,255,0)");
-//   strokeWeight(4);
-//   isLine && line(0, trigHeight, width * 2, trigHeight);
-// }
+  positions = tracker.getCurrentPosition();
+  for (var i = 0; i < positions.length; i++) {
+    fill(0, 255, 0);
+    rect(positions[i][0], positions[i][1], 3, 3);
+    if (i == 20) {
+      ypos = positions[i][1];
+    }
+  }
+  stroke("rgb(0,255,0)");
+  strokeWeight(4);
+  isLine && line(0, trigHeight, width * 2, trigHeight);
+}
 
 function setHeight() {
   trigHeight = ypos + 15;
@@ -127,15 +127,15 @@ function bendCount() {
 }
 
 // -------- Mouse part -------------
-// gkm.events.on("mouse.*", () => {
-//   mouseBoolean = true;
-//   const formatted = moment.utc(showMouse * 1000).format("HH:mm:ss");
-//   document.getElementById("mouse").innerHTML = `${formatted}`;
-//   if (mouseTimerout) {
-//     clearTimeout(mouseTimerout);
-//   }
-//   mouseTimerout = setTimeout(mouseStop, 150);
-// });
+gkm.events.on("mouse.*", () => {
+  mouseBoolean = true;
+  const formatted = moment.utc(showMouse * 1000).format("HH:mm:ss");
+  document.getElementById("mouse").innerHTML = `${formatted}`;
+  if (mouseTimerout) {
+    clearTimeout(mouseTimerout);
+  }
+  mouseTimerout = setTimeout(mouseStop, 150);
+});
 
 function mouseStop() {
   mouseBoolean = false;
@@ -152,30 +152,30 @@ function mouseStop() {
 }
 
 // //---------Keyboard tracking--------------
-// gkm.events.on("key.pressed", data => {
-//   if (pressedKeys[data]) {
-//     return;
-//   }
-//   pressedKeys[data] = true;
+gkm.events.on("key.pressed", data => {
+  if (pressedKeys[data]) {
+    return;
+  }
+  pressedKeys[data] = true;
 
-//   ++keycount;
+  ++keycount;
 
-//   let keyboardRef = firebase
-//     .database()
-//     .ref(`users/${user}/behavior/${date}/${hour}/keyboard/keycount`);
-//   keyboardRef.transaction(keycount => {
-//     keycount += 1;
-//     return keycount;
-//   });
-//   clearTimeout(timeout);
-//   timeout = setTimeout(() => {
-//     keycount = 0;
-//   }, 1000);
-// });
+  let keyboardRef = firebase
+    .database()
+    .ref(`users/${user}/behavior/${date}/${hour}/keyboard/keycount`);
+  keyboardRef.transaction(keycount => {
+    keycount += 1;
+    return keycount;
+  });
+  clearTimeout(timeout);
+  timeout = setTimeout(() => {
+    keycount = 0;
+  }, 1000);
+});
 
-// gkm.events.on("key.released", function(data) {
-//   delete pressedKeys[data];
-// });
+gkm.events.on("key.released", function(data) {
+  delete pressedKeys[data];
+});
 
 // --------- Timer for sit duration -------------
 function sitTimer() {
@@ -280,10 +280,12 @@ function getHistory() {
   const lastSevenDay = moment()
     .subtract(7, 'd')
     .format('DD-MM-YYYY');
-
   const filteredData = finalData.filter(i => {
-    // return Object.keys(i) < today && Object.keys(i) >= lastSevenDay;
-    return Object.keys(i) >= lastSevenDay;
+    return (
+      new Date(Object.keys(i)).getTime() != new Date(today).getTime() &&
+      new Date(Object.keys(i)).getTime() >= new Date(lastSevenDay).getTime()
+    );
+    // return Object.keys(i) >= lastSevenDay;
   });
 
   for (let i = 0; i < filteredData.length; i++) {
