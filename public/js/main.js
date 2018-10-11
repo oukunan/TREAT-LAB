@@ -1,4 +1,4 @@
-const notifier = require("node-notifier");
+const notifier = require('node-notifier');
 // const gkm = require("gkm");
 
 const pressedKeys = {};
@@ -29,30 +29,30 @@ let tmpCounterHistory = 0,
   sumKeyboard = 0,
   sumMouse = 0,
   user = null,
-  date = moment(new Date()).format("DD-MM-YYYY"),
-  hour = moment(new Date()).format("HH");
+  date = moment(new Date()).format('DD-MM-YYYY'),
+  hour = moment(new Date()).format('HH');
 
 // --------- Load data after login -----------
 window.onload = () => {
-  const expireDate = localStorage.getItem("expirationDate");
+  const expireDate = localStorage.getItem('expirationDate');
   if (expireDate) {
     if (new Date(expireDate).getTime() < new Date().getTime()) {
       logout();
     }
   }
 
-  user = localStorage.getItem("userId");
+  user = localStorage.getItem('userId');
   const oneDayRef = firebase.database().ref(`users/${user}/behavior/${date}`);
   const nameRef = firebase.database().ref(`users/${user}/info/name`);
 
-  oneDayRef.on("value", received => {
+  oneDayRef.on('value', received => {
     generateEachBehavior(received.val());
   });
 
-  nameRef.on("value", received => {
+  nameRef.on('value', received => {
     let name = received.val();
     if (name) {
-\      document.getElementById("topName").innerHTML = name;
+      document.getElementById('topName').innerHTML = name;
     }
   });
   getHistory();
@@ -101,7 +101,7 @@ function headUp() {
     if (ypos > trigHeight && alarm) {
       timer();
       if (counter == 2) {
-        notification("Mind your posture", "Your head is bending down");
+        notification('Mind your posture', 'Your head is bending down');
         bendCount();
         alarm = false;
         counter = 0;
@@ -186,16 +186,16 @@ function sitTimer() {
     .database()
     .ref(`users/${user}/behavior/${date}/${hour}/relax/duration`);
 
-  if (typeof positions === "object") {
+  if (typeof positions === 'object') {
     ++secSit;
     ++showSit;
 
     if (showSit % 1800 == 0) {
-      notification("Go get some rest", "Now you have to sit for 30 minutes");
+      notification('Go get some rest', 'Now you have to sit for 30 minutes');
     }
 
-    const formatted = moment.utc(showSit * 1000).format("HH:mm:ss");
-    document.getElementById("sit").innerHTML = `${formatted}`;
+    const formatted = moment.utc(showSit * 1000).format('HH:mm:ss');
+    document.getElementById('sit').innerHTML = `${formatted}`;
 
     let tmpSecRelax = secRelax;
     relaxRef.transaction(duration => {
@@ -207,8 +207,8 @@ function sitTimer() {
     ++secRelax;
     ++showRelax;
 
-    const formatted = moment.utc(showRelax * 1000).format("HH:mm:ss");
-    document.getElementById("relax").innerHTML = `${formatted}`;
+    const formatted = moment.utc(showRelax * 1000).format('HH:mm:ss');
+    document.getElementById('relax').innerHTML = `${formatted}`;
 
     let tmpSecSit = secSit;
     sitRef.transaction(duration => {
@@ -236,7 +236,7 @@ function getHistory() {
   const key = [];
   let finalData = [];
   const notFilterHistory = firebase.database().ref(`users/${user}/behavior`);
-  notFilterHistory.on("child_added", received => {
+  notFilterHistory.on('child_added', received => {
     behaviorValue.push(received.val());
     key.push(received.key);
 
@@ -249,19 +249,19 @@ function getHistory() {
 
       objectData = {};
       for (let day in behaviorValue[i]) {
-        bendTotal += behaviorValue[i][day].hasOwnProperty("bends")
+        bendTotal += behaviorValue[i][day].hasOwnProperty('bends')
           ? behaviorValue[i][day].bends.count
           : 0;
-        sitTotal += behaviorValue[i][day].hasOwnProperty("sit")
+        sitTotal += behaviorValue[i][day].hasOwnProperty('sit')
           ? behaviorValue[i][day].sit.duration
           : 0;
-        relaxTotal += behaviorValue[i][day].hasOwnProperty("relax")
+        relaxTotal += behaviorValue[i][day].hasOwnProperty('relax')
           ? behaviorValue[i][day].relax.duration
           : 0;
-        keyboardTotal += behaviorValue[i][day].hasOwnProperty("keyboard")
+        keyboardTotal += behaviorValue[i][day].hasOwnProperty('keyboard')
           ? behaviorValue[i][day].keyboard.keycount
           : 0;
-        mouseTotal += behaviorValue[i][day].hasOwnProperty("mouse")
+        mouseTotal += behaviorValue[i][day].hasOwnProperty('mouse')
           ? behaviorValue[i][day].mouse.mouseClickCount
           : 0;
       }
@@ -276,10 +276,10 @@ function getHistory() {
     finalData.push(objectData);
   });
 
-  const today = moment().format("DD-MM-YYYY");
+  const today = moment().format('DD-MM-YYYY');
   const lastSevenDay = moment()
-    .subtract(7, "d")
-    .format("DD-MM-YYYY");
+    .subtract(7, 'd')
+    .format('DD-MM-YYYY');
 
   const filteredData = finalData.filter(i => {
     // return Object.keys(i) < today && Object.keys(i) >= lastSevenDay;
@@ -300,7 +300,7 @@ function getHistory() {
       filteredData[i][Object.keys(filteredData[i])].keyboard
     );
 
-    $("#eachDay").append(
+    $('#eachDay').append(
       `<div class="col-md-4">
             <div class="col-md-12 historyItem">
                 <h4 class="historyDate">${Object.keys(filteredData[i])}</h4>
@@ -341,27 +341,27 @@ function generateEachBehavior(data) {
   ++sitCount;
   ++relaxCount;
 
-  document.getElementById("showBend").innerHTML = sumBends;
+  document.getElementById('showBend').innerHTML = sumBends;
   if (sitCount < 3) {
     showSit = sumSit;
-    document.getElementById("sit").innerHTML = `${formatBehaviorTime(sumSit)}`;
+    document.getElementById('sit').innerHTML = `${formatBehaviorTime(sumSit)}`;
   }
 
   if (relaxCount < 3) {
     showRelax = sumRelax;
-    document.getElementById("relax").innerHTML = `${formatBehaviorTime(
+    document.getElementById('relax').innerHTML = `${formatBehaviorTime(
       sumRelax
     )}`;
   }
 
   if (sumKeyboard % 10000 == 0 && sumKeyboard !== 0) {
-    notification("Go get some rest", "Number of keystroke is too many");
+    notification('Go get some rest', 'Number of keystroke is too many');
   }
-  document.getElementById("keyboard").innerHTML = sumKeyboard;
+  document.getElementById('keyboard').innerHTML = sumKeyboard;
 
   if (mouseCount < 3) {
     showMouse = sumMouse;
-    document.getElementById("mouse").innerHTML = formatBehaviorTime(sumMouse);
+    document.getElementById('mouse').innerHTML = formatBehaviorTime(sumMouse);
   }
 }
 
@@ -374,7 +374,7 @@ function checkMouseTimer() {
 function mouseTimer() {
   setInterval(++mouseCounter, ++showMouse, 1000);
   if (showMouse % 100 == 0 && showMouse !== 0) {
-    notification("DANGER", "Number of mouse click is too many");
+    notification('DANGER', 'Number of mouse click is too many');
   }
 }
 function timer() {
@@ -388,20 +388,20 @@ setInterval(headUp, 1000);
 setInterval(checkMouseTimer, 1000);
 setInterval(sitTimer, 1000);
 
-document.getElementById("dateValue").innerHTML = moment().format("LL");
+document.getElementById('dateValue').innerHTML = moment().format('LL');
 
 function toggleMenu() {
-  document.getElementById("myDropdown").classList.toggle("show");
+  document.getElementById('myDropdown').classList.toggle('show');
 }
 
 window.onclick = function(event) {
-  if (!event.target.matches(".dropbtn")) {
-    var dropdowns = document.getElementsByClassName("dropdown-content");
+  if (!event.target.matches('.dropbtn')) {
+    var dropdowns = document.getElementsByClassName('dropdown-content');
     var i;
     for (i = 0; i < dropdowns.length; i++) {
       var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains("show")) {
-        openDropdown.classList.remove("show");
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
       }
     }
   }
