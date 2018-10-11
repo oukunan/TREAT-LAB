@@ -181,6 +181,9 @@ i {
   display: inline-block;
   padding: 3px;
   margin: 0 0 5px 5px;
+  cursor: pointer;
+  margin-left: -10px;
+  margin-right: 10px;
 }
 
 .down {
