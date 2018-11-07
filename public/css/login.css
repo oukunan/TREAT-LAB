@@ -1,9 +1,6 @@
 body {
   font-family: Roboto;
   padding-top: 70px;
-  /* color: white; */
-  /* background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-    url(../img/login.jpg) no-repeat center center fixed; */
   background-size: cover;
 }
 
@@ -15,7 +12,7 @@ body {
   font-style: normal;
   font-weight: bold;
   font-size: 18px;
-  color: #A0CA68;
+  color: #a0ca68;
   letter-spacing: 5px;
 }
 
@@ -29,32 +26,15 @@ input {
   font-size: 40px;
   font-weight: 500px;
   padding-bottom: 25px;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   color: #4c4d4f;
   font-size: 24px;
 }
 
-#signInBtn {
-  background: #A0CA68;
-  width: 120px;
-  height: 40px;
-  color: white;
-  border-radius: 50px;
-  margin-top: 20px;
-}
-
-#signInBtn:hover {
-  background-color: #8baf5b;
-  transform: scale(1.05);
-}
-
-#signInBtn:active {
-  background-color: #629f00;
-  transform: scale(0.95);
-}
-
+#signInBtn,
+#forgetPassBtn,
 #signUpBtn {
-  background: #A0CA68;
+  background: #a0ca68;
   width: 120px;
   height: 40px;
   color: white;
@@ -62,13 +42,17 @@ input {
   margin-top: 20px;
 }
 
+#signInBtn:hover,
+#forgetPassBtn:hover,
 #signUpBtn:hover {
   background-color: #8baf5b;
   transform: scale(1.05);
 }
 
+#signInBtn:active,
+#forgetPassBtn:active,
 #signUpBtn:active {
-  background-color: #6e8c47
+  background-color: #629f00;
   transform: scale(0.95);
 }
 
@@ -85,7 +69,7 @@ input {
 .foot {
   font-size: 14px;
   margin-bottom: 35px;
-  color: #4C4D4F;
+  color: #4c4d4f;
 }
 
 .btn:focus,
@@ -108,75 +92,77 @@ input {
   border-top-left-radius: 50px;
   border-bottom-left-radius: 50px;
   background: white;
-  border: 1px solid #C3C3C4;
+  border: 1px solid #c3c3c4;
 }
 
-input[type="email"],
-input[type="password"],
-input[type="number"],
-input[type="text"],
-input[type="date"],
+input[type='email'],
+input[type='password'],
+input[type='number'],
+input[type='text'],
+input[type='date'],
 #gender {
   padding-left: 25px;
   border: 0px;
   color: #4c4d4f;
   height: 45px;
   padding-left: 0px;
-  border-top: 1px solid #C3C3C4;
-  border-bottom: 1px solid #C3C3C4;
-  border-right: 1px solid #C3C3C4;
+  border-top: 1px solid #c3c3c4;
+  border-bottom: 1px solid #c3c3c4;
+  border-right: 1px solid #c3c3c4;
 }
 
-input[type="email"]:focus,
-input[type="password"]:focus,
-input[type="number"]:focus,
-input[type="text"]:focus,
-input[type="date"]:focus,
+input[type='email']:focus,
+input[type='password']:focus,
+input[type='number']:focus,
+input[type='text']:focus,
+input[type='date']:focus,
 #gender:focus {
   outline: none;
   box-shadow: none;
   color: #4c4d4f;
-  border-top: 1px solid #C3C3C4;
-  border-bottom: 1px solid #C3C3C4;
-  border-right: 1px solid #C3C3C4;
+  border-top: 1px solid #c3c3c4;
+  border-bottom: 1px solid #c3c3c4;
+  border-right: 1px solid #c3c3c4;
 }
 
-input[type="email"]::-webkit-input-placeholder,
-input[type="password"]::-webkit-input-placeholder,
-input[type="number"]::-webkit-input-placeholder,
-input[type="text"]::-webkit-input-placeholder {
-  color: #C3C3C4;
+input[type='email']::-webkit-input-placeholder,
+input[type='password']::-webkit-input-placeholder,
+input[type='number']::-webkit-input-placeholder,
+input[type='text']::-webkit-input-placeholder {
+  color: #c3c3c4;
   font-size: 15px;
 }
 
-input[type="email"]:focus::-webkit-input-placeholder,
-input[type="password"]:focus::-webkit-input-placeholder,
-input[type="number"]:focus::-webkit-input-placeholder,
-input[type="text"]:focus::-webkit-input-placeholder {
+input[type='email']:focus::-webkit-input-placeholder,
+input[type='password']:focus::-webkit-input-placeholder,
+input[type='number']:focus::-webkit-input-placeholder,
+input[type='text']:focus::-webkit-input-placeholder {
   color: transparent;
 }
 
 #remember {
   font-size: 14px;
-  color:#4C4D4F;
+  color: #4c4d4f;
 }
 
 #navLogin,
-#signup-section {
+#signup-section,
+#forgetPass-section {
   display: none;
 }
 
-#navSignup,#navLogin {
+#navSignup,
+#navLogin {
   font-family: Roboto;
   font-size: 14px;
-  color:#A0CA68;
+  color: #a0ca68;
 }
 
 #forgetPassworld {
   margin-top: 20px;
   font-family: Roboto;
   font-size: 14px;
-  color: #A0CA68;
+  color: #a0ca68;
   cursor: pointer;
 }
 
@@ -184,28 +170,27 @@ input[type="text"]:focus::-webkit-input-placeholder {
   margin-top: 20px;
 }
 
-.error {  
+.error {
   font-family: Roboto;
   font-size: 12px;
-  color: #EB5757;
+  color: #eb5757;
 }
 
 .input-error {
-  border-top: 1px solid #EB5757 !important;
-  border-bottom: 1px solid #EB5757 !important;
-  border-right: 1px solid #EB5757 !important;
+  border-top: 1px solid #eb5757 !important;
+  border-bottom: 1px solid #eb5757 !important;
+  border-right: 1px solid #eb5757 !important;
 }
 
 .addon-error {
-  border-top: 1px solid #EB5757 !important;
-  border-bottom: 1px solid #EB5757 !important;
-  border-left: 1px solid #EB5757 !important;
+  border-top: 1px solid #eb5757 !important;
+  border-bottom: 1px solid #eb5757 !important;
+  border-left: 1px solid #eb5757 !important;
 }
 
-input[type="date"]::-webkit-inner-spin-button{
-    display: none;
+input[type='date']::-webkit-inner-spin-button {
+  display: none;
 }
-
 
 /* Toggle remember */
 .switch {
@@ -215,7 +200,9 @@ input[type="date"]::-webkit-inner-spin-button{
   height: 34px;
 }
 
-.switch input {display: none;}
+.switch input {
+  display: none;
+}
 
 .slider {
   position: absolute;
@@ -225,20 +212,20 @@ input[type="date"]::-webkit-inner-spin-button{
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 .slider:before {
   position: absolute;
-  content: "";
+  content: '';
   height: 26px;
   width: 26px;
   left: 4px;
   bottom: 4px;
   background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 input:checked + .slider {
@@ -271,12 +258,12 @@ input:checked + .slider:before {
 #message {
   display: flex;
   justify-content: center;
-  position: absolute; 
+  position: absolute;
   top: 0;
-  left: 0; 
-  right: 0; 
+  left: 0;
+  right: 0;
   margin: auto;
-  width: 250px; 
+  width: 350px;
   padding: 15px 25px;
   font-size: 14px;
   color: white;

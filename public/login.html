@@ -18,7 +18,7 @@
 </head>
 
 <body>
-    <div id="message"> Registration Complete.</div>
+    <div id="message"></div>
 
     <div class="container">
         <div class="top-sec">
@@ -88,7 +88,7 @@
             </div>
             <div class="row justify-content-center text-center forget-section">
                 <div class="col-md-6 col-xl-4">
-                    <span id="forgetPassworld">Forget Password?</span>
+                    <span id="forgetPassworld" onclick="showForget()">Forget Password?</span>
                 </div>
             </div>
         </div>
@@ -198,6 +198,34 @@
                 </div>
 
             </div>
+        </div>
+
+        <!-- Forget password section -->
+        <div id="forgetPass-section">
+            <div class="row justify-content-center text-center">
+                <div class="col-md-6 col-xl-6">
+                    <form>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon" id="addon-forgetEmail">
+                                    <img src="img/email.png" height="20px">
+                                </div>
+                                <input type="email" class="form-control" name="email" id="forgetEmail" placeholder="Email address"
+                                    onclick="handleError()">
+                            </div>
+                            <span class="error" id="forgetEmail-error"></span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            <div class="row justify-content-center text-center">
+                <div class="col-md-6 col-xl-4">
+                    <button type="button" class="btn" id="forgetPassBtn" onclick="forgetPassword()">Send</button>
+                </div>
+            </div>
+
         </div>
 
 

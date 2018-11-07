@@ -1,5 +1,7 @@
 let loginSection = document.getElementById('login-section');
 let signupSection = document.getElementById('signup-section');
+let forgetPass = document.getElementById('forgetPass-section');
+let forgetInput = document.getElementById('forgetEmail');
 let navSignup = document.getElementById('navSignup');
 let navLogin = document.getElementById('navLogin');
 let emailError = document.getElementById('email-error');
@@ -76,6 +78,7 @@ function signup() {
           }
         })
         .then(() => {
+          $('#message').html('Registration complete');
           $('#message').css('transform', 'translateY(0px)');
           signupEmail.value = '';
           signupPassword.value = '';
@@ -86,7 +89,7 @@ function signup() {
           weight.value = '';
           setTimeout(
             () => $('#message').css('transform', 'translateY(-55px)'),
-            3000
+            4000
           );
           showLogin();
         });
@@ -193,9 +196,51 @@ function logout() {
     });
 }
 
+function forgetPassword() {
+  const email = $('#forgetEmail').val();
+  firebase
+    .auth()
+    .sendPasswordResetEmail(email)
+    .then(() => {
+      forgetInput.value = '';
+      $('#message').html('Send link for reset password to your email');
+      $('#message').css('transform', 'translateY(0px)');
+      setTimeout(
+        () => $('#message').css('transform', 'translateY(-55px)'),
+        4000
+      );
+
+      showLogin();
+    })
+    .catch(err => {
+      const errCode = err.code;
+      error = true;
+
+      $('#forgetEmail-error').css('display', 'inline');
+
+      if (err != null) {
+        if (errCode === 'auth/invalid-email') {
+          $('#forgetEmail').addClass('input-error');
+          $('#addon-forgetEmail').addClass('addon-error');
+          $('#forgetEmail-error').html(
+            'Invalid email address. Please try again.'
+          );
+        }
+
+        if (errCode === 'auth/user-not-found') {
+          $('#forgetEmail').addClass('input-error');
+          $('#addon-forgetEmail').addClass('addon-error');
+          $('#forgetEmail-error').html('User not found. Please try again.');
+        }
+        return;
+      }
+    });
+}
+
 function showLogin() {
   signupSection.style.display = 'none';
   loginSection.style.display = 'block';
+  forgetPass.style.display = 'none';
   navSignup.style.display = 'block';
   navLogin.style.display = 'none';
   topic.innerHTML = 'Login';
@@ -204,23 +249,37 @@ function showLogin() {
 function showSignup() {
   loginSection.style.display = 'none';
   signupSection.style.display = 'block';
+  forgetPass.style.display = 'none';
   navSignup.style.display = 'none';
   navLogin.style.display = 'block';
   topic.innerHTML = 'Sign up';
+}
+
+function showForget() {
+  forgetPass.style.display = 'block';
+  loginSection.style.display = 'none';
+  signupSection.style.display = 'none';
+  topic.innerHTML = 'Forget Password?';
 }
 
 function handleError() {
   if (error) {
     $('#email-error').css('display', 'none');
     $('#password-error').css('display', 'none');
+    $('#forgetEmail-error').css('display', 'none');
+
     $('#email-error').html('');
     $('#password-error').html('');
+    $('#forgetEmail-error').html('');
 
     $('#addon-email').removeClass('addon-error');
     $('#loginEmail').removeClass('input-error');
 
     $('#addon-password').removeClass('addon-error');
     $('#loginPassword').removeClass('input-error');
+
+    $('#addon-forgetEmail').removeClass('addon-error');
+    $('#forgetEmail').removeClass('input-error');
 
     error = false;
   }
