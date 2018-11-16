@@ -189,3 +189,10 @@ i {
 .down {
   transform: rotate(45deg);
 }
+
+.noData {
+  margin-top: 50px;
+  color: gray;
+  opacity: 0.5;
+  font-weight: bold;
+}

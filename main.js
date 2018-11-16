@@ -5,10 +5,10 @@ const {
   focusedWindow,
   Tray,
   ipcMain
-} = require("electron");
-const url = require("url");
-const path = require("path");
-const {autoUpdater} = require("electron-updater");
+} = require('electron');
+const url = require('url');
+const path = require('path');
+const { autoUpdater } = require('electron-updater');
 
 let main = null;
 let myWindows;
@@ -27,22 +27,25 @@ if (shouldQuit) {
   return;
 }
 
-app.setAppUserModelId("treatlab.com");
-app.on("ready", () => {
+app.setAppUserModelId('treatlab.com');
+app.on('ready', () => {
   main = new BrowserWindow({
     width: 1280,
-    height:720,
+    height: 720,
     minWidth: 1280,
     minHeight: 720,
     webPreferences: {
       backgroundThrottling: false
-    }
+    },
+    icon: __dirname + '/laptop.ico'
   });
-  main.loadURL(url.format({
-    pathname: path.join(__dirname, "public/login.html"),
-    protocol: "file",
-    slashes: true
-  }));
+  main.loadURL(
+    url.format({
+      pathname: path.join(__dirname, 'public/login.html'),
+      protocol: 'file',
+      slashes: true
+    })
+  );
 
   // Check update when window loaded
   autoUpdater.checkForUpdates();
@@ -51,30 +54,26 @@ app.on("ready", () => {
   const mainMenu = Menu.buildFromTemplate(menuTemplate);
   Menu.setApplicationMenu(mainMenu);
 
-  main.on("closed", () => {
+  main.on('closed', () => {
     app.quit();
   });
 });
 
-autoUpdater.on("update-downloaded", info => {
-  main
-    .webContents
-    .send("updateReady");
+autoUpdater.on('update-downloaded', info => {
+  main.webContents.send('updateReady');
 });
 
-ipcMain.on("quitAndInstall", (event, arg) => {
+ipcMain.on('quitAndInstall', (event, arg) => {
   autoUpdater.quitAndInstall();
 });
 
 const menuTemplate = [
   {
-    label: "File",
+    label: 'File',
     submenu: [
       {
-        label: "Quit",
-        accelerator: process.platform === "darwin"
-          ? "Command+Q"
-          : "Ctrl+Q",
+        label: 'Quit',
+        accelerator: process.platform === 'darwin' ? 'Command+Q' : 'Ctrl+Q',
         click() {
           app.quit();
         }
@@ -83,24 +82,23 @@ const menuTemplate = [
   }
 ];
 
-if (process.platform === "darwin") {
+if (process.platform === 'darwin') {
   menuTemplate.unshift({});
 }
 
-if (process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV !== 'production') {
   menuTemplate.push({
-    label: "Developer Tools",
+    label: 'Developer Tools',
     submenu: [
       {
-        label: "Toggle DevTools",
-        accelerator: process.platform === "darwin"
-          ? "Command+I"
-          : "Ctrl+I",
+        label: 'Toggle DevTools',
+        accelerator: process.platform === 'darwin' ? 'Command+I' : 'Ctrl+I',
         click(Item, focusedWindow) {
           focusedWindow.toggleDevTools();
         }
-      }, {
-        role: "reload"
+      },
+      {
+        role: 'reload'
       }
     ]
   });

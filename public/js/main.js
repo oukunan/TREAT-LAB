@@ -55,17 +55,16 @@ window.onload = () => {
       document.getElementById('topName').innerHTML = name;
     }
   });
-  getHistory();
 };
 
 //------- Image processing -----------
 function setup() {
   let videoInput = createCapture(VIDEO);
   videoInput.size(400, 300);
-  videoInput.parent("sketch-holder");
+  videoInput.parent('sketch-holder');
 
   let cnv = createCanvas(400, 300);
-  cnv.parent("sketch-holder2");
+  cnv.parent('sketch-holder2');
 
   tracker = new clm.tracker();
   tracker.init(pModel);
@@ -84,7 +83,7 @@ function draw() {
       ypos = positions[i][1];
     }
   }
-  stroke("rgb(0,255,0)");
+  stroke('rgb(0,255,0)');
   strokeWeight(4);
   isLine && line(0, trigHeight, width * 2, trigHeight);
 }
@@ -220,6 +219,11 @@ function sitTimer() {
 }
 
 // ------- History --------------
+
+$('#historyTab').one('click', () => {
+  getHistory();
+});
+
 function getHistory() {
   tmpCounterHistory++;
   if (tmpCounterHistory > 2) {
@@ -285,25 +289,26 @@ function getHistory() {
       new Date(Object.keys(i)).getTime() != new Date(today).getTime() &&
       new Date(Object.keys(i)).getTime() >= new Date(lastSevenDay).getTime()
     );
-    // return Object.keys(i) >= lastSevenDay;
   });
 
-  for (let i = 0; i < filteredData.length; i++) {
-    const formattedSit = formatShow(
-      filteredData[i][Object.keys(filteredData[i])].sit
-    );
-    const formattedRelax = formatShow(
-      filteredData[i][Object.keys(filteredData[i])].relax
-    );
-    const formattedMouse = formatShow(
-      filteredData[i][Object.keys(filteredData[i])].mouse
-    );
-    const formattedKeyboard = formatShow(
-      filteredData[i][Object.keys(filteredData[i])].keyboard
-    );
 
-    $('#eachDay').append(
-      `<div class="col-md-4">
+  if (filteredData.length !== 0) {
+    for (let i = 0; i < filteredData.length; i++) {
+      const formattedSit = formatShow(
+        filteredData[i][Object.keys(filteredData[i])].sit
+      );
+      const formattedRelax = formatShow(
+        filteredData[i][Object.keys(filteredData[i])].relax
+      );
+      const formattedMouse = formatShow(
+        filteredData[i][Object.keys(filteredData[i])].mouse
+      );
+      const formattedKeyboard = formatShow(
+        filteredData[i][Object.keys(filteredData[i])].keyboard
+      );
+
+      $('#eachDay').append(
+        `<div class="col-md-4">
             <div class="col-md-12 historyItem">
                 <h4 class="historyDate">${Object.keys(filteredData[i])}</h4>
                 <p><strong>Bad posture: </strong>${filteredData[i][
@@ -317,6 +322,13 @@ function getHistory() {
                 ].keyboard || 0}</p>
             </div>
           </div>`
+      );
+    }
+  } else {
+    $('#eachDay').append(
+      `<div class="col-md-4 offset-md-4">
+          <div class="noData">No data</div>
+        </div>`
     );
   }
 }
