@@ -156,6 +156,10 @@ gkm.events.on('key.pressed', data => {
   if (pressedKeys[data]) {
     return;
   }
+  if (data[0] === 'Space' || data[0] === 'Enter') {
+    return;
+  }
+
   pressedKeys[data] = true;
 
   ++keycount;
