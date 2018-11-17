@@ -1,5 +1,5 @@
 const notifier = require('node-notifier');
-const gkm = require("gkm");
+const gkm = require('gkm');
 
 const pressedKeys = {};
 let tmpCounterHistory = 0,
@@ -55,6 +55,7 @@ window.onload = () => {
       document.getElementById('topName').innerHTML = name;
     }
   });
+  getHistory();
 };
 
 //------- Image processing -----------
@@ -126,10 +127,10 @@ function bendCount() {
 }
 
 // -------- Mouse part -------------
-gkm.events.on("mouse.*", () => {
+gkm.events.on('mouse.*', () => {
   mouseBoolean = true;
-  const formatted = moment.utc(showMouse * 1000).format("HH:mm:ss");
-  document.getElementById("mouse").innerHTML = `${formatted}`;
+  const formatted = moment.utc(showMouse * 1000).format('HH:mm:ss');
+  document.getElementById('mouse').innerHTML = `${formatted}`;
   if (mouseTimerout) {
     clearTimeout(mouseTimerout);
   }
@@ -151,7 +152,7 @@ function mouseStop() {
 }
 
 // //---------Keyboard tracking--------------
-gkm.events.on("key.pressed", data => {
+gkm.events.on('key.pressed', data => {
   if (pressedKeys[data]) {
     return;
   }
@@ -172,7 +173,7 @@ gkm.events.on("key.pressed", data => {
   }, 1000);
 });
 
-gkm.events.on("key.released", function(data) {
+gkm.events.on('key.released', function(data) {
   delete pressedKeys[data];
 });
 
@@ -225,10 +226,10 @@ $('#historyTab').one('click', () => {
 });
 
 function getHistory() {
-  tmpCounterHistory++;
-  if (tmpCounterHistory > 2) {
-    return;
-  }
+  // tmpCounterHistory++;
+  // if (tmpCounterHistory > 2) {
+  //   return;
+  // }
 
   let bendTotal = 0,
     sitTotal = 0,
@@ -290,9 +291,7 @@ function getHistory() {
       new Date(Object.keys(i)).getTime() >= new Date(lastSevenDay).getTime()
     );
   });
-
-
-  if (filteredData.length !== 0) {
+  if (filteredData !== 0) {
     for (let i = 0; i < filteredData.length; i++) {
       const formattedSit = formatShow(
         filteredData[i][Object.keys(filteredData[i])].sit
@@ -327,7 +326,7 @@ function getHistory() {
   } else {
     $('#eachDay').append(
       `<div class="col-md-4 offset-md-4">
-          <div class="noData">No data</div>
+        <div class="noData">No data</div>
         </div>`
     );
   }
