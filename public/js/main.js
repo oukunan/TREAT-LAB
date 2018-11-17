@@ -94,6 +94,8 @@ function setHeight() {
   isLine = true;
   checkFace = true;
   alarm = true;
+
+  $('#heightBtn').blur();
 }
 
 function headUp() {
