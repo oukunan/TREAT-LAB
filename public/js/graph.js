@@ -30,7 +30,7 @@ const timeLabel = [
 // //---------- First get data ---------------
 function getData(cb) {
   let user = localStorage.getItem('userId');
-  let date = moment(new Date()).format('DD-MM-YYYY');
+  let date = moment(new Date()).format('MM-DD-YYYY');
   let graphData = firebase.database().ref(`users/${user}/behavior/${date}`);
   graphData.on('value', snapshot => {
     cb(snapshot.val());
