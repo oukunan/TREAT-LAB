@@ -318,13 +318,13 @@ function getHistory() {
                 <h4 class="historyDate">${Object.keys(filteredData[i])}</h4>
                 <p><strong>Bad posture: </strong>${filteredData[i][
           Object.keys(filteredData[i])
-        ].bends || 0}</p>
-                <p><strong>Sitting Hours: </strong>${formattedSit || 0}</p>
-                <p><strong>Relax Time: </strong>${formattedRelax || 0}</p>
-                <p><strong>Mouse Usage: </strong>${formattedMouse || 0}</p>
+        ].bends || 0} Times</p>
+                <p><strong>Sitting Hours: </strong>${formattedSit || 0} Hours</p>
+                <p><strong>Relax Time: </strong>${formattedRelax || 0} Hours</p>
+                <p><strong>Mouse Usage: </strong>${formattedMouse || 0} Hours</p>
                 <p><strong>Typing Keyboard: </strong>${filteredData[i][
           Object.keys(filteredData[i])
-        ].keyboard || 0}</p>
+        ].keyboard || 0} Times</p>
             </div>
           </div>`
       );
