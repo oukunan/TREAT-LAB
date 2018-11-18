@@ -291,10 +291,13 @@ function getHistory() {
   const lastSevenDay = moment()
     .subtract(7, 'd')
     .format('MM-DD-YYYY');
+
   const filteredData = finalData.filter(i => {
     return (
-       moment(new Date(Object.keys(i)).getTime()).format('DD-MM-YYYY') != moment(new Date(today).getTime()).format('DD-MM-YYYY') &&
-       moment(new Date(Object.keys(i)).getTime()).format('DD-MM-YYYY') >= moment(new Date(lastSevenDay).getTime()).format('DD-MM-YYYY')
+      moment(new Date(Object.keys(i)).getTime()).format('DD-MM-YYYY') !==
+        moment(new Date(today).getTime()).format('DD-MM-YYYY') &&
+      moment(new Date(Object.keys(i)).getTime()).format('DD-MM-YYYY') >=
+        moment(new Date(lastSevenDay).getTime()).format('DD-MM-YYYY')
     );
   });
   if (filteredData !== 0) {
@@ -317,14 +320,14 @@ function getHistory() {
             <div class="col-md-12 historyItem">
                 <h4 class="historyDate">${Object.keys(filteredData[i])}</h4>
                 <p><strong>Bad posture: </strong>${filteredData[i][
-          Object.keys(filteredData[i])
-        ].bends || 0}</p>
+                  Object.keys(filteredData[i])
+                ].bends || 0}</p>
                 <p><strong>Sitting Hours: </strong>${formattedSit || 0}</p>
                 <p><strong>Relax Time: </strong>${formattedRelax || 0}</p>
                 <p><strong>Mouse Usage: </strong>${formattedMouse || 0}</p>
                 <p><strong>Typing Keyboard: </strong>${filteredData[i][
-          Object.keys(filteredData[i])
-        ].keyboard || 0}</p>
+                  Object.keys(filteredData[i])
+                ].keyboard || 0}</p>
             </div>
           </div>`
       );
@@ -397,7 +400,7 @@ function mouseTimer() {
   }
 }
 function timer() {
-  setTimeout(function () {
+  setTimeout(function() {
     ++counter;
   }, 1000);
 }
@@ -413,7 +416,7 @@ function toggleMenu() {
   document.getElementById('myDropdown').classList.toggle('show');
 }
 
-window.onclick = function (event) {
+window.onclick = function(event) {
   if (!event.target.matches('.dropbtn')) {
     var dropdowns = document.getElementsByClassName('dropdown-content');
     var i;

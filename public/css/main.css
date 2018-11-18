@@ -40,12 +40,12 @@ body {
 }
 
 #heightBtn {
-  border: 1px solid #333333;
   margin-top: 10px;
   border-radius: 50px;
   background-color: white;
   font-weight: bold;
-  color: #333333;
+  color: #a0ca68;
+  border: 1px solid #a0ca68;
 }
 
 #heightBtn:hover {
