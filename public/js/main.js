@@ -179,7 +179,7 @@ gkm.events.on('key.pressed', data => {
   }, 1000);
 });
 
-gkm.events.on('key.released', function (data) {
+gkm.events.on('key.released', function(data) {
   delete pressedKeys[data];
 });
 
@@ -321,13 +321,16 @@ function getHistory() {
                 <h4 class="historyDate">${Object.keys(filteredData[i])}</h4>
                 <p><strong>Bad posture: </strong>${filteredData[i][
                   Object.keys(filteredData[i])
-                ].bends || 0}</p>
-                <p><strong>Sitting Hours: </strong>${formattedSit || 0}</p>
-                <p><strong>Relax Time: </strong>${formattedRelax || 0}</p>
-                <p><strong>Mouse Usage: </strong>${formattedMouse || 0}</p>
+                ].bends || 0} <span class="unit">times</span></p>
+                <p><strong>Sitting Hours: </strong>${formattedSit ||
+                  0} <span class="unit">hours</span></p>
+                <p><strong>Relax Time: </strong>${formattedRelax ||
+                  0} <span class="unit">hours</span></p>
+                <p><strong>Mouse Usage: </strong>${formattedMouse ||
+                  0} <span class="unit">hours</span></p>
                 <p><strong>Typing Keyboard: </strong>${filteredData[i][
                   Object.keys(filteredData[i])
-                ].keyboard || 0}</p>
+                ].keyboard || 0} <span class="unit">Times</span></p>
             </div>
           </div>`
       );

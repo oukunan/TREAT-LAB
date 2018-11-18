@@ -196,3 +196,7 @@ i {
   opacity: 0.5;
   font-weight: bold;
 }
+
+.unit {
+  color: gray;
+}
